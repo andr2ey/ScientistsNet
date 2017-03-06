@@ -6,6 +6,9 @@ out
 
 #gradle
 .gradle
+#for wrapper of gradle
+gradle
+
 
 #Package Files
 *.class

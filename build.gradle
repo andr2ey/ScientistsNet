@@ -25,6 +25,6 @@ dependencies {
     testCompile 'junit:junit:+'
 }
 
-task wrapper(type: wrapper) {
-    gradleVerion = '3.2.1'
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2.1'
 }
