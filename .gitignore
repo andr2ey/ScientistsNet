@@ -1,11 +1,14 @@
-*.class
-
-# idea
+#idea
+build
 out
 .idea
 **/*.iml
 
-# Package Files #
+#gradle
+.gradle
+
+#Package Files
+*.class
 *.jar
 *.war
 *.ear

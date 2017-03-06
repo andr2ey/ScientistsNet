@@ -4,7 +4,9 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'war'
 
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.8
+//noinspection GroovyUnusedAssignment
 targetCompatibility = 1.8
 
 repositories {
@@ -21,4 +23,8 @@ test.testLogging.showStandardStreams = true
 dependencies {
     compile 'ch.qos.logback:logback-classic:+'
     testCompile 'junit:junit:+'
+}
+
+task wrapper(type: wrapper) {
+    gradleVerion = '3.2.1'
 }
