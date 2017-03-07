@@ -13,9 +13,9 @@ public class University {
     private String country;
     private String city;
     private String full_name;
-    private String degree;
+    private Degree degree;
 
-    public University(int id, String country, String city, String full_name, String degree) {
+    public University(int id, String country, String city, String full_name, Degree degree) {
         this.id = id;
         this.country = country;
         this.city = city;
@@ -58,11 +58,11 @@ public class University {
         this.full_name = full_name;
     }
 
-    public String getDegree() {
+    public Degree getDegree() {
         return degree;
     }
 
-    public void setDegree(String degree) {
+    public void setDegree(Degree degree) {
         this.degree = degree;
     }
 }

@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>${requestScope.welcome} Welcome to Scientists network! </title>
   </head>
   <body>
   $END$
