@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created on 07.03.2017.
  */
-public interface UserDao {
+public interface ScientistDao {
 
     int create(Scientist scientist);
     Scientist get(int id);

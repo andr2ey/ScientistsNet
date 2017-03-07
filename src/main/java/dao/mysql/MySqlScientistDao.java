@@ -1,6 +1,6 @@
 package dao.mysql;
 
-import dao.UserDao;
+import dao.ScientistDao;
 import model.Degree;
 import model.Scientist;
 import model.University;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created on 07.03.2017.
  */
-public class MySqlUserDao implements UserDao {
+public class MySqlScientistDao implements ScientistDao {
 
     private final static String SQL_CREATE_SCIENTIST = "INSERT INTO Scientist (first_name, second_name, middle_name, " +
             "email, password, birthday, university_id)" +

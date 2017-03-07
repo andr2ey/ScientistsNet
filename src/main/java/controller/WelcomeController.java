@@ -1,6 +1,9 @@
 package controller;
 
+import dao.ScientistDao;
+
 import javax.annotation.Resource;
+import javax.servlet.ServletConfig;
 import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,23 +25,30 @@ import java.util.Optional;
 @WebServlet("/")
 public class WelcomeController extends HttpServlet {
 
-    public static String WELCOME_KEY = "welcome";
+    public static final String WELCOME_KEY = "welcome";
+
+    private ScientistDao scientistDao;
 
     @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
+    @Override
+    public void init(ServletConfig config) throws ServletException{
+        scientistDao = (ScientistDao) config.getServletContext().getAttribute("ScientistDao");
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = (HttpSession) request.getSession().getAttribute("FIRST_NAME_KEY");
         String welcome = Optional.ofNullable(request.getSession().getAttribute("FIRST_NAME_KEY"))
                 .map(o -> String.format("Hello, %s!", o))
                 .orElse("Hello!");
         request.setAttribute(WELCOME_KEY, welcome);
-
-
 
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }

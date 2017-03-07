@@ -34,6 +34,7 @@ public class DBIniter implements ServletContextListener {
         Path sqlDirPath = Paths.get(sce.getServletContext().getContextPath(), "//sql");
         try(Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
+            //sce.getServletContext().getRealPath("/WEB-INF/classes/sql");
             DirectoryStream<Path> paths = Files.newDirectoryStream(sqlDirPath);
             for (Path filePath : paths) {
                 Matcher matcher = pattern.matcher(filePath.toFile().getName());
