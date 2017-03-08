@@ -38,4 +38,15 @@
               password="root"
               driverClassName="com.mysql.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/scientists"/>
+
+    <Realm className="org.apache.catalina.realm.JDBCRealm"
+           driverName="com.mysql.jdbc.Driver"
+           connectionURL="jdbc:mysql://localhost:3306/scientists"
+           connectionName="root"
+           connectionPassword="root"
+           userTable="scientist"
+           userNameCol="s_email"
+           userCredCol="s_password"
+           userRoleTable="roles"
+           roleNameCol="r_name"/>
 </Context>

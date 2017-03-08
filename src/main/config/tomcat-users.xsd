@@ -42,7 +42,7 @@
           <xs:complexType>
             <xs:attribute name="username" use="required" type="users:entityname" />
             <xs:attribute name="fullname" type="xs:string" />
-            <xs:attribute name="password" type="xs:string" />
+            <xs:attribute name="s_password" type="xs:string" />
             <xs:attribute name="roles" type="xs:string" />
             <xs:attribute name="groups" type="xs:string" />
           </xs:complexType>

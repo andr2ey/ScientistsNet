@@ -15,11 +15,11 @@ import javax.sql.DataSource;
 @WebListener
 public class Injector implements ServletContextListener {
 
-    @Resource(name = "jdbc/TestDB")
-    private DataSource dataSource;
+//    @Resource(name = "jdbc/TestDB")
+//    private DataSource dataSource;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        sce.getServletContext().setAttribute("ScientistDao", new MySqlScientistDao());
+//        sce.getServletContext().setAttribute("ScientistDao", new MySqlScientistDao());
     }
 }
