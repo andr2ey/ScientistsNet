@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created on 08.03.2017.
  */
 
-public class SecurityFilter implements Filter {
+public class LogInFilter implements Filter {
 
     private final String EMAIL_KEY = "email";
 
@@ -19,8 +19,7 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        ServletContext servletContext = filterConfig.getServletContext();
-        scientistDao = (ScientistDao) servletContext.getAttribute("ScientistDao");
+        scientistDao = (ScientistDao) filterConfig.getServletContext().getAttribute("ScientistDao");
     }
 
     @Override
@@ -29,12 +28,10 @@ public class SecurityFilter implements Filter {
         String username = request.getRemoteUser();
 
         if (username != null && request.getSession().getAttribute(EMAIL_KEY) == null) {
-            // First-time login. You can do your thing here.
-            System.err.println(scientistDao);
+            // first-time login
             Scientist user = scientistDao.get(username);
             request.getSession().setAttribute(EMAIL_KEY, user);
         }
-
         chain.doFilter(req, resp);
     }
 

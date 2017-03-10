@@ -9,7 +9,7 @@ CREATE TABLE degree (
 );
 
 CREATE TABLE university (
-  u_id INT NOT NULL AUTO_INCREMENT,
+  u_id INT AUTO_INCREMENT,
   u_country VARCHAR(100) NOT NULL,
   u_city VARCHAR(100) NOT NULL,
   u_full_name VARCHAR(255) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE university (
 );
 
 CREATE TABLE gender (
-  g_id   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  g_id   INT          AUTO_INCREMENT PRIMARY KEY,
   g_name VARCHAR(100) NOT NULL
 );
 

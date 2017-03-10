@@ -32,30 +32,29 @@ public class DBIniter implements ServletContextListener {
 
     @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
-    private Logger rootLogger;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
+        //TODO think about logging
+        Logger rootLogger = initRootLogger(servletContext);
+        servletContext.setAttribute(SCIENTIST_DAO,
+                new MySqlScientistDao(dataSource, rootLogger));
+        initDB(sce);
+    }
 
-        //TODO create logger with name = dbLogger
-        rootLogger = Logger.getRootLogger();
+    private Logger initRootLogger(ServletContext servletContext) {
+        Logger rootLogger = Logger.getRootLogger();
         try(FileInputStream inputStream = new FileInputStream(
-                sce.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"))) {
+                servletContext.getRealPath("/WEB-INF/classes/log4j.properties"))) {
             PropertyConfigurator.configure(inputStream);
-            System.err.println("FILE exist!");
-            System.err.println(Arrays.toString(
-                    new File(sce.getServletContext().getRealPath("/WEB-INF/lib")).list()));
         } catch (IOException e) {
             System.err.println("FILE doesn't exist!");
         }
         rootLogger.setLevel(Level.INFO);
-        rootLogger.info("dbLogger loaded");
-
         servletContext.setAttribute(ROOT_LOGGER, rootLogger);
-        servletContext.setAttribute(SCIENTIST_DAO, new MySqlScientistDao(dataSource, rootLogger));
-
-        initDB(sce);
+        rootLogger.info("rootLogger loaded");
+        return rootLogger;
     }
 
     private void initDB(ServletContextEvent sce) {

@@ -24,38 +24,17 @@ import java.util.Optional;
 /**
  * Created on 07.03.2017.
  */
-@WebServlet("/else")
-public class Welcome extends HttpServlet {
-
-    public static final String WELCOME_KEY = "welcome";
-    private final String EMAIL_KEY = "email";
-
-    private ScientistDao scientistDao;
-
-    @Resource(name = "jdbc/TestDB")
-    private DataSource dataSource;
-
-
-    @Override
-    public void init(ServletConfig config) throws ServletException{
-        scientistDao = (ScientistDao) config.getServletContext().getAttribute("ScientistDao");
-    }
+@WebServlet("/")
+public class HomePage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Scientist user = (Scientist)session.getAttribute(EMAIL_KEY);
-        request.getRequestDispatcher("WEB-INF/main/index.jsp").forward(request, response);
-
-//        String welcome = Optional.ofNullable(request.getSession().getAttribute("FIRST_NAME_KEY"))
-//                .map(o -> String.format("Hello, %s!", o))
-//                .orElse("Hello!");
-//        request.setAttribute(WELCOME_KEY, welcome);
-
+        doPost(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        //default home page doesn't exist that is why it goes to /main
+        response.sendRedirect("/main");
     }
 }
