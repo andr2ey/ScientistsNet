@@ -23,7 +23,7 @@ test.testLogging.showStandardStreams = true
 dependencies {
     compileOnly 'org.apache.tomcat:tomcat-api:+',
             'org.apache.tomcat:tomcat-jsp-api:+'
-    compile 'ch.qos.logback:logback-classic:+',
+    compile 'log4j:log4j:1.2.17',
             'mysql:mysql-connector-java:5.1.30'
     testCompile 'junit:junit:+'
 }

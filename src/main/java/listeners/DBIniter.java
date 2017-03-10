@@ -1,8 +1,13 @@
 package listeners;
 
 import dao.mysql.MySqlScientistDao;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -11,6 +16,8 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 /**
@@ -20,12 +27,34 @@ import java.util.regex.Pattern;
 @WebListener
 public class DBIniter implements ServletContextListener {
 
+    private static final String SCIENTIST_DAO = "ScientistDao";
+    private static final String ROOT_LOGGER = "rootLogger";
+
     @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
+    private Logger rootLogger;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        sce.getServletContext().setAttribute("ScientistDao", new MySqlScientistDao(dataSource));
+        ServletContext servletContext = sce.getServletContext();
+
+        //TODO create logger with name = dbLogger
+        rootLogger = Logger.getRootLogger();
+        try(FileInputStream inputStream = new FileInputStream(
+                sce.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"))) {
+            PropertyConfigurator.configure(inputStream);
+            System.err.println("FILE exist!");
+            System.err.println(Arrays.toString(
+                    new File(sce.getServletContext().getRealPath("/WEB-INF/lib")).list()));
+        } catch (IOException e) {
+            System.err.println("FILE doesn't exist!");
+        }
+        rootLogger.setLevel(Level.INFO);
+        rootLogger.info("dbLogger loaded");
+
+        servletContext.setAttribute(ROOT_LOGGER, rootLogger);
+        servletContext.setAttribute(SCIENTIST_DAO, new MySqlScientistDao(dataSource, rootLogger));
+
         initDB(sce);
     }
 

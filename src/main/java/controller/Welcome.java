@@ -24,7 +24,7 @@ import java.util.Optional;
 /**
  * Created on 07.03.2017.
  */
-@WebServlet("/")
+@WebServlet("/else")
 public class Welcome extends HttpServlet {
 
     public static final String WELCOME_KEY = "welcome";
@@ -45,12 +45,7 @@ public class Welcome extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Scientist user = (Scientist)session.getAttribute(EMAIL_KEY);
-        if (user == null) {
-            request.getRequestDispatcher("WEB-INF/signup/index.jsp").forward(request, response);
-        } else {
-            //TODO go to database with FIRST_NAME_KEY and create main page
-            request.getRequestDispatcher("WEB-INF/main/index.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("WEB-INF/main/index.jsp").forward(request, response);
 
 //        String welcome = Optional.ofNullable(request.getSession().getAttribute("FIRST_NAME_KEY"))
 //                .map(o -> String.format("Hello, %s!", o))

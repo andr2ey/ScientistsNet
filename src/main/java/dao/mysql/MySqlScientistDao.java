@@ -5,6 +5,7 @@ import model.Degree;
 import model.Gender;
 import model.Scientist;
 import model.University;
+import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -39,9 +40,11 @@ public class MySqlScientistDao implements ScientistDao {
 
     //TODO how does it work?
     private DataSource dataSource;
+    private final Logger dbLogger;
 
-    public MySqlScientistDao(DataSource dataSource) {
+    public MySqlScientistDao(DataSource dataSource, Logger dbLogger) {
         this.dataSource = dataSource;
+        this.dbLogger = dbLogger;
     }
 
     @Override
@@ -129,7 +132,7 @@ public class MySqlScientistDao implements ScientistDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
+            dbLogger.error(e.getMessage(), e);
         }
         return null;
     }
