@@ -118,8 +118,8 @@
 <div id="content">
     <p align="center"><h3>Authorization</h3>
     <form action="j_security_check" method="post" id="j_security_check">
-        <!--First name-->
-        <p align="center"><input class="text" pattern="[A-Za-zА-Яа-я0-9]]{2,40}" required maxlength="100"
+        <!--Email-->
+        <p align="center"><input class="email" pattern="[A-Za-zА-Яа-я0-9]]{2,40}" required maxlength="100"
                                  name="j_username" size="25" placeholder="email"></p>
         <!--Password-->
         <p align="center"><div class="info" align="center" data-title="Only latin letters and numbers, length 3-255">
@@ -136,6 +136,5 @@
     </form>
 
 </div>
-<div id="footer">&copy;</div>
 </body>
 </html>

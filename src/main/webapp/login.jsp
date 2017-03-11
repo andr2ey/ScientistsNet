@@ -121,10 +121,9 @@
     <form action="j_security_check" method="post" id="j_security_check">
         <!--Email-->
         <!--TODO create pattern for email-->
-        <p align="center"><div class="info" align="center" data-title="Only latin letters and numbers, length 2-100">
-        <input class="text" required maxlength="100"
-                                 name="j_username" size="100" placeholder="email"
-               value=""></div>
+        <p align="center">
+            <input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
+                   name="j_username" size="100" placeholder="email">
         <!--Password-->
         <p align="center"><div class="info" align="center" data-title="Only latin letters and numbers, length 3-255">
         <input type="password"  class="text" pattern="[A-Za-z0-9]{3,255}" required maxlength="255"
@@ -133,17 +132,14 @@
         <!--Log in Button-->
         <p align="center">
             <button type="submit" form="j_security_check" class="button_log_in">Log in</button>
+        <p align="center">
+        ${requestScope.unregistered}
     </form>
     <!--Sign up Button-->
     <form method="post" action="/signup">
         <p align="center"><input type="submit"  class="button_sign_up" value="Sign up">
     </form>
 
-    <%--<%if(request.getAttribute("email") == null) {--%>
-        <%--PrintWriter printWriter = response.getWriter();--%>
-        <%--printWriter.print("Such user doesn't exist. Please, repeate your log in or press sign up!");--%>
-    <%--}%>--%>
 </div>
-<div id="footer">&copy;</div>
 </body>
 </html>

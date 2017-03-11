@@ -1,16 +1,14 @@
 package dao.mysql;
 
 import dao.ScientistDao;
-import model.Degree;
 import model.Gender;
 import model.Scientist;
-import model.University;
 import org.apache.log4j.Logger;
-
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -19,64 +17,69 @@ import java.util.List;
  */
 public class MySqlScientistDao implements ScientistDao {
 
+    //CREATE
     private final static String SQL_CREATE_SCIENTIST = "INSERT INTO scientist (s_first_name, s_second_name, s_middle_name, " +
-            "s_email, s_password, s_birthday)" +
-            "VALUES (?, ?, ?, ?, ?, ?)";
-    private final static String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
-            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_birthday, s_gender_id, s_university_id," +
-            "u_country, u_city, u_full_name, u_degree_id," +
-            "d_name, d_description," +
-            "g_name \n" +
-            "FROM scientist s, university u, degree d, gender g\n" +
-            "WHERE s_university_id = u_id AND u_degree_id = d_id AND s_gender_id = g_id";
-    private final static String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT \n" +
-            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_birthday, s_gender_id, s_university_id,\n" +
-            "u_country, u_city, u_full_name, u_degree_id,\n" +
-            "d_name, d_description,\n" +
-            "g_name \n" +
-            "FROM scientist s, university u, degree d, gender g\n" +
-            "WHERE s_university_id = u_id AND u_degree_id = d_id AND s_gender_id = g_id AND s_email = ";
-    private final static String SQL_SELECT_SCIENTIST_BY_ID = "SELECT * FROM Scientist WHERE id = (?)";
-    private final static String SQL_REMOVE_SCEINTIST = "DELETE FROM Scientist";
+            "s_email, s_password, s_dob, s_gender_id) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
     private final static String SQL_ADD_TO_ROLE = "INSERT INTO roles (s_email, r_name) VALUES (?, ?)";
 
-    //TODO how does it work?
-    private DataSource dataSource;
-    private final Logger dbLogger;
+    //READ
+    private final static String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_dob, s_gender_id, " +
+            "g_name " +
+            "FROM scientist s, gender g " +
+            "WHERE s_gender_id = g_id";
+    private final static String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_dob, s_gender_id, " +
+            "g_name " +
+            "FROM scientist s, gender g " +
+            "WHERE s_gender_id = g_id AND s_email = (?)";
+    private final static String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_dob, s_gender_id, " +
+            "g_name \n" +
+            "FROM scientist s, gender g\n" +
+            "WHERE s_gender_id = g_id AND s_id = (?)";
 
-    public MySqlScientistDao(DataSource dataSource, Logger dbLogger) {
+    //UPDATE
+
+    //DELETE
+    private final static String SQL_REMOVE_SCEINTIST = "DELETE FROM Scientist WHERE";
+
+    //TODO how does it work?
+    //TODO create own connection pool
+    private DataSource dataSource;
+    private final Logger logger;
+
+    public MySqlScientistDao(DataSource dataSource, Logger logger) {
         this.dataSource = dataSource;
-        this.dbLogger = dbLogger;
+        this.logger = logger;
     }
 
     @Override
     public int create(Scientist scientist) {
-        try (Connection connection1 = dataSource.getConnection();
-             PreparedStatement statementForScientist = connection1.prepareStatement(
-                     SQL_CREATE_SCIENTIST, Statement.RETURN_GENERATED_KEYS)
-             ) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statementForScientist =
+                     connection.prepareStatement(SQL_CREATE_SCIENTIST, Statement.RETURN_GENERATED_KEYS)) {
             statementForScientist.setString(1, scientist.getFirstName());
             statementForScientist.setString(2, scientist.getSecondName());
             statementForScientist.setString(3, scientist.getMiddleName());
             statementForScientist.setString(4, scientist.getEmail());
             statementForScientist.setString(5, scientist.getPassword());
-            LocalDate localDate = scientist.getBirthday();
-            Date date = localDate == null ? null : Date.valueOf(localDate);
-            statementForScientist.setDate(6, date);
+            LocalDate localDate = scientist.getDob();
+            statementForScientist.setDate(6, (localDate == null ? null : Date.valueOf(localDate)));
+            statementForScientist.setInt(7, (scientist.getGender().ordinal() + 1));
             statementForScientist.executeUpdate();
             try (ResultSet generatedKeys = statementForScientist.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     scientist.setId(generatedKeys.getInt(1));
             }
-            //TODO think about university id
-            //TODO create ArrayList with university id
-            try(PreparedStatement statementForRole = connection1.prepareStatement(SQL_ADD_TO_ROLE)) {
+            try(PreparedStatement statementForRole = connection.prepareStatement(SQL_ADD_TO_ROLE)) {
                 statementForRole.setString(1, scientist.getEmail());
                 statementForRole.setString(2, "user");
                 statementForRole.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("operation with DB is invalid");
+            logger.fatal(String.format("User (%s) hasn't created", scientist), e);
         }
         return scientist.getId();
     }
@@ -87,29 +90,9 @@ public class MySqlScientistDao implements ScientistDao {
              PreparedStatement preparedStatement = connection.prepareStatement(
                      SQL_SELECT_SCIENTIST_BY_ID)) {
              preparedStatement.setInt(1, id);
-             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                 if (resultSet.next()) {
-                     return new Scientist(
-                             resultSet.getInt("s_id"),
-                             resultSet.getString("password"), //TODO think about safety
-                             resultSet.getString("email"),
-                             resultSet.getString("first_name"),
-                             resultSet.getString("second_name"),
-                             resultSet.getString("middle_name"),
-                             resultSet.getDate("birthday").toLocalDate(),
-                             new University(
-                                     resultSet.getInt("university_id"),
-                                     resultSet.getString("country"),
-                                     resultSet.getString("city"),
-                                     resultSet.getString("full_name"),
-                                     Degree.valueOf(resultSet.getString("d_name"))
-                             ),
-                             Gender.valueOf(resultSet.getString("g_name"))
-                     );
-                 }
-             }
+            return getScientist(preparedStatement);
         } catch (SQLException e) {
-            throw new RuntimeException("operation with DB is invalid");
+            logger.error(String.format("Getting user by id = (%d) has been unsuccessful", id), e);
         }
         return null;
     }
@@ -118,31 +101,11 @@ public class MySqlScientistDao implements ScientistDao {
     public Scientist get(String email) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     SQL_SELECT_SCIENTIST_BY_EMAIL + "\'" +email + "\'")) {
-//            preparedStatement.setString(1, email);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Scientist(
-                            resultSet.getInt("s_id"),
-                            resultSet.getString("s_password"), //TODO think about safety
-                            resultSet.getString("s_email"),
-                            resultSet.getString("s_first_name"),
-                            resultSet.getString("s_second_name"),
-                            resultSet.getString("s_middle_name"),
-                            resultSet.getDate("s_birthday").toLocalDate(),
-                            new University(
-                                    resultSet.getInt("s_university_id"),
-                                    resultSet.getString("u_country"),
-                                    resultSet.getString("u_city"),
-                                    resultSet.getString("u_full_name"),
-                                    Degree.valueOf(resultSet.getString("d_name"))
-                            ),
-                            Gender.valueOf(resultSet.getString("g_name"))
-                    );
-                }
-            }
+                     SQL_SELECT_SCIENTIST_BY_EMAIL)) {
+            preparedStatement.setString(1, email);
+            return getScientist(preparedStatement);
         } catch (SQLException e) {
-            dbLogger.error(e.getMessage(), e);
+            logger.error(String.format("Getting user by email = (%s) has been unsuccessful", email), e);
         }
         return null;
     }
@@ -160,28 +123,44 @@ public class MySqlScientistDao implements ScientistDao {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             ArrayList<Scientist> list = new ArrayList<>(resultSet.getRow());
             while (resultSet.next()) {
-                Scientist scientist = new Scientist(
-                        resultSet.getInt("id"),
-                        resultSet.getString("password"), //TODO think about safety
-                        resultSet.getString("email"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("second_name"),
-                        resultSet.getString("middle_name"),
-                        resultSet.getDate("birthday").toLocalDate(),
-                        new University(
-                                resultSet.getInt("university_id"),
-                                resultSet.getString("country"),
-                                resultSet.getString("city"),
-                                resultSet.getString("full_name"),
-                                Degree.valueOf(resultSet.getString("name"))
-                        ),
-                        Gender.valueOf(resultSet.getString("g_name"))
-                );
-                list.add(scientist);
+                Scientist.Builder builder = new Scientist().builder()
+                        .setId(resultSet.getInt("s_id"))
+                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
+                        .setEmail( resultSet.getString("s_email"))
+                        .setFirstName(resultSet.getString("s_first_name"))
+                        .setSecondName(resultSet.getString("s_second_name"))
+                        .setMiddleName(resultSet.getString("s_middle_name"));
+                Date date = resultSet.getDate("s_dob");
+                builder.setDob(date != null ? date.toLocalDate() : null);
+                String gender = resultSet.getString("g_name");
+                builder.setGender(gender != null ? Gender.valueOf(gender) : null);
+                list.add(builder.build());
             }
             return list;
         } catch (SQLException e) {
-            throw new RuntimeException("operation with DB is invalid");
+            logger.error("Getting all users has been unsuccessful", e);
         }
+        return Collections.emptyList();
+    }
+
+    private Scientist getScientist(PreparedStatement preparedStatement) throws SQLException {
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                Scientist.Builder builder = new Scientist().builder()
+                        .setId(resultSet.getInt("s_id"))
+                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
+                        .setEmail( resultSet.getString("s_email"))
+                        .setFirstName(resultSet.getString("s_first_name"))
+                        .setSecondName(resultSet.getString("s_second_name"))
+                        .setMiddleName(resultSet.getString("s_middle_name"));
+                Date date = resultSet.getDate("s_dob");
+                builder.setDob(date != null ? date.toLocalDate() : null);
+                String gender = resultSet.getString("g_name");
+                builder.setGender(gender != null ? Gender.valueOf(gender) : null);
+                return builder.build();
+            }
+        }
+        logger.fatal("Scientist model hasn't created");
+        return new Scientist();
     }
 }

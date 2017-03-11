@@ -124,29 +124,46 @@
     </div>
 </div>
 <div id="content">
-    <p align="center"><h1>Registration</h1>
+    <p align="center"><h3>Registration</h3>
     <form action="/signup" method="post" id="/signup">
         <!--First name-->
-        <p align="center"><input class="text" pattern="[A-Za-zА-Яа-я0-9]]{2,100}" required maxlength="100"
-                                 name="first_name" size="100" placeholder="Your first name"></p>
+        <p align="center">
+            <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]]{2,100}" required maxlength="100"
+                   name="first_name" size="100" placeholder="Your first name">
+        </p>
         <!--Last name-->
-        <p align="center"><input class="text" pattern="[A-Za-zА-Яа-я0-9]{2,100}" required maxlength="100"
-                                 name="second_name" size="100" placeholder="Your last name"></p>
+        <p align="center">
+            <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" required maxlength="100"
+                   name="second_name" size="100" placeholder="Your last name">
+        </p>
         <!--Middle name-->
-        <p align="center"><input class="text" pattern="[A-Za-zА-Яа-я0-9]{2,100}" maxlength="100"
-                                 name="middle_name" size="100" placeholder="Your middle name"></p>
+        <p align="center">
+            <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" maxlength="100"
+                   name="middle_name" size="100" placeholder="Your middle name">
+        </p>
         <!--Gender-->
-        <p align="center"><input name="gender" type="radio" value="male" placeholder="" required>Male
-            <input name="gender" type="radio" value="female" placeholder="" required>Female</p>
+        <p align="center">
+            <input name="gender" type="radio" value="other" placeholder="">Other
+            <input name="gender" type="radio" value="male" placeholder="">Male
+            <input name="gender" type="radio" value="female" placeholder="">Female
+        </p>
+        <!--Date of birthday-->
+        <p align="center">
+            Date of birthday
+        </p>
+        <p align="center">
+            <input type="date" class="text" name="dob" value="dob" placeholder=""
+                   max="2001-01-01" min="1900-01-01">
+        </p>
         <!--Email-->
-        <!--TODO create pattern for email-->
-        <p align="center"><div class="info" align="center" data-title="Only latin letters and numbers, length 2-100">
-        <input type="text" class="text" required maxlength="100"
-               name="emailNew" size="100" placeholder="email"></div>
-        <!--Password-->
-        <p align="center"><div class="info" align="center" data-title="Only latin letters and numbers, length3-255">
-        <input type="password"  class="text" pattern="[A-Za-z0-9]{3,255}" required maxlength="255"
-               name="passwordNew" size="255" placeholder="password"></div>
+        <p align="center">
+            <input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
+                   name="emailNew" size="100" placeholder="email">
+            <!--Password-->
+        <p align="center">
+        <div class="info" align="center" data-title="Only latin letters and numbers, length 3-100">
+            <input type="password"  class="text" pattern="[A-Za-z0-9]{3,100}" required maxlength="100"
+                   name="passwordNew" size="100" placeholder="password"></div>
         <!--Sign up Button-->
         <p align="center"><input type="submit" form="/signup" class="button_sign_up" value="Sign up">
     </form>
@@ -155,6 +172,5 @@
         <p align="center"><input type="submit"  class="button_log_in" value="Log in">
     </form>
 </div>
-<div id="footer">&copy;</div>
 </body>
 </html>

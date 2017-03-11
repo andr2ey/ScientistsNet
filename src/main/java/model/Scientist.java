@@ -7,36 +7,25 @@ import java.time.LocalDate;
  */
 public class Scientist {
 
-    public static String FIRST_NAME_KEY = "firstName";
-    //s_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     private int id;
-    //s_password        VARCHAR(255) NOT NULL,
-    private String password;
-    //s_email           VARCHAR(100) NOT NULL UNIQUE,
     private String email;
-    //s_first_name      VARCHAR(100) NOT NULL,
+    private String password;
     private String firstName;
-    //s_second_name     VARCHAR(100) NOT NULL,
     private String secondName;
-    //s_middle_name     VARCHAR(100),
     private String middleName;
-    //s_birthday        DATE,
-    private LocalDate birthday;
-    //university_id   INT,
+    private LocalDate dob;
     private University university;
-    //s_gender_id     INT,
     private Gender gender;
 
-    public Scientist(int id, String password, String email,
-                     String firstName, String secondName, String middleName,
-                     LocalDate birthday, University university, Gender gender) {
+    public Scientist(int id, String email, String password, String firstName, String secondName, String middleName,
+                     LocalDate dob, University university, Gender gender) {
         this.id = id;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
-        this.birthday = birthday;
+        this.dob = dob;
         this.university = university;
         this.gender = gender;
     }
@@ -52,20 +41,20 @@ public class Scientist {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -92,12 +81,12 @@ public class Scientist {
         this.middleName = middleName;
     }
 
-    public LocalDate getBirthday() {
-        return birthday;
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public University getUniversity() {
@@ -114,6 +103,10 @@ public class Scientist {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Builder builder(){
+        return this.new Builder();
     }
 
     public class Builder {
@@ -137,27 +130,22 @@ public class Scientist {
             return this;
         }
 
-        public Builder setFirst_name(String firstName) {
+        public Builder setFirstName(String firstName) {
             Scientist.this.firstName = firstName;
             return this;
         }
 
-        public Builder setSecond_name(String secondName) {
+        public Builder setSecondName(String secondName) {
             Scientist.this.secondName = secondName;
             return this;
         }
 
-        public Builder setMiddle_name(String middleName) {
+        public Builder setMiddleName(String middleName) {
             Scientist.this.middleName = middleName;
             return this;
         }
-        public Builder setBirthday(LocalDate birthday) {
-            Scientist.this.birthday = birthday;
-            return this;
-        }
-
-        public Builder setUniversity(University university) {
-            Scientist.this.university = university;
+        public Builder setDob(LocalDate dob) {
+            Scientist.this.dob = dob;
             return this;
         }
 
@@ -176,12 +164,12 @@ public class Scientist {
     public String toString() {
         return "Scientist{" +
                 "id=" + id +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", middleName='" + middleName + '\'' +
-                ", birthday=" + birthday +
+                ", dob=" + dob +
                 ", university=" + university +
                 ", gender=" + gender +
                 '}';

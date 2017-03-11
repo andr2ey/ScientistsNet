@@ -1,6 +1,8 @@
 package security;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -11,8 +13,8 @@ public class ScientistValidator {
     private boolean valid = true;
     private static final String PASSWORD_PATTERN = "^[\\dA-Za-z]{3,100}$";
     private static final String EMAIL_PATTERN = "^.+@.+\\..+[^\\.]$";
-    //TODO think about name pattern
-    private static final String NAME_PATTERN = ".+";
+    //TODO think about name pattern, if it is two spaces
+    private static final String NAME_PATTERN = "[A-Za-z\\u0410-\\u044F\\d ]{2,100}";
     private static final String GENDER_PATTERN = "(?i)^(male|female)$";
 
     public ScientistValidator password(String password){
@@ -84,11 +86,21 @@ public class ScientistValidator {
     }
 
     //TODO verify date
-    public ScientistValidator birthday(LocalDate date){
+    public ScientistValidator birthday(String dob){
         if (!valid)
             return this;
-        if (date == null)
+        if (dob == null)
             return this;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // TODO consider locale
+        formatter = formatter.withLocale(Locale.getDefault());
+        LocalDate localDate = LocalDate.parse(dob, formatter);
+        System.err.println(localDate);
+        if (localDate == null) {
+            //TODO delete sout
+            System.err.println("PARSE DATE is invalid");
+            valid = false;
+        }
         return this;
     }
 
@@ -99,5 +111,6 @@ public class ScientistValidator {
         }
         return true;
     }
+
 
 }

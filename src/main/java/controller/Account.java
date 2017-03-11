@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created on 10.03.2017.
  */
 @WebServlet("/main")
-public class MainPage extends HttpServlet {
+public class Account extends HttpServlet {
 
     private static final String LOGOUT = "logout";
     private static final String MAIN_PAGE_FULL_PATH = "WEB-INF/main/index.jsp";
@@ -23,7 +23,7 @@ public class MainPage extends HttpServlet {
             //redirect to carry on an authorization
             response.sendRedirect(MAIN_PAGE_PATH);
         } else {
-            //process page of account
+            //to account
             request.getRequestDispatcher(MAIN_PAGE_FULL_PATH).forward(request, response);
         }
     }
