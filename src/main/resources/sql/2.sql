@@ -6,6 +6,7 @@ INSERT INTO degree (d_name) VALUES ('SPECIALIST');
 INSERT INTO Gender (g_name) VALUES ('OTHER');
 INSERT INTO Gender (g_name) VALUES ('MALE');
 INSERT INTO Gender (g_name) VALUES ('FEMALE');
+INSERT INTO Gender (g_name) VALUES ('NONE');
 
 INSERT INTO university (u_scientist_id, u_country, u_city, u_full_name, u_degree_id)
 VALUES (1,

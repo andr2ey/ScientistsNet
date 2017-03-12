@@ -29,6 +29,7 @@ public class DBIniter implements ServletContextListener {
 
     private static final String SCIENTIST_DAO = "ScientistDao";
     private static final String ROOT_LOGGER = "rootLogger";
+    private static Logger rootLogger;
 
     @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
@@ -37,7 +38,8 @@ public class DBIniter implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
         //TODO think about logging
-        Logger rootLogger = initRootLogger(servletContext);
+        rootLogger = initRootLogger(servletContext);
+        servletContext.setAttribute(ROOT_LOGGER, rootLogger);
         servletContext.setAttribute(SCIENTIST_DAO,
                 new MySqlScientistDao(dataSource, rootLogger));
         initDB(sce);
@@ -48,12 +50,14 @@ public class DBIniter implements ServletContextListener {
         try(FileInputStream inputStream = new FileInputStream(
                 servletContext.getRealPath("/WEB-INF/classes/log4j.properties"))) {
             PropertyConfigurator.configure(inputStream);
+            rootLogger.setAdditivity(true);
+            rootLogger.info("PropertyConfigurator worked successful");
         } catch (IOException e) {
-            System.err.println("FILE doesn't exist!");
+            BasicConfigurator.configure();
+            rootLogger.setAdditivity(true);
+            rootLogger.info("BasicConfigurator worked successful", e);
         }
         rootLogger.setLevel(Level.INFO);
-        servletContext.setAttribute(ROOT_LOGGER, rootLogger);
-        rootLogger.info("rootLogger loaded");
         return rootLogger;
     }
 
@@ -79,11 +83,9 @@ public class DBIniter implements ServletContextListener {
                     statement.executeBatch();
                 }
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
-            //TODO add logging
+            rootLogger.warn("SQL query in initDB is invalid", e);
         } catch (IOException e) {
-            throw new RuntimeException("connection to sql directory is invalid");
-            //TODO add logging
+            rootLogger.warn("Connection to sql directory is invalid", e);
         }
     }
 }

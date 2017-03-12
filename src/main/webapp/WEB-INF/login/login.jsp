@@ -140,6 +140,7 @@
         <p align="center"><input type="submit"  class="button_sign_up" value="Sign up">
     </form>
     <p align="center">${applicationScope.error_login}</p>
+    <p align="center">${sessionScope.signup}</p>
 </div>
 </body>
 </html>

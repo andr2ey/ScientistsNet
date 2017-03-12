@@ -69,7 +69,10 @@ public class MySqlScientistDao implements ScientistDao {
             statementForScientist.setDate(6, (localDate == null ? null : Date.valueOf(localDate)));
             Gender gender = scientist.getGender();
             statementForScientist.setInt(7, (gender == null ? 0 : gender.ordinal()+1 ));
-            statementForScientist.executeUpdate();
+            int count = statementForScientist.executeUpdate();
+            if (count == 0) {
+                return 0;
+            }
             try (ResultSet generatedKeys = statementForScientist.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     scientist.setId(generatedKeys.getInt(1));

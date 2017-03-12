@@ -132,30 +132,41 @@
         <!--First name-->
         <p align="center">
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]]{2,100}" required maxlength="100"
-                   name="first_name" size="100" placeholder="Your first name">
+                   name="first_name" size="100" placeholder="Your first name" value="${requestScope.first_name}">
         </p>
         <!--Last name-->
         <p align="center">
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" required maxlength="100"
-                   name="second_name" size="100" placeholder="Your last name">
+                   name="second_name" size="100" placeholder="Your last name" value="${requestScope.second_name}">
         </p>
         <!--Middle name-->
         <p align="center">
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" maxlength="100"
-                   name="middle_name" size="100" placeholder="Your middle name">
+                   name="middle_name" size="100" placeholder="Your middle name" value="${requestScope.middle_name}">
         </p>
         <!--Gender-->
         <p align="center">
-            <input name="gender" type="radio" value="other" placeholder="">Other
-            <input name="gender" type="radio" value="male" placeholder="">Male
-            <input name="gender" type="radio" value="female" placeholder="">Female
+            <c:choose>
+                <c:when test="${requestScope.gender eq 'other'}">
+                    <c:set var="gender_other" scope="page" value="checked"/>
+                </c:when>
+                <c:when test="${requestScope.gender eq 'male'}">
+                    <c:set var="gender_male" scope="page" value="checked"/>
+                </c:when>
+                <c:when test="${requestScope.gender eq 'female'}">
+                    <c:set var="gender_female" scope="page" value="checked"/>
+                </c:when>
+            </c:choose>
+            <input name="gender" type="radio" value="other" placeholder="" ${gender_other}>Other
+            <input name="gender" type="radio" value="male" placeholder="" ${gender_male}>Male
+            <input name="gender" type="radio" value="female" placeholder="" ${gender_female}>Female
         </p>
         <!--Date of birthday-->
         <p align="center">
             Date of birthday
         </p>
         <p align="center">
-            <input type="date" class="text" name="dob" value="dob" placeholder=""
+            <input type="date" class="text" name="dob" value="${requestScope.dob}" placeholder=""
                    max="2001-01-01" min="1900-01-01">
         </p>
         <!--Email-->
@@ -168,12 +179,13 @@
             <input type="password"  class="text" pattern="[A-Za-z0-9]{3,100}" required maxlength="100"
                    name="passwordNew" size="100" placeholder="password"></div>
         <!--Sign up Button-->
-        <p align="center"><input type="submit" form="/signup" class="button_sign_up" value="Sign up">
+        <p align="center"><input type="submit" class="button_sign_up" value="Sign up">
     </form>
     <!--Log in Button-->
     <form action="/" method="post">
         <p align="center"><input type="submit"  class="button_log_in" value="Log in">
     </form>
+    <p align="center">${requestScope.email_exist}</p>
 </div>
 </body>
 </html>
