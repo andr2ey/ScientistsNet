@@ -1,8 +1,5 @@
 package security;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -11,11 +8,13 @@ import java.util.regex.Pattern;
 public class ScientistValidator {
 
     private boolean valid = true;
-    private static final String PASSWORD_PATTERN = "^[\\dA-Za-z]{3,100}$";
-    private static final String EMAIL_PATTERN = "^.+@.+\\..+[^\\.]$";
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\dA-Za-z]{3,100}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+[^\\.]$");
     //TODO think about name pattern, if it is two spaces
-    private static final String NAME_PATTERN = "[A-Za-z\\u0410-\\u044F\\d ]{2,100}";
-    private static final String GENDER_PATTERN = "(?i)^(male|female)$";
+    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\d ]{2,100}");
+    private static final Pattern GENDER_PATTERN = Pattern.compile("(?i)^(male|female|other)$");
+    //TODO think about date pattern, check year, day, month
+    private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
 
     public ScientistValidator password(String password){
         if (!valid)
@@ -24,7 +23,7 @@ public class ScientistValidator {
             valid = false;
             return this;
         }
-        if (!Pattern.compile(PASSWORD_PATTERN).matcher(password).matches())
+        if (!PASSWORD_PATTERN.matcher(password).matches())
             valid = false;
         return this;
     }
@@ -36,7 +35,7 @@ public class ScientistValidator {
             valid = false;
             return this;
         }
-        if (!Pattern.compile(EMAIL_PATTERN).matcher(email).matches())
+        if (!EMAIL_PATTERN.matcher(email).matches())
             valid = false;
         return this;
     }
@@ -48,7 +47,7 @@ public class ScientistValidator {
             valid = false;
             return this;
         }
-        if (!Pattern.compile(NAME_PATTERN).matcher(firstName).matches())
+        if (!NAME_PATTERN.matcher(firstName).matches())
             valid = false;
         return this;
     }
@@ -60,7 +59,7 @@ public class ScientistValidator {
             valid = false;
             return this;
         }
-        if (!Pattern.compile(NAME_PATTERN).matcher(secondName).matches())
+        if (!NAME_PATTERN.matcher(secondName).matches())
             valid = false;
         return this;
     }
@@ -70,7 +69,7 @@ public class ScientistValidator {
             return this;
         if (middleName == null)
             return this;
-        if (!Pattern.compile(NAME_PATTERN).matcher(middleName).matches())
+        if (!NAME_PATTERN.matcher(middleName).matches())
             valid = false;
         return this;
     }
@@ -80,27 +79,18 @@ public class ScientistValidator {
             return this;
         if (gender == null)
             return this;
-        if (!Pattern.compile(GENDER_PATTERN).matcher(gender).matches())
+        if (!GENDER_PATTERN.matcher(gender).matches())
             valid = false;
         return this;
     }
 
-    //TODO verify date
     public ScientistValidator birthday(String dob){
         if (!valid)
             return this;
         if (dob == null)
             return this;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // TODO consider locale
-        formatter = formatter.withLocale(Locale.getDefault());
-        LocalDate localDate = LocalDate.parse(dob, formatter);
-        System.err.println(localDate);
-        if (localDate == null) {
-            //TODO delete sout
-            System.err.println("PARSE DATE is invalid");
+        if (!DATE_PATTERN.matcher(dob).matches())
             valid = false;
-        }
         return this;
     }
 

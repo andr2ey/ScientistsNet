@@ -68,9 +68,9 @@ public class SignUp extends HttpServlet {
         VALIDATOR.firstName(firstName).secondName(secondName).middleName(middleName).gender(gender)
                 .birthday(dob).email(email).password(password);
         if (VALIDATOR.isValid()) {
-            Scientist user = new Scientist(0, password, email, firstName,
-                    secondName, middleName, localeDateParse(dob), null,
-                    (gender != null ?  Gender.valueOf(gender.toUpperCase()) : null) );
+            Scientist user = new Scientist().builder().setEmail(email).setPassword(password).setFirstName(firstName)
+                    .setSecondName(secondName).setMiddleName(middleName).setDob(localeDateParse(dob))
+                    .setGender((gender != null ?  Gender.valueOf(gender.toUpperCase()) : null)).build();
             ((ScientistDao) getServletContext().getAttribute(SCIENTIST_DAO)).create(user);
             LOGGER.info(String.format("User (%s) is successfully created", user));
             return user;
@@ -79,13 +79,11 @@ public class SignUp extends HttpServlet {
     }
 
     private LocalDate localeDateParse(String dob) {
+        if (dob == null)
+            return null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate localDate = null;
-        if (dob != null) {
             // TODO consider locale
-            localDate = LocalDate.parse(dob, formatter.withLocale(Locale.getDefault()));
-        }
-        return localDate;
+        return LocalDate.parse(dob, formatter.withLocale(Locale.getDefault()));
     }
 
 

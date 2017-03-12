@@ -6,6 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%--To avoid repeating error message on log in page--%>
+<c:set var="error_login" scope="application" value=""/>
 <html>
 <head>
     <meta charset="utf-8">

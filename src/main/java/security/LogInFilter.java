@@ -14,9 +14,6 @@ import java.io.IOException;
 public class LogInFilter implements Filter {
 
     private static final String EMAIL_KEY = "email";
-    private static final String UNREGISTERED_EMAIL_KEY = "unregistered";
-
-    private static final String UNREGISTERED_EMAIL = "Unable to log in. Check email and password.";
 
     private ScientistDao scientistDao;
 
@@ -33,10 +30,6 @@ public class LogInFilter implements Filter {
         if (username != null && request.getSession().getAttribute(EMAIL_KEY) == null) {
             // first-time login
             Scientist user = scientistDao.get(username);
-            if (user == null)
-                request.setAttribute(UNREGISTERED_EMAIL_KEY, UNREGISTERED_EMAIL);
-            else
-                request.setAttribute(UNREGISTERED_EMAIL_KEY, "");
             request.getSession().setAttribute(EMAIL_KEY, user);
         }
         chain.doFilter(req, resp);

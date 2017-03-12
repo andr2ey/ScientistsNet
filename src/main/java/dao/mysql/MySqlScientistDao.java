@@ -67,7 +67,8 @@ public class MySqlScientistDao implements ScientistDao {
             statementForScientist.setString(5, scientist.getPassword());
             LocalDate localDate = scientist.getDob();
             statementForScientist.setDate(6, (localDate == null ? null : Date.valueOf(localDate)));
-            statementForScientist.setInt(7, (scientist.getGender().ordinal() + 1));
+            Gender gender = scientist.getGender();
+            statementForScientist.setInt(7, (gender == null ? 0 : gender.ordinal()+1 ));
             statementForScientist.executeUpdate();
             try (ResultSet generatedKeys = statementForScientist.getGeneratedKeys()) {
                 if (generatedKeys.next())

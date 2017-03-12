@@ -1,4 +1,5 @@
-<%@ page import="java.io.PrintWriter" %>
+<%@ page contentType="text/html; utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
     <meta charset="utf-8">
@@ -132,14 +133,13 @@
         <!--Log in Button-->
         <p align="center">
             <button type="submit" form="j_security_check" class="button_log_in">Log in</button>
-        <p align="center">
-        ${requestScope.unregistered}
+
     </form>
     <!--Sign up Button-->
     <form method="post" action="/signup">
         <p align="center"><input type="submit"  class="button_sign_up" value="Sign up">
     </form>
-
+    <p align="center">${applicationScope.error_login}</p>
 </div>
 </body>
 </html>

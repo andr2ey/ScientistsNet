@@ -14,11 +14,10 @@ public class Scientist {
     private String secondName;
     private String middleName;
     private LocalDate dob;
-    private University university;
     private Gender gender;
 
     public Scientist(int id, String email, String password, String firstName, String secondName, String middleName,
-                     LocalDate dob, University university, Gender gender) {
+                     LocalDate dob, Gender gender) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -26,7 +25,6 @@ public class Scientist {
         this.secondName = secondName;
         this.middleName = middleName;
         this.dob = dob;
-        this.university = university;
         this.gender = gender;
     }
 
@@ -87,14 +85,6 @@ public class Scientist {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
-    }
-
-    public University getUniversity() {
-        return university;
-    }
-
-    public void setUniversity(University university) {
-        this.university = university;
     }
 
     public Gender getGender() {
@@ -170,7 +160,6 @@ public class Scientist {
                 ", secondName='" + secondName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", dob=" + dob +
-                ", university=" + university +
                 ", gender=" + gender +
                 '}';
     }
