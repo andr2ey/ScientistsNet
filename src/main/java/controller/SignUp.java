@@ -35,10 +35,19 @@ public class SignUp extends HttpServlet {
     private final Logger LOGGER = Logger.getRootLogger();
     private final ScientistValidator VALIDATOR = new ScientistValidator(Logger.getRootLogger());
 
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html; charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
+        super.service(req, resp);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         String email = request.getParameter("emailNew");
@@ -57,8 +66,12 @@ public class SignUp extends HttpServlet {
         if(emailNull)
             return null;
 
+        System.err.println(request.getHeader("Content-Type"));
+
+        request.setCharacterEncoding("utf-8");
         String email = request.getParameter("emailNew").trim();
         String firstName = request.getParameter("first_name");
+        System.err.println(firstName);
         String secondName = request.getParameter("second_name");
         String middleName = request.getParameter("middle_name");
         String gender = request.getParameter("gender");
@@ -70,6 +83,7 @@ public class SignUp extends HttpServlet {
 //        if(!emailExist(email, scientistDao)) {
 //            getServletContext().setAttribute();
 //        }
+
         firstName = firstName == null ? null : firstName.trim();
         secondName = secondName == null ? null : secondName.trim();
         middleName = (middleName == null || middleName.isEmpty()) ? null : middleName.trim();
@@ -96,6 +110,7 @@ public class SignUp extends HttpServlet {
             request.getSession()
                     .setAttribute("signup", "You have been successfully signed up. Please log in!");
             LOGGER.info(String.format("User (%s) is successfully created", user));
+            request.login(email, password);
             return user;
         }
         LOGGER.warn("User hasn't created");

@@ -18,24 +18,24 @@ import java.util.List;
 public class MySqlScientistDao implements ScientistDao {
 
     //CREATE
-    private final static String SQL_CREATE_SCIENTIST = "INSERT INTO scientist (s_first_name, s_second_name, s_middle_name, " +
+    private final String SQL_CREATE_SCIENTIST = "INSERT INTO scientist (s_first_name, s_second_name, s_middle_name, " +
             "s_email, s_password, s_dob, s_gender_id) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private final static String SQL_ADD_TO_ROLE = "INSERT INTO roles (s_email, r_name) VALUES (?, ?)";
+    private final String SQL_ADD_TO_ROLE = "INSERT INTO roles (s_email, r_name) VALUES (?, ?)";
 
     //READ
-    private final static String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
-            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_dob, s_gender_id, " +
+    private final String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
             "g_name " +
             "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id";
-    private final static String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT " +
-            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_dob, s_gender_id, " +
+    private final String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
             "g_name " +
             "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id AND s_email = (?)";
-    private final static String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
-            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_password, s_dob, s_gender_id, " +
+    private final String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
             "g_name \n" +
             "FROM scientist s, gender g\n" +
             "WHERE s_gender_id = g_id AND s_id = (?)";
@@ -48,11 +48,10 @@ public class MySqlScientistDao implements ScientistDao {
     //TODO how does it work?
     //TODO create own connection pool
     private DataSource dataSource;
-    private final Logger logger;
+    private final Logger logger = Logger.getRootLogger();
 
-    public MySqlScientistDao(DataSource dataSource, Logger logger) {
+    public MySqlScientistDao(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.logger = logger;
     }
 
     @Override
@@ -129,7 +128,7 @@ public class MySqlScientistDao implements ScientistDao {
             while (resultSet.next()) {
                 Scientist.Builder builder = new Scientist().builder()
                         .setId(resultSet.getInt("s_id"))
-                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
+//                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
                         .setEmail( resultSet.getString("s_email"))
                         .setFirstName(resultSet.getString("s_first_name"))
                         .setSecondName(resultSet.getString("s_second_name"))
@@ -152,7 +151,7 @@ public class MySqlScientistDao implements ScientistDao {
             if (resultSet.next()) {
                 Scientist.Builder builder = new Scientist().builder()
                         .setId(resultSet.getInt("s_id"))
-                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
+//                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
                         .setEmail( resultSet.getString("s_email"))
                         .setFirstName(resultSet.getString("s_first_name"))
                         .setSecondName(resultSet.getString("s_second_name"))

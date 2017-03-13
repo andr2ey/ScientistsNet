@@ -1,5 +1,5 @@
 DROP DATABASE scientists;
-CREATE DATABASE scientists;
+CREATE DATABASE scientists CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE scientists;
 
 CREATE TABLE degree (

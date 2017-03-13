@@ -13,6 +13,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,10 +26,8 @@ import java.util.regex.Pattern;
  */
 
 @WebListener
-public class DBIniter implements ServletContextListener {
+public class DBandLoggerInit implements ServletContextListener {
 
-    private static final String SCIENTIST_DAO = "ScientistDao";
-    private static final String ROOT_LOGGER = "rootLogger";
     private static Logger rootLogger;
 
     @Resource(name = "jdbc/TestDB")
@@ -39,9 +38,6 @@ public class DBIniter implements ServletContextListener {
         ServletContext servletContext = sce.getServletContext();
         //TODO think about logging
         rootLogger = initRootLogger(servletContext);
-        servletContext.setAttribute(ROOT_LOGGER, rootLogger);
-        servletContext.setAttribute(SCIENTIST_DAO,
-                new MySqlScientistDao(dataSource, rootLogger));
         initDB(sce);
     }
 
@@ -50,11 +46,9 @@ public class DBIniter implements ServletContextListener {
         try(FileInputStream inputStream = new FileInputStream(
                 servletContext.getRealPath("/WEB-INF/classes/log4j.properties"))) {
             PropertyConfigurator.configure(inputStream);
-            rootLogger.setAdditivity(true);
             rootLogger.info("PropertyConfigurator worked successful");
         } catch (IOException e) {
             BasicConfigurator.configure();
-            rootLogger.setAdditivity(true);
             rootLogger.info("BasicConfigurator worked successful", e);
         }
         rootLogger.setLevel(Level.INFO);
@@ -70,7 +64,8 @@ public class DBIniter implements ServletContextListener {
             if (filesSql == null)
                 return;
             for (File fileSql : filesSql)
-                try (BufferedReader reader = new BufferedReader(new FileReader(fileSql))) {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(fileSql), Charset.forName("utf-8")))) {
                     String line;
                     StringBuilder sb = new StringBuilder();
                     while ((line = reader.readLine()) != null) {
@@ -83,9 +78,9 @@ public class DBIniter implements ServletContextListener {
                     statement.executeBatch();
                 }
         } catch (SQLException e) {
-            rootLogger.warn("SQL query in initDB is invalid", e);
+            rootLogger.fatal("SQL query in initDB is invalid", e);
         } catch (IOException e) {
-            rootLogger.warn("Connection to sql directory is invalid", e);
+            rootLogger.fatal("Connection to sql directory is invalid", e);
         }
     }
 }

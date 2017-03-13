@@ -1,17 +1,32 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 07.03.2017
-  Time: 21:48
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%--To avoid repeating error message on log in page--%>
-<c:set var="error_login" scope="application" value=""/>
+<c:set var="error_login" scope="session" value="${null}"/>
+<c:set var="signup" scope="session" value="${null}"/>
+<fmt:setLocale value="${sessionScope.language}"/>
+<fmt:setBundle basename="language.lang" var="lang"/>
+
+<fmt:message bundle="${lang}" key="lang.button.rus" var="ru_button"/>
+<fmt:message bundle="${lang}" key="lang.button.en" var="en_button"/>
+<fmt:message bundle="${lang}" key="lang.button.login" var="button_login"/>
+<fmt:message bundle="${lang}" key="lang.button.signup" var="button_signup"/>
+<fmt:message bundle="${lang}" key="lang.data-title.password" var="data_title_password"/>
+<fmt:message bundle="${lang}" key="lang.email.placeholder" var="placeholder_email"/>
+<fmt:message bundle="${lang}" key="lang.password.placeholder" var="placeholder_password"/>
+<fmt:message bundle="${lang}" key="lang.date.of.birthday" var="date_of_birthday"/>
+<fmt:message bundle="${lang}" key="lang.gender.other" var="gender_other"/>
+<fmt:message bundle="${lang}" key="lang.gender.male" var="gender_male"/>
+<fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
+<fmt:message bundle="${lang}" key="lang.your.first.name" var="your_first_name"/>
+<fmt:message bundle="${lang}" key="lang.your.last.name" var="your_last_name"/>
+<fmt:message bundle="${lang}" key="lang.your.middle.name" var="your_middle_name"/>
+<fmt:message bundle="${lang}" key="lang.signup.title" var="signup_title"/>
+<fmt:message bundle="${lang}" key="lang.email.exist" var="email_exist"/>
+<fmt:message bundle="${lang}" key="lang.signup.title" var="signup_title"/>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ScientistsNet</title>
     <style>
         body {
@@ -39,7 +54,6 @@
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
-
         #content { /* Центральная колонка */
             background: #b1b1b1; /* Цвет фона */
             margin: 20px auto auto auto; /* Значения отступов */
@@ -47,15 +61,6 @@
             width: 500px; /* Ширина колонки */
             border: solid 1px #898989; /* Параметры рамки вокруг */
             border-radius:  3px;
-        }
-        #footer { /* Нижний блок */
-            background: #636363; /* Цвет фона */
-            padding: 5px; /* Поля вокруг текста */
-            color: #fff; /* Цвет текста */
-            clear: left; /* Отменяем действие float */
-            position: absolute;
-            bottom: 0;
-            width: 100%;
         }
         .text {
             width: 440px;
@@ -116,33 +121,46 @@
 </head>
 <body>
 <div id="header">
-    <div>
-        <p align="center"> <h1>ScientistsNet</h1>
-    </div>
-    <div>
-        <form action="/language" method="post">
-            <p align="center"><input type="submit"  class="button_lang" value="ENG">
-                <input type="submit"  class="button_lang"  value="RUS"></p>
-        </form>
-    </div>
+    <table border="0" width="100%" cellpadding="0">
+        <tr>
+            <td align="left" width="20%">
+
+            </td>
+            <td align="center" width="60%">
+                <h1>ScientistsNet</h1>
+            </td>
+            <td align="right" width="20%">
+                <form action="/language" method="post">
+                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="lang" value="en">
+                    <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
+                </form>
+                <form action="/language" method="post">
+                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="lang" value="ru">
+                    <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
+                </form>
+            </td>
+        </tr>
+    </table>
 </div>
 <div id="content">
-    <p align="center"><h3>Registration</h3>
+    <p align="center"><h3>${signup_title}</h3>
     <form action="/signup" method="post" id="/signup">
         <!--First name-->
         <p align="center">
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]]{2,100}" required maxlength="100"
-                   name="first_name" size="100" placeholder="Your first name" value="${requestScope.first_name}">
+                   name="first_name" size="100" placeholder="${your_first_name}" value="${requestScope.first_name}">
         </p>
         <!--Last name-->
         <p align="center">
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" required maxlength="100"
-                   name="second_name" size="100" placeholder="Your last name" value="${requestScope.second_name}">
+                   name="second_name" size="100" placeholder="${your_last_name}" value="${requestScope.second_name}">
         </p>
         <!--Middle name-->
         <p align="center">
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" maxlength="100"
-                   name="middle_name" size="100" placeholder="Your middle name" value="${requestScope.middle_name}">
+                   name="middle_name" size="100" placeholder="${your_middle_name}" value="${requestScope.middle_name}">
         </p>
         <!--Gender-->
         <p align="center">
@@ -157,13 +175,13 @@
                     <c:set var="gender_female" scope="page" value="checked"/>
                 </c:when>
             </c:choose>
-            <input name="gender" type="radio" value="other" placeholder="" ${gender_other}>Other
-            <input name="gender" type="radio" value="male" placeholder="" ${gender_male}>Male
-            <input name="gender" type="radio" value="female" placeholder="" ${gender_female}>Female
+            <input name="gender" type="radio" value="male" placeholder="" ${gender_male}>${gender_male}
+            <input name="gender" type="radio" value="female" placeholder="" ${gender_female}>${gender_female}
+            <input name="gender" type="radio" value="other" placeholder="" ${gender_other}>${gender_other}
         </p>
         <!--Date of birthday-->
         <p align="center">
-            Date of birthday
+            ${date_of_birthday}
         </p>
         <p align="center">
             <input type="date" class="text" name="dob" value="${requestScope.dob}" placeholder=""
@@ -172,20 +190,23 @@
         <!--Email-->
         <p align="center">
             <input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
-                   name="emailNew" size="100" placeholder="email">
+                   name="emailNew" size="100" placeholder="${placeholder_email}">
             <!--Password-->
         <p align="center">
-        <div class="info" align="center" data-title="Only latin letters and numbers, length 3-100">
+        <div class="info" align="center" data-title="${data_title_password}">
             <input type="password"  class="text" pattern="[A-Za-z0-9]{3,100}" required maxlength="100"
-                   name="passwordNew" size="100" placeholder="password"></div>
+                   name="passwordNew" size="100" placeholder="${placeholder_password}"></div>
         <!--Sign up Button-->
-        <p align="center"><input type="submit" class="button_sign_up" value="Sign up">
+        <p align="center"><input type="submit" class="button_sign_up" value="${button_signup}">
     </form>
     <!--Log in Button-->
     <form action="/" method="post">
-        <p align="center"><input type="submit"  class="button_log_in" value="Log in">
+        <p align="center"><input type="submit"  class="button_log_in" value="${button_login}">
     </form>
-    <p align="center">${requestScope.email_exist}</p>
+    <c:if test="${requestScope.email_exist != null}">
+        <c:set var="email_exist" scope="request" value="${email_exist}"/>
+    </c:if>
+    <p align="center"><small>${requestScope.email_exist}</small></p>
 </div>
 </body>
 </html>

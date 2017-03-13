@@ -72,6 +72,52 @@ public class University {
         this.degree = degree;
     }
 
+    public Builder builder(){
+        return this.new Builder();
+    }
+
+    public class Builder {
+
+        private Builder() {
+            // private constructor
+        }
+
+        public Builder setId(int id) {
+            University.this.id = id;
+            return this;
+        }
+
+        public Builder setScientistId(int scientistId) {
+            University.this.scientistId = scientistId;
+            return this;
+        }
+
+        public Builder setCountry(String country) {
+            University.this.country = country;
+            return this;
+        }
+
+        public Builder setCity(String city) {
+            University.this.city = city;
+            return this;
+        }
+
+        public Builder setFullName(String fullName) {
+            University.this.fullName = fullName;
+            return this;
+        }
+
+        public Builder setDegree(Degree degree) {
+            University.this.degree = degree;
+            return this;
+        }
+
+        public University build() {
+            return University.this;
+        }
+
+    }
+
     @Override
     public String toString() {
         return "University{" +

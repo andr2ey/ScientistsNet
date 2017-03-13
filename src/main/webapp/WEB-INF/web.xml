@@ -21,6 +21,7 @@
     </security-role>
 
     <login-config>
+        <!--TODO change FORM to DIGEST-->
         <auth-method>FORM</auth-method>
         <form-login-config>
             <form-login-page>/WEB-INF/login/login.jsp</form-login-page>
@@ -42,6 +43,4 @@
         <url-pattern>/main/*</url-pattern>
         <url-pattern>/else/*</url-pattern>
     </filter-mapping>
-
-
 </web-app>

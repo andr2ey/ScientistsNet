@@ -19,7 +19,7 @@ INSERT INTO scientist (s_email, s_password, s_first_name, s_second_name, s_middl
   VALUES ('ao.andronov@gmail.com',
         '123',
         'Andrey',
-        'Andronov',
+        'Андронов',
         'Olegovich',
         '1989-03-04',
         2);

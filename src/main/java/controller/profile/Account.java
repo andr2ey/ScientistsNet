@@ -1,4 +1,4 @@
-package controller;
+package controller.profile;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +17,14 @@ public class Account extends HttpServlet {
     private static final String MAIN_PAGE_FULL_PATH = "WEB-INF/main/index.jsp";
     private static final String MAIN_PAGE_PATH = "/main";
 
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html; charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
+        super.service(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //did user log out
         if (accountLogout(request)) {
@@ -28,6 +36,7 @@ public class Account extends HttpServlet {
         }
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }

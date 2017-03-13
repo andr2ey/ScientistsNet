@@ -1,9 +1,27 @@
-<%@ page contentType="text/html; utf-8" %>
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ScientistsNet</title>
+    <c:if test="${sessionScope.language eq null}">
+        <c:set var="language" scope="session" value="en"/>
+    </c:if>
+    <fmt:setLocale value="${sessionScope.language}"/>
+    <fmt:setBundle basename="language.lang" var="lang"/>
+
+    <fmt:message bundle="${lang}" key="lang.button.rus" var="ru_button"/>
+    <fmt:message bundle="${lang}" key="lang.button.en" var="en_button"/>
+    <fmt:message bundle="${lang}" key="lang.login.title" var="login_title"/>
+    <fmt:message bundle="${lang}" key="lang.error.login" var="error_login"/>
+    <fmt:message bundle="${lang}" key="lang.email.placeholder" var="placeholder_email"/>
+    <fmt:message bundle="${lang}" key="lang.password.placeholder" var="placeholder_password"/>
+    <fmt:message bundle="${lang}" key="lang.button.login" var="button_login"/>
+    <fmt:message bundle="${lang}" key="lang.button.signup" var="button_signup"/>
+    <fmt:message bundle="${lang}" key="lang.data-title.password" var="data_title_password"/>
+    <fmt:message bundle="${lang}" key="lang.signed.up.success" var="signed_up_success"/>
     <style>
         body {
             font: 14pt Arial, sans-serif; /* Рубленый шрифт текста */
@@ -102,45 +120,67 @@
             padding: 4px 4px;
             font: 8pt Arial, sans-serif;
             cursor: pointer;
+            margin: 0;
         }
     </style>
 </head>
 <body>
 <div id="header">
-    <div>
-        <p align="center"> <h1>ScientistsNet</h1>
-    </div>
-    <div>
-        <form action="/language" method="post">
-            <p align="center"><input type="submit"  class="button_lang" value="ENG">
-                <input type="submit"  class="button_lang"  value="RUS"></p>
-        </form>
-    </div>
+    <table border="0" width="100%" cellpadding="0">
+        <tr>
+        <tr>
+            <td align="left" width="20%">
+
+            </td>
+            <td align="center" width="60%">
+                <h1>ScientistsNet</h1>
+            </td>
+            <td align="right" width="20%">
+                <form action="/language" method="post">
+                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="lang" value="en">
+                    <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
+                </form>
+                <form action="/language" method="post">
+                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="lang" value="ru">
+                    <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
+                </form>
+            </td>
+        </tr>
+        </tr>
+    </table>
 </div>
 <div id="content">
-    <p align="center"><h3>Authorization</h3>
+    <p align="center"><h3>${login_title}</h3>
     <form action="j_security_check" method="post" id="j_security_check">
         <!--Email-->
         <!--TODO create pattern for email-->
         <p align="center">
             <input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
-                   name="j_username" size="100" placeholder="email">
+                   name="j_username" size="100" placeholder="${placeholder_email}">
         <!--Password-->
-        <p align="center"><div class="info" align="center" data-title="Only latin letters and numbers, length 3-255">
+        <p align="center"><div class="info" align="center" data-title="${data_title_password}">
         <input type="password"  class="text" pattern="[A-Za-z0-9]{3,255}" required maxlength="255"
-               name="j_password" size="255" placeholder="password"
+               name="j_password" size="255" placeholder="${placeholder_password}"
                value=""></div>
         <!--Log in Button-->
         <p align="center">
-            <button type="submit" form="j_security_check" class="button_log_in">Log in</button>
+            <button type="submit" form="j_security_check" class="button_log_in">${button_login}</button>
 
     </form>
     <!--Sign up Button-->
     <form method="post" action="/signup">
-        <p align="center"><input type="submit"  class="button_sign_up" value="Sign up">
+        <p align="center"><input type="submit"  class="button_sign_up" value="${button_signup}">
     </form>
-    <p align="center">${applicationScope.error_login}</p>
-    <p align="center">${sessionScope.signup}</p>
+    <c:if test="${sessionScope.error_login != null}">
+        <c:set var="error_login" scope="session" value="${error_login}"/>
+    </c:if>
+    <p align="center"><small>${sessionScope.error_login}</small></p>
+    <c:if test="${sessionScope.signup != null}">
+        <c:set var="signup" scope="session" value="${signed_up_success}"/>
+    </c:if>
+    <p align="center"><small>${sessionScope.signup}</small></p>
 </div>
 </body>
 </html>

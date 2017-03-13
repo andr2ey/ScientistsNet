@@ -25,8 +25,9 @@ public class LogInFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
-        String username = request.getRemoteUser();
 
+
+        String username = request.getRemoteUser();
         if (username != null && request.getSession().getAttribute(EMAIL_KEY) == null) {
             // first-time login
             Scientist user = scientistDao.get(username);
