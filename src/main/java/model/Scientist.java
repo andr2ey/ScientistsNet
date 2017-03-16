@@ -14,6 +14,7 @@ public class Scientist {
     private String secondName;
     private String middleName;
     private LocalDate dob;
+    private String formattedDob;
     private Gender gender;
 
     public Scientist(int id, String email, String password, String firstName, String secondName, String middleName,
@@ -29,6 +30,14 @@ public class Scientist {
     }
 
     public Scientist() {
+    }
+
+    public String getFormattedDob() {
+        return formattedDob;
+    }
+
+    public void setFormattedDob(String formattedDob) {
+        this.formattedDob = formattedDob;
     }
 
     public int getId() {

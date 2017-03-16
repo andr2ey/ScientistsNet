@@ -10,7 +10,14 @@ import util.Const;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.DateFormatter;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +51,7 @@ public class LogInFilter implements Filter {
         // first-time login
         if (email != null && request.getSession().getAttribute(Const.EMAIL_KEY) == null) {
             Scientist scientist = scientistService.get(email);
+            scientist.setFormattedDob(formatDate(request, scientist.getDob()));
             session.setAttribute(Const.EMAIL_KEY, scientist);
 
             logger.info(String.format("Authorization of User (%s) ", scientist));
@@ -51,6 +59,11 @@ public class LogInFilter implements Filter {
             loadUniversities(session, scientist.getId());
         }
         chain.doFilter(request, resp); // Just continue chain.
+    }
+
+    private String formatDate(HttpServletRequest req, LocalDate localDate) {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, req.getLocale());
+        return df.format(Date.valueOf(localDate));
     }
 
     private void loadUniversities(HttpSession session, int scientistId) {

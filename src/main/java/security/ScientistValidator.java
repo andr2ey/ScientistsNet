@@ -35,16 +35,6 @@ public class ScientistValidator {
     public ScientistValidator() {
     }
 
-    public void setDefault() {
-        validPassword = null;
-        validEmail = null;
-        validFirstName = null;
-        validSecondName = null;
-        validMiddleName = null;
-        validGender = Gender.NONE;
-        LocalDate validDate = null;
-    }
-
     public String getValidPassword() {
         return validPassword;
     }
@@ -84,9 +74,16 @@ public class ScientistValidator {
                 .isValid()) {
             req.setAttribute("first_name", req.getParameter("first_name"));
             req.setAttribute("second_name", req.getParameter("second_name"));
+            setDefaultAfterRegistration();
             return false;
         }
+        setDefaultAfterRegistration();
         return true;
+    }
+
+    private void setDefaultAfterRegistration() {
+        validMiddleName = null;
+        validGender = Gender.NONE;
     }
 
     private ScientistValidator dob(String day, String month, String year, HttpServletRequest req){

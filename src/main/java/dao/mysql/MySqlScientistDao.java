@@ -66,13 +66,13 @@ public class MySqlScientistDao implements ScientistDao {
             statementForScientist.setString(4, scientist.getEmail());
             statementForScientist.setString(5, scientist.getPassword());
             LocalDate localDate = scientist.getDob();
-            statementForScientist.setDate(6, (localDate == null ? null : Date.valueOf(localDate)));
+            statementForScientist.setDate(6,
+                    (localDate == null ? null : Date.valueOf(localDate)));
             Gender gender = scientist.getGender();
-            statementForScientist.setInt(7, (gender == null ? 0 : gender.ordinal()+1 ));
+            statementForScientist.setInt(7,
+                    (gender == null ? Gender.NONE.ordinal()+1 : gender.ordinal()+1 ));
             int count = statementForScientist.executeUpdate();
-            if (count == 0) {
-                return 0;
-            }
+
             try (ResultSet generatedKeys = statementForScientist.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     scientist.setId(generatedKeys.getInt(1));
@@ -84,6 +84,7 @@ public class MySqlScientistDao implements ScientistDao {
             }
         } catch (SQLException e) {
             logger.fatal(String.format("User (%s) hasn't created", scientist), e);
+            return 0;
         }
         return scientist.getId();
     }

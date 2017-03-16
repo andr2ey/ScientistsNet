@@ -7,6 +7,35 @@
 <fmt:message bundle="${lang}" key="lang.button.rus" var="ru_button"/>
 <fmt:message bundle="${lang}" key="lang.button.en" var="en_button"/>
 
+<fmt:message bundle="${lang}" key="lang.bachelor" var="bachelor"/>
+<fmt:message bundle="${lang}" key="lang.master" var="master"/>
+<fmt:message bundle="${lang}" key="lang.specialist" var="specialist"/>
+
+<fmt:message bundle="${lang}" key="lang.gender.other" var="gender_other"/>
+<fmt:message bundle="${lang}" key="lang.gender.male" var="gender_male"/>
+<fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
+
+<fmt:message bundle="${lang}" key="lang.none" var="none"/>
+<%--log out button, High education, edit buttons 2
+    date of birthday, gender, email, country, city, university, degree--%>
+<fmt:message bundle="${lang}" key="lang.high.education" var="high_education"/>
+<fmt:message bundle="${lang}" key="lang.log.out.button" var="log_out_button"/>
+<fmt:message bundle="${lang}" key="lang.edit.button" var="edit_button"/>
+<fmt:message bundle="${lang}" key="lang.txt.dob" var="txt_dob"/>
+<fmt:message bundle="${lang}" key="lang.gender" var="txt_gender"/>
+<fmt:message bundle="${lang}" key="lang.email.placeholder" var="txt_email"/>
+
+<fmt:message bundle="${lang}" key="lang.country" var="txt_country"/>
+<fmt:message bundle="${lang}" key="lang.city" var="txt_city"/>
+<fmt:message bundle="${lang}" key="lang.university" var="txt_university"/>
+<fmt:message bundle="${lang}" key="lang.degree" var="txt_degree"/>
+
+<fmt:message bundle="${lang}" key="lang.button.my.profile" var="button_my_profile"/>
+<fmt:message bundle="${lang}" key="lang.button.friends" var="button_friends"/>
+<fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
+<fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
+
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -45,6 +74,7 @@
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
+            margin-top: 8px;
             width: 200px; /* Ширина колонки */
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
@@ -97,7 +127,7 @@
         <tr>
             <td valign="center" align="left" width="20%">
                 <form action="/main" method="post">
-                    <input type="submit" class="button_lang" name="logout" value="Log out">
+                    <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
             <td valign="center" align="center" width="60%">
@@ -124,19 +154,20 @@
             <div id="sidebar">
                 <form action="/main" method="post">
                     <p align="center"><input type="submit" name="button_profile" class="button_of_profile"
-                                             value="My profile"></p>
+                                             value="${button_my_profile}"></p>
                 </form>
                 <form action="/friends" method="post">
-                    <p align="center"><input type="submit" name="button_friends" class="button_of_profile" value="Friends">
+                    <p align="center"><input type="submit" name="button_friends" class="button_of_profile"
+                                             value="${button_friends}">
                     </p>
                 </form>
                 <form action="/messages" method="post">
                     <p align="center"><input type="submit" name="button_message" class="button_of_profile"
-                                             value="Messages"></p>
+                                             value="${button_messages}"></p>
                 </form>
                 <form action="/articles" method="post">
                     <p align="center"><input type="submit" name="button_articles" class="button_of_profile"
-                                             value="Articles"></p>
+                                             value="${button_articles}"></p>
                 </form>
             </div>
         </td>
@@ -155,29 +186,40 @@
                                     <td width="25%" align="right">
                                         <form action="/baseinfo" method="get">
                                             <input type="submit" name="button_edit_info" class="button_lang"
-                                                   value="edit">
+                                                   value="${edit_button}">
                                         </form>
                                     </td>
                                 </tr>
                             </table>
                             <table border="0" width="100%" cellpadding="5" align="top">
-                                <c:if test="${sessionScope.email.dob != null}">
+                                <c:if test="${sessionScope.email.formattedDob != null}">
                                     <tr>
                                         <td width="40%"></td>
-                                        <td>date of birthday:</td>
-                                        <td>${sessionScope.email.dob}</td>
+                                        <td>${txt_dob}:</td>
+                                        <td>${sessionScope.email.formattedDob}</td>
                                     </tr>
                                 </c:if>
-                                <c:if test="${sessionScope.email.gender != null}">
+                                <c:if test="${sessionScope.email.gender != 'NONE'}">
                                     <tr>
                                         <td width="40%"></td>
-                                        <td>gender:</td>
-                                        <td>${sessionScope.email.gender}</td>
+                                        <td>${txt_gender}:</td>
+                                        <c:choose>
+                                            <c:when test="${sessionScope.email.gender eq 'MALE'}">
+                                                <c:set var="gender" scope="page" value="${gender_male}"/>
+                                            </c:when>
+                                            <c:when test="${sessionScope.email.gender eq 'FEMALE'}">
+                                                <c:set var="gender" scope="page" value="${gender_female}"/>
+                                            </c:when>
+                                            <c:otherwise >
+                                                <c:set var="gender" scope="page" value="${none}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <td>${gender}</td>
                                     </tr>
                                 </c:if>
                                 <tr>
                                     <td width="40%"></td>
-                                    <td>email:</td>
+                                    <td>${txt_email}:</td>
                                     <td>${sessionScope.email.email}</td>
                                 </tr>
                             </table>
@@ -190,11 +232,11 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>High Education</h3></td>
+                                    <td width="50%"><h3>${high_education}</h3></td>
                                     <td width="25%" align="right">
                                         <form action="/education" method="get">
                                             <input type="submit" name="button_edit_education" class="button_lang"
-                                                   value="edit">
+                                                   value="${edit_button}">
                                         </form>
                                     </td>
                                 </tr>
@@ -203,20 +245,34 @@
                                 <br>
                                 <table border="0" width="60%" align="center">
                                     <tr>
-                                        <td width="30%" align="left">country:</td>
+                                        <td width="30%" align="left">${txt_country}:</td>
                                         <td align="left">${university.country}</td>
                                     </tr>
                                     <tr>
-                                        <td width="30%" align="left">city:</td>
+                                        <td width="30%" align="left">${txt_city}:</td>
                                         <td align="left">${university.city}</td>
                                     </tr>
                                     <tr>
-                                        <td width="30%" align="left">university:</td>
+                                        <td width="30%" align="left">${txt_university}:</td>
                                         <td align="left">${university.fullName}</td>
                                     </tr>
                                     <tr>
-                                        <td width="30%" align="left">degree:</td>
-                                        <td align="left">${university.degree}</td>
+                                        <td width="30%" align="left">${txt_degree}:</td>
+                                        <c:choose>
+                                            <c:when test="${university.degree eq 'BACHELOR'}">
+                                                <c:set var="degree" scope="page" value="${bachelor}"/>
+                                            </c:when>
+                                            <c:when test="${university.degree eq 'MASTER'}">
+                                                <c:set var="degree" scope="page" value="${master}"/>
+                                            </c:when>
+                                            <c:when test="${university.degree eq 'SPECIALIST'}">
+                                                <c:set var="degree" scope="page" value="${specialist}"/>
+                                            </c:when>
+                                            <c:otherwise >
+                                                <c:set var="degree" scope="page" value="${none}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <td align="left">${pageScope.degree}</td>
                                     </tr>
                                 </table>
                             </c:forEach>
