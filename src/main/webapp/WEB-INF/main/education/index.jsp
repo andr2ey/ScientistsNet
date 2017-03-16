@@ -28,6 +28,9 @@
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
+<fmt:message bundle="${lang}" key="lang.bachelor" var="bachelor"/>
+<fmt:message bundle="${lang}" key="lang.master" var="master"/>
+<fmt:message bundle="${lang}" key="lang.specialist" var="specialist"/>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -67,6 +70,7 @@
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
             width: 200px; /* Ширина колонки */
+            margin-top: 7px;
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
@@ -138,6 +142,7 @@
             margin: 0;
             cursor: pointer;
         }
+
         .text {
             width: 320px;
             height: 30px;
@@ -145,7 +150,7 @@
             padding: 2px 9px; /*внутренние поля*/
             background: #fcfdff;
             border: solid 1px #898989;
-            border-radius:  3px;
+            border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
     </style>
@@ -253,11 +258,15 @@
                                             <td>
                                                 <c:if test="${requestScope.updatedStatus != null}">
                                                     <c:choose>
-                                                        <c:when test="${university.updated == 'success'}">
-                                                            <p align="right"><small>${txt_success}</small></p>
+                                                        <c:when test="${requestScope.updatedStatus == 'success'}">
+                                                            <p align="right">
+                                                                <small>${txt_success}</small>
+                                                            </p>
                                                         </c:when>
-                                                        <c:when test="${university.updated == 'success'}">
-                                                            <p align="right"><small>${txt_fail}</small></p>
+                                                        <c:when test="${requestScope.updatedStatus == 'success'}">
+                                                            <p align="right">
+                                                                <small>${txt_fail}</small>
+                                                            </p>
                                                         </c:when>
                                                     </c:choose>
                                                 </c:if>
@@ -268,7 +277,7 @@
                                         <table border="0" width="100%" align="top">
                                             <tr>
                                                 <td width="25%">
-                                                    ${txt_country}:
+                                                        ${txt_country}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
@@ -281,7 +290,7 @@
                                             </tr>
                                             <tr>
                                                 <td width="25%">
-                                                    ${txt_city}:
+                                                        ${txt_city}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
@@ -294,7 +303,7 @@
                                             </tr>
                                             <tr>
                                                 <td width="25%">
-                                                    ${txt_university}:
+                                                        ${txt_university}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
@@ -303,11 +312,11 @@
                                                                value="${university.fullName}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
-                                                <td width="25%"> </td>
+                                                <td width="25%"></td>
                                             </tr>
                                             <tr>
                                                 <td width="25%">
-                                                    ${txt_degree}:
+                                                        ${txt_degree}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
@@ -315,30 +324,33 @@
                                                                 name="univ_degree${number.index}" size="1" required>
                                                             <c:choose>
                                                                 <c:when test="${university.degree eq 'BACHELOR'}">
-                                                                    <c:set var="bachelor" scope="page"
+                                                                    <c:set var="bachelor_var" scope="page"
                                                                            value="selected"/>
-                                                                    <c:set var="master" scope="page" value=""/>
-                                                                    <c:set var="specialist" scope="page" value=""/>
+                                                                    <c:set var="master_var" scope="page" value=""/>
+                                                                    <c:set var="specialist_var" scope="page" value=""/>
                                                                 </c:when>
                                                                 <c:when test="${university.degree eq 'MASTER'}">
-                                                                    <c:set var="master" scope="page" value="selected"/>
-                                                                    <c:set var="bachelor" scope="page" value=""/>
-                                                                    <c:set var="specialist" scope="page" value=""/>
+                                                                    <c:set var="master_var" scope="page"
+                                                                           value="selected"/>
+                                                                    <c:set var="bachelor_var" scope="page" value=""/>
+                                                                    <c:set var="specialist_var" scope="page" value=""/>
                                                                 </c:when>
                                                                 <c:when test="${university.degree eq 'SPECIALIST'}">
-                                                                    <c:set var="specialist" scope="page"
+                                                                    <c:set var="specialist_var" scope="page"
                                                                            value="selected"/>
-                                                                    <c:set var="master" scope="page" value=""/>
-                                                                    <c:set var="bachelor" scope="page" value=""/>
+                                                                    <c:set var="master_var" scope="page" value=""/>
+                                                                    <c:set var="bachelor_var" scope="page" value=""/>
                                                                 </c:when>
                                                             </c:choose>
-                                                            <option disabled>Выберите ученую степень</option>
-                                                            <option ${bachelor} value="bachelor">бакалавр</option>
-                                                            <option ${master} value="master">магистр</option>
-                                                            <option ${specialist} value="specialist">специалист</option>
+                                                            <option value="none">${txt_degree}</option>
+                                                            <option ${bachelor_var}
+                                                                    value="bachelor">${bachelor}</option>
+                                                            <option ${master_var} value="master">${master}</option>
+                                                            <option ${specialist_var}
+                                                                    value="specialist">${specialist}</option>
                                                         </select>
                                                 </td>
-                                                <td width="25%"> </td>
+                                                <td width="25%"></td>
                                             </tr>
                                         </table>
                                     </form>
@@ -350,20 +362,22 @@
                             </c:forEach>
                             <form action="/education_add" method="post" id="/education_add">
                                 <p align="center">
-                                    <input name="education_country" placeholder="country" required class="text"
+                                    <input align="center" name="education_country" placeholder="${txt_country}"
+                                           required class="text"
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
-                                    <input name="education_city" placeholder="city" required class="text"
+                                    <input name="education_city" placeholder="${txt_city}" required class="text"
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
-                                    <input name="education_fullName" placeholder="${txt_university}" required class="text"
+                                    <input name="education_fullName" placeholder="${txt_university}" required
+                                           class="text"
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
                                     <select name="education_degree" size="1" required class="text">
-                                        <option disabled>Выберите ученую степень</option>
-                                        <option value="bachelor">бакалавр</option>
-                                        <option selected value="master">магистр</option>
-                                        <option value="specialist">специалист</option>
+                                        <option selected value="none">${txt_degree}</option>
+                                        <option value="bachelor">${bachelor}</option>
+                                        <option value="master">${master}</option>
+                                        <option value="specialist">${specialist}</option>
                                     </select>
                                 </p>
                                 <p align="center">
@@ -380,9 +394,11 @@
                                 </p>
                             </form>
                             <%--Restriction of universities count--%>
-                            <c:if test="${requestScope.maxUniversity != null}">
-                                ${requestScope.maxUniversity}
-                            </c:if>
+                            <p align="center">
+                                <c:if test="${requestScope.maxUniversity != null}">
+                                    ${requestScope.maxUniversity}
+                                </c:if>
+                            </p>
                         </div>
                     </td>
                 </tr>

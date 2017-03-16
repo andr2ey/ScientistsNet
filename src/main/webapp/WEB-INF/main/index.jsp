@@ -70,16 +70,14 @@
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
-
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
-            margin-top: 8px;
+            margin-top: 7px;
             width: 200px; /* Ширина колонки */
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
         #contentBaseInfo { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */

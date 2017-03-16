@@ -46,6 +46,7 @@
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
             width: 200px; /* Ширина колонки */
+            margin-top: 7px;
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
