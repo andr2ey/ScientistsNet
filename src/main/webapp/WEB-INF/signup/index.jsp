@@ -243,7 +243,7 @@
             </select>
             <%--TODO think about max and min value--%>
             <input type="number" class="text_year" name="year" value="${requestScope.year}" placeholder="${year_birthday}"
-                   min="1907" max="2003" size="60" required>
+                   min="${requestScope.minYear}" max="${requestScope.maxYear}" size="60" required>
         </p>
         <!--Email-->
             <p align="center"><input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"

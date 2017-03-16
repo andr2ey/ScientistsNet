@@ -17,8 +17,6 @@ public class ScientistValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+[^\\.]$");
     private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\d\\-\\., ]{2,100}");
     private static final Pattern GENDER_PATTERN = Pattern.compile("(?i)^(male|female|other|none)$");
-    private static final int TOP_EDGE_OF_AGE = 110;
-    private static final int BOTTOM_EDGE_OF_AGE = 14;
 
     private final Logger logger = Logger.getRootLogger();
 
@@ -98,7 +96,7 @@ public class ScientistValidator {
             LocalDate dob = LocalDate.of(yearInt, Integer.parseInt(month.trim()), Integer.parseInt(day.trim()));
             LocalDate difference = LocalDate.now().minusYears(yearInt);
             int yearDiffer = difference.getYear();
-            if (yearDiffer > TOP_EDGE_OF_AGE || yearDiffer < BOTTOM_EDGE_OF_AGE) {
+            if (yearDiffer > Const.TOP_EDGE_OF_AGE || yearDiffer < Const.BOTTOM_EDGE_OF_AGE) {
                 valid = false;
               req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
             } else {

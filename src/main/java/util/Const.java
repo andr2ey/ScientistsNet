@@ -19,4 +19,9 @@ public interface Const {
     String SECOND_NAME_INPUT_ERROR = "secondNameInputError";
     String MIDDLE_NAME_INPUT_ERROR = "middleNameInputError";
 
+    int TOP_EDGE_OF_AGE = 110;
+    int BOTTOM_EDGE_OF_AGE = 14;
+    String MAX_YEAR_KEY = "maxYear";
+    String MIN_YEAR_KEY = "minYear";
+
 }

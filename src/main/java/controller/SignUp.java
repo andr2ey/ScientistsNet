@@ -50,9 +50,16 @@ public class SignUp extends HttpServlet {
         if (VALIDATOR.validateRegistrationFields(req) && createUser(req)) {
             resp.sendRedirect(MAIN_PAGE);
         } else {
+            setYearsLimits(req);
             //TODO create information that such email has been already registered
             req.getRequestDispatcher(SIGN_UP_PAGE_FULL_PATH).forward(req, resp);
         }
+    }
+
+    private void setYearsLimits(HttpServletRequest req) {
+        LocalDate localDate = LocalDate.now();
+        req.setAttribute(Const.MAX_YEAR_KEY, (localDate.getYear() - Const.BOTTOM_EDGE_OF_AGE) );
+        req.setAttribute(Const.MIN_YEAR_KEY, (localDate.getYear() - Const.TOP_EDGE_OF_AGE));
     }
 
     private boolean createUser(HttpServletRequest req) throws ServletException {

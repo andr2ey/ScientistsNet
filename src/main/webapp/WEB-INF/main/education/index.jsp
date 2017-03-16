@@ -6,6 +6,27 @@
 <fmt:setBundle basename="language.lang" var="lang"/>
 <fmt:message bundle="${lang}" key="lang.button.rus" var="ru_button"/>
 <fmt:message bundle="${lang}" key="lang.button.en" var="en_button"/>
+<fmt:message bundle="${lang}" key="lang.log.out.button" var="log_out_button"/>
+
+<fmt:message bundle="${lang}" key="lang.txt.success" var="txt_success"/>
+<fmt:message bundle="${lang}" key="lang.txt.fail" var="txt_fail"/>
+<fmt:message bundle="${lang}" key="lang.message.deleted" var="message_deleted"/>
+
+<fmt:message bundle="${lang}" key="lang.high.education" var="high_education"/>
+<fmt:message bundle="${lang}" key="lang.button.delete" var="delete_button"/>
+<fmt:message bundle="${lang}" key="lang.button.update" var="update_button"/>
+<fmt:message bundle="${lang}" key="lang.button.add" var="add_button"/>
+<fmt:message bundle="${lang}" key="lang.button.save" var="save_button"/>
+
+<fmt:message bundle="${lang}" key="lang.country" var="txt_country"/>
+<fmt:message bundle="${lang}" key="lang.city" var="txt_city"/>
+<fmt:message bundle="${lang}" key="lang.university" var="txt_university"/>
+<fmt:message bundle="${lang}" key="lang.degree" var="txt_degree"/>
+
+<fmt:message bundle="${lang}" key="lang.button.my.profile" var="button_my_profile"/>
+<fmt:message bundle="${lang}" key="lang.button.friends" var="button_friends"/>
+<fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
+<fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
 <html>
 <head>
@@ -117,6 +138,16 @@
             margin: 0;
             cursor: pointer;
         }
+        .text {
+            width: 320px;
+            height: 30px;
+            margin: 0;
+            padding: 2px 9px; /*внутренние поля*/
+            background: #fcfdff;
+            border: solid 1px #898989;
+            border-radius:  3px;
+            font: 11pt Arial, sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +156,7 @@
         <tr>
             <td valign="center" align="left" width="20%">
                 <form action="/main" method="post">
-                    <input type="submit" class="button_lang" name="logout" value="Log out">
+                    <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
             <td valign="center" align="center" width="60%">
@@ -154,19 +185,20 @@
             <div id="sidebar">
                 <form action="/main" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="My profile"></p>
+                                             value="${button_my_profile}"></p>
                 </form>
                 <form action="/friends" method="post">
-                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile" value="Friends">
+                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
+                                             value="${button_friends}">
                     </p>
                 </form>
                 <form action="/messages" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="Messages"></p>
+                                             value="${button_messages}"></p>
                 </form>
                 <form action="/articles" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="Articles"></p>
+                                             value="${button_articles}"></p>
                 </form>
             </div>
         </td>
@@ -180,9 +212,20 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>High Education</h3></td>
+                                    <td width="50%"><h3>${high_education}</h3></td>
                                     <td width="25%" align="right">
-                                        <small>${requestScope.successOfTransaction}</small>
+                                        <small>
+                                            <c:if test="${requestScope.successOfTransaction != null}">
+                                                <c:choose>
+                                                    <c:when test="${requestScope.successOfTransaction == 'success'}">
+                                                        ${txt_success}
+                                                    </c:when>
+                                                    <c:when test="${requestScope.successOfTransaction == 'success'}">
+                                                        ${txt_fail}
+                                                    </c:when>
+                                                </c:choose>
+                                            </c:if>
+                                        </small>
                                     </td>
                                 </tr>
                             </table>
@@ -196,20 +239,27 @@
                                                 <td width="3%" align="left" valign="bottom">
                                                     <button type="submit"
                                                             form="/education_delete" class="button_lang"
-                                                            name="button_delete_education" value="${number.index}">del
+                                                            name="button_delete_education"
+                                                            value="${number.index}">${delete_button}
                                                     </button>
                                                 </td>
                                             </form>
                                             <td width="3%" align="left" valign="bottom">
                                                 <button type="submit" form="/education_update" class="button_lang"
-                                                        name="button_update_education" value="${number.index}">upd
+                                                        name="button_update_education"
+                                                        value="${number.index}">${update_button}
                                                 </button>
                                             </td>
                                             <td>
-                                                <c:if test="${university.updated == true}">
-                                                    <p align="right">
-                                                        <small>${requestScope.updatedStatus}</small>
-                                                    </p>
+                                                <c:if test="${requestScope.updatedStatus != null}">
+                                                    <c:choose>
+                                                        <c:when test="${university.updated == 'success'}">
+                                                            <p align="right"><small>${txt_success}</small></p>
+                                                        </c:when>
+                                                        <c:when test="${university.updated == 'success'}">
+                                                            <p align="right"><small>${txt_fail}</small></p>
+                                                        </c:when>
+                                                    </c:choose>
                                                 </c:if>
                                             </td>
                                         </tr>
@@ -217,47 +267,51 @@
                                     <form action="/education_update" method="get" id="/education_update">
                                         <table border="0" width="100%" align="top">
                                             <tr>
-                                                <td>
-                                                    <small>country:</small>
+                                                <td width="25%">
+                                                    ${txt_country}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input form="/education_update"
+                                                        <input form="/education_update" class="text"
                                                                name="univ_country${number.index}"
                                                                value="${university.country}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
+                                                <td width="25%"></td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <small>city:</small>
+                                                <td width="25%">
+                                                    ${txt_city}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input form="/education_update" name="univ_city${number.index}"
+                                                        <input form="/education_update" class="text"
+                                                               name="univ_city${number.index}"
                                                                value="${university.city}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
+                                                <td width="25%"></td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <small>university:</small>
+                                                <td width="25%">
+                                                    ${txt_university}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input form="/education_update"
+                                                        <input form="/education_update" class="text"
                                                                name="univ_full_name${number.index}"
                                                                value="${university.fullName}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
+                                                <td width="25%"> </td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <small>degree:</small>
+                                                <td width="25%">
+                                                    ${txt_degree}:
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <select form="/education_update"
+                                                        <select form="/education_update" class="text"
                                                                 name="univ_degree${number.index}" size="1" required>
                                                             <c:choose>
                                                                 <c:when test="${university.degree eq 'BACHELOR'}">
@@ -284,27 +338,28 @@
                                                             <option ${specialist} value="specialist">специалист</option>
                                                         </select>
                                                 </td>
+                                                <td width="25%"> </td>
                                             </tr>
                                         </table>
                                     </form>
                                 </c:if>
                                 <c:if test="${university.deleted == true}">
-                                    <small>This entry will be deleted once you've saved your changes.</small>
+                                    <small>${message_deleted}</small>
                                     <br/>
                                 </c:if>
                             </c:forEach>
                             <form action="/education_add" method="post" id="/education_add">
                                 <p align="center">
-                                    <input name="education_country" placeholder="country" required
+                                    <input name="education_country" placeholder="country" required class="text"
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
-                                    <input name="education_city" placeholder="city" required
+                                    <input name="education_city" placeholder="city" required class="text"
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
-                                    <input name="education_fullName" placeholder="university" required
+                                    <input name="education_fullName" placeholder="${txt_university}" required class="text"
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
-                                    <select name="education_degree" size="1" required>
+                                    <select name="education_degree" size="1" required class="text">
                                         <option disabled>Выберите ученую степень</option>
                                         <option value="bachelor">бакалавр</option>
                                         <option selected value="master">магистр</option>
@@ -313,17 +368,18 @@
                                 </p>
                                 <p align="center">
                                     <button type="submit" form="/education_add" class="button_add"
-                                            name="button_add_education" value="add">Add
+                                            name="button_add_education" value="add">${add_button}
                                     </button>
                                 </p>
                             </form>
                             <form action="/education_save" method="get" id="/education_save">
                                 <p align="center">
                                     <button type="submit" form="/education_save" class="button_save"
-                                            name="button_save_education" value="save">Save
+                                            name="button_save_education" value="save">${save_button}
                                     </button>
                                 </p>
                             </form>
+                            <%--Restriction of universities count--%>
                             <c:if test="${requestScope.maxUniversity != null}">
                                 ${requestScope.maxUniversity}
                             </c:if>

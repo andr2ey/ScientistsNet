@@ -52,7 +52,7 @@ public class UpdateUniversity extends HttpServlet {
         }
         VALIDATOR.verifyAll(BUFFER);
         if (VALIDATOR.isValid()) {
-            request.setAttribute(UPDATED_STATUS, "successfully");
+            request.setAttribute(UPDATED_STATUS, "success");
             University university = universityList.get(indexUpdated);
             //add not updated old values to buffer
             if (!university.isUpdated()) {
@@ -72,7 +72,7 @@ public class UpdateUniversity extends HttpServlet {
             university.setFullName(BUFFER[2]);
             university.setDegree(Degree.valueOf(BUFFER[3].toUpperCase()));
         } else {
-            request.setAttribute(UPDATED_STATUS, "unsuccessfully");
+            request.setAttribute(UPDATED_STATUS, "fail");
         }
         request.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(request, response);
     }
