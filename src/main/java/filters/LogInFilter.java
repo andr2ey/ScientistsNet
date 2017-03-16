@@ -36,6 +36,7 @@ public class LogInFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+        System.err.println("LogInFilter");
         HttpServletRequest request = (HttpServletRequest) req;
         HttpSession session = request.getSession();
 
