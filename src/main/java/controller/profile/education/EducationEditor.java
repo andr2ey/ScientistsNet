@@ -1,4 +1,9 @@
-package controller;
+package controller.profile.education;
+
+import model.Scientist;
+import model.University;
+import service.UniversityService;
+import util.Const;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,20 +12,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 /**
- * Created on 12.03.2017.
+ * Created on 13.03.2017.
  */
-@WebServlet("/language")
-public class Language extends HttpServlet {
+
+//work only after profile page
+@WebServlet("/education")
+public class EducationEditor extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("language", request.getParameter("lang"));
-        response.sendRedirect(request.getParameter("pathFrom"));
+        doGet(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        System.err.println("EducationEditor");
+        request.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(request, response);
     }
+
+
 }

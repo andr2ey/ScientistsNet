@@ -9,7 +9,6 @@
         <web-resource-collection>
             <web-resource-name>user</web-resource-name>
             <url-pattern>/main/*</url-pattern>
-            <url-pattern>/else/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>
@@ -36,11 +35,20 @@
 
     <filter>
         <filter-name>LogInFilter</filter-name>
-        <filter-class>security.LogInFilter</filter-class>
+        <filter-class>filters.LogInFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>LogInFilter</filter-name>
-        <url-pattern>/main/*</url-pattern>
-        <url-pattern>/else/*</url-pattern>
+        <url-pattern>/main</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>filters.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>

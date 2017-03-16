@@ -15,4 +15,5 @@ public interface ScientistDao {
     //void update()
     void remove(Scientist scientist);
     List<Scientist> getAll();
+    boolean exist(String email);
 }

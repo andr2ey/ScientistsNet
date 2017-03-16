@@ -34,6 +34,7 @@ public class MySqlScientistDao implements ScientistDao {
             "g_name " +
             "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id AND s_email = (?)";
+    private final String SQL_SELECT_EXISTING_SCIENTIST_BY_EMAIL = "SELECT s_email FROM scientist s WHERE s_email = (?)";
     private final String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
             "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
             "g_name \n" +
@@ -144,6 +145,23 @@ public class MySqlScientistDao implements ScientistDao {
             logger.error("Getting all users has been unsuccessful", e);
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean exist(String email) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(SQL_CREATE_SCIENTIST, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, email);
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Getting user has been unsuccessful", e);
+        }
+        return false;
     }
 
     private Scientist getScientist(PreparedStatement preparedStatement) throws SQLException {

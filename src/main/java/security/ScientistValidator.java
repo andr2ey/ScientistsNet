@@ -1,145 +1,224 @@
 package security;
 
+import model.Gender;
 import org.apache.log4j.Logger;
+import util.Const;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 /**
  * Created on 10.03.2017.
  */
 public class ScientistValidator {
-
-    private boolean valid = true;
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\dA-Za-z]{3,100}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+[^\\.]$");
-    //TODO think about name pattern, if it is two spaces
-    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\d ]{2,100}");
-    private static final Pattern GENDER_PATTERN = Pattern.compile("(?i)^(male|female|other)$");
-    //TODO think about date pattern, check year, day, month
-    private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
-    private final Logger logger;
+    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\d\\-\\., ]{2,100}");
+    private static final Pattern GENDER_PATTERN = Pattern.compile("(?i)^(male|female|other|none)$");
+    private static final int TOP_EDGE_OF_AGE = 110;
+    private static final int BOTTOM_EDGE_OF_AGE = 14;
 
-    public ScientistValidator(Logger logger) {
-        this.logger = logger;
+    private final Logger logger = Logger.getRootLogger();
+
+    private boolean valid = true;
+
+    private String validPassword;
+    private String validEmail;
+    private String validFirstName;
+    private String validSecondName;
+    private String validMiddleName;
+    private Gender validGender = Gender.NONE;
+    private LocalDate validDate;
+
+    public ScientistValidator() {
     }
 
-    public ScientistValidator password(String password){
-        System.err.println("IN VALIDATOR "+password+valid);
-        if (!valid) {
-            return this;
+    public void setDefault() {
+        validPassword = null;
+        validEmail = null;
+        validFirstName = null;
+        validSecondName = null;
+        validMiddleName = null;
+        validGender = Gender.NONE;
+        LocalDate validDate = null;
+    }
+
+    public String getValidPassword() {
+        return validPassword;
+    }
+
+    public String getValidEmail() {
+        return validEmail;
+    }
+
+    public String getValidFirstName() {
+        return validFirstName;
+    }
+
+    public String getValidSecondName() {
+        return validSecondName;
+    }
+
+    public String getValidMiddleName() {
+        return validMiddleName;
+    }
+
+    public LocalDate getValidDate() {
+        return validDate;
+    }
+
+    public Gender getValidGender() {
+        return validGender;
+    }
+
+    public boolean validateRegistrationFields(HttpServletRequest req) {
+        if (!dob(req.getParameter("day"),
+                req.getParameter("month"),
+                req.getParameter("year"), req)
+                .email(req.getParameter("emailNew"), req)
+                .password(req.getParameter("passwordNew"), req)
+                .firstName(req.getParameter("first_name"), req)
+                .secondName(req.getParameter("second_name"), req)
+                .isValid()) {
+            req.setAttribute("first_name", req.getParameter("first_name"));
+            req.setAttribute("second_name", req.getParameter("second_name"));
+            return false;
         }
-        if (password == null) {
-            logger.warn("User password is null");
+        return true;
+    }
+
+    private ScientistValidator dob(String day, String month, String year, HttpServletRequest req){
+        if (!valid)
+            return this;
+        if (nullable(day, month, year)) {
             valid = false;
             return this;
         }
-        if (!PASSWORD_PATTERN.matcher(password).matches()) {
-            logger.warn("User password is INVALID");
+        try {
+            int yearInt = Integer.parseInt(year.trim());
+            LocalDate dob = LocalDate.of(yearInt, Integer.parseInt(month.trim()), Integer.parseInt(day.trim()));
+            LocalDate difference = LocalDate.now().minusYears(yearInt);
+            int yearDiffer = difference.getYear();
+            if (yearDiffer > TOP_EDGE_OF_AGE || yearDiffer < BOTTOM_EDGE_OF_AGE) {
+                valid = false;
+              req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
+            } else {
+                validDate = dob;
+            }
+        } catch (NumberFormatException | DateTimeException e) {
             valid = false;
+            req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
         }
         return this;
     }
 
-    public ScientistValidator email(String email){
-        System.err.println("IN VALIDATOR "+email+valid);
+    private boolean nullable(String day, String month, String year) {
+        return day == null || month == null || year == null;
+    }
+
+    private ScientistValidator email(String email, HttpServletRequest req){
         if (!valid) {
             return this;
         }
-        if (email == null) {
-            logger.warn("User email is null");
+        if (email == null || email.isEmpty()) {
             valid = false;
             return this;
         }
-        if (!EMAIL_PATTERN.matcher(email).matches()) {
-            logger.warn(String.format("User email - (%s) is INVALID", email));
+        if (!EMAIL_PATTERN.matcher(email.trim()).matches()) {
             valid = false;
+            req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
         }
+        validEmail = email;
         return this;
     }
 
-    public ScientistValidator firstName(String firstName){
-        System.err.println("IN VALIDATOR "+firstName+valid);
+    private ScientistValidator password(String password, HttpServletRequest req){
         if (!valid) {
             return this;
         }
-        if (firstName == null) {
-            logger.warn("User firstName is null");
+        if (password == null || password.isEmpty()) {
             valid = false;
             return this;
         }
-        if (!NAME_PATTERN.matcher(firstName).matches()) {
-            logger.warn(String.format("User firstName - (%s) is INVALID", firstName));
+        if (!PASSWORD_PATTERN.matcher(password.trim()).matches()) {
             valid = false;
+            req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
         }
+        validPassword = password;
         return this;
     }
 
-    public ScientistValidator secondName(String secondName){
-        System.err.println("IN VALIDATOR "+secondName+valid);
+    private ScientistValidator firstName(String firstName, HttpServletRequest req){
         if (!valid) {
             return this;
         }
-        if (secondName == null) {
-            logger.warn("User firstName is null");
+        if (firstName == null || firstName.isEmpty()) {
             valid = false;
             return this;
         }
-        if (!NAME_PATTERN.matcher(secondName).matches()) {
-            logger.warn(String.format("User secondName - (%s) is INVALID", secondName));
+        if (!NAME_PATTERN.matcher(firstName.trim()).matches()) {
             valid = false;
+            req.setAttribute(Const.FIRST_NAME_INPUT_ERROR, "First name is incorrect!");
         }
+        validFirstName = firstName;
         return this;
     }
 
-    public ScientistValidator middleName(String middleName){
-        System.err.println("IN VALIDATOR "+middleName+valid);
+    private ScientistValidator secondName(String secondName, HttpServletRequest req){
         if (!valid) {
             return this;
         }
-        if (middleName == null || middleName.isEmpty())
-            return this;
-        if (!NAME_PATTERN.matcher(middleName).matches()) {
-            logger.warn(String.format("User middleName - (%s) is INVALID", middleName));
+        if (secondName == null || secondName.isEmpty()) {
             valid = false;
+            return this;
         }
+        if (!NAME_PATTERN.matcher(secondName.trim()).matches()) {
+            valid = false;
+            req.setAttribute(Const.SECOND_NAME_INPUT_ERROR, "Second name is incorrect!");
+        }
+        validSecondName = secondName;
         return this;
     }
 
-    public ScientistValidator gender(String gender){
-        System.err.println("IN VALIDATOR "+gender+valid);
+    private ScientistValidator middleName(String middleName, HttpServletRequest req){
         if (!valid) {
             return this;
         }
-        if (gender == null)
+        if (middleName == null || middleName.isEmpty()) {
+            validMiddleName = null;
             return this;
-        if (!GENDER_PATTERN.matcher(gender).matches()) {
-            logger.warn(String.format("User gender - (%s) is INVALID", gender));
-            valid = false;
         }
+        if (!NAME_PATTERN.matcher(middleName.trim()).matches()) {
+            valid = false;
+            req.setAttribute(Const.MIDDLE_NAME_INPUT_ERROR, "Middle name is incorrect!");
+        }
+        validMiddleName = middleName;
         return this;
     }
 
-    public ScientistValidator birthday(String dob){
-        System.err.println("IN VALIDATOR "+dob+valid);
+    private ScientistValidator gender(String gender) {
         if (!valid) {
             return this;
         }
-        if (dob == null)
+        if (gender == null || gender.isEmpty()) {
+            validGender = Gender.NONE;
             return this;
-        if (!DATE_PATTERN.matcher(dob).matches()) {
-            logger.warn(String.format("User dob - (%s) is INVALID", dob));
+        }
+        if (!GENDER_PATTERN.matcher(gender.trim()).matches()) {
             valid = false;
         }
+        validGender = Gender.valueOf(gender.trim().toUpperCase());
         return this;
     }
 
-    public boolean isValid() {
+    private boolean isValid() {
         if (!valid) {
             valid = true;
             return false;
         }
         return true;
     }
-
 
 }

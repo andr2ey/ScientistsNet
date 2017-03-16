@@ -15,8 +15,17 @@ public class UniversityService {
         this.universityDao = universityDao;
     }
 
-    public List<University> allUniversities(int scientistId) {
+    public List<University> getAll(int scientistId) {
         return universityDao.getAll(scientistId);
     }
 
+    public void deleteUniversities(List<University> listToDelete) {
+        universityDao.deleteAll(listToDelete);
+    }
+
+    public boolean transactionCUD(List<University> listDeleted,
+                                  List<University> listCreated,
+                                  List<University> listUpdated) {
+        return universityDao.transactionCUD(listDeleted, listCreated, listUpdated);
+    }
 }

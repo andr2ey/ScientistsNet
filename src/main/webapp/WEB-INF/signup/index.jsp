@@ -20,10 +20,29 @@
 <fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
 <fmt:message bundle="${lang}" key="lang.your.first.name" var="your_first_name"/>
 <fmt:message bundle="${lang}" key="lang.your.last.name" var="your_last_name"/>
-<fmt:message bundle="${lang}" key="lang.your.middle.name" var="your_middle_name"/>
 <fmt:message bundle="${lang}" key="lang.signup.title" var="signup_title"/>
 <fmt:message bundle="${lang}" key="lang.email.exist" var="email_exist"/>
-<fmt:message bundle="${lang}" key="lang.signup.title" var="signup_title"/>
+<%--Все поля необходимо заполнить, day, year, month, ...--%>
+<fmt:message bundle="${lang}" key="lang.message.about.fields" var="message_about_fields"/>
+
+<fmt:message bundle="${lang}" key="lang.day.birthday" var="day_birthday"/>
+<fmt:message bundle="${lang}" key="lang.year.birthday" var="year_birthday"/>
+
+<fmt:message bundle="${lang}" key="lang.month" var="month"/>
+<fmt:message bundle="${lang}" key="lang.january" var="january"/>
+<fmt:message bundle="${lang}" key="lang.february" var="february"/>
+<fmt:message bundle="${lang}" key="lang.march" var="march"/>
+<fmt:message bundle="${lang}" key="lang.april" var="april"/>
+<fmt:message bundle="${lang}" key="lang.may" var="may"/>
+<fmt:message bundle="${lang}" key="lang.june" var="june"/>
+<fmt:message bundle="${lang}" key="lang.july" var="july"/>
+<fmt:message bundle="${lang}" key="lang.august" var="august"/>
+<fmt:message bundle="${lang}" key="lang.september" var="september"/>
+<fmt:message bundle="${lang}" key="lang.october" var="october"/>
+<fmt:message bundle="${lang}" key="lang.november" var="november"/>
+<fmt:message bundle="${lang}" key="lang.december" var="december"/>
+<fmt:message bundle="${lang}" key="lang.date.input.error" var="date_input_error"/>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -42,8 +61,20 @@
         }
         h3 {
             font-size: 24px; /* Размер шрифта */
+            margin: 5px; /* Убираем отступы */
+            color: #690005; /* Цвет текста */
+            text-align: center;
+        }
+        h4 {
+            font-size: 16px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
             color: #690005; /* Цвет текста */
+            text-align: center;
+        }
+        h5 {
+            margin: 0; /* Убираем отступы */
+            color: #1d1d1d; /* Цвет текста */
+            font: 14pt Arial, sans-serif;
             text-align: center;
         }
         h2 {
@@ -67,6 +98,36 @@
             height: 30px;
             margin: 2px;
             padding: 5px 12px; /*внутренние поля*/
+            background: #fcfdff;
+            border: solid 1px #898989;
+            border-radius:  3px;
+            font: 14pt Arial, sans-serif;
+        }
+        .text_day {
+            width: 80px;
+            height: 30px;
+            margin: 2px;
+            padding: 2px 9px; /*внутренние поля*/
+            background: #fcfdff;
+            border: solid 1px #898989;
+            border-radius:  3px;
+            font: 14pt Arial, sans-serif;
+        }
+        .text_month {
+             width: 170px;
+             height: 30px;
+             margin: 0;
+             padding: 2px 9px; /*внутренние поля*/
+             background: #fcfdff;
+             border: solid 1px #898989;
+             border-radius:  3px;
+             font: 14pt Arial, sans-serif;
+         }
+        .text_year {
+            width: 80px;
+            height: 30px;
+            margin: 2px;
+            padding: 2px 9px; /*внутренние поля*/
             background: #fcfdff;
             border: solid 1px #898989;
             border-radius:  3px;
@@ -107,7 +168,6 @@
             margin: 2px 20px;
             cursor: pointer;
         }
-
         .button_lang{ /* Кнопка регистрации */
             background: #f0f0f0;
             border: solid 1px #494949;
@@ -131,12 +191,12 @@
             </td>
             <td align="right" width="20%">
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="pathFrom" value="/signup">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="pathFrom" value="/signup">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
                 </form>
@@ -146,6 +206,8 @@
 </div>
 <div id="content">
     <p align="center"><h3>${signup_title}</h3>
+    <h4>${message_about_fields}</h4>
+
     <form action="/signup" method="post" id="/signup">
         <!--First name-->
         <p align="center">
@@ -157,39 +219,34 @@
             <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" required maxlength="100"
                    name="second_name" size="100" placeholder="${your_last_name}" value="${requestScope.second_name}">
         </p>
-        <!--Middle name-->
-        <p align="center">
-            <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" maxlength="100"
-                   name="middle_name" size="100" placeholder="${your_middle_name}" value="${requestScope.middle_name}">
-        </p>
-        <!--Gender-->
-        <p align="center">
-            <c:choose>
-                <c:when test="${requestScope.gender eq 'other'}">
-                    <c:set var="gender_other" scope="page" value="checked"/>
-                </c:when>
-                <c:when test="${requestScope.gender eq 'male'}">
-                    <c:set var="gender_male" scope="page" value="checked"/>
-                </c:when>
-                <c:when test="${requestScope.gender eq 'female'}">
-                    <c:set var="gender_female" scope="page" value="checked"/>
-                </c:when>
-            </c:choose>
-            <input name="gender" type="radio" value="male" placeholder="" ${gender_male}>${gender_male}
-            <input name="gender" type="radio" value="female" placeholder="" ${gender_female}>${gender_female}
-            <input name="gender" type="radio" value="other" placeholder="" ${gender_other}>${gender_other}
-        </p>
         <!--Date of birthday-->
+        <h5>${date_of_birthday}</h5>
+
         <p align="center">
-            ${date_of_birthday}
-        </p>
-        <p align="center">
-            <input type="date" class="text" name="dob" value="${requestScope.dob}" placeholder=""
-                   max="2001-01-01" min="1900-01-01">
+            <input type="number" class="text_day" name="day" value="${requestScope.day}" placeholder="${day_birthday}"
+                   min="1" max="31" size="40" required>
+            <select class="text_month" name="month" size="1" required>
+
+                <option value="none">${month}</option>
+                <option value="1" ${requestScope.m1}>${january}</option>
+                <option value="2" ${requestScope.m2}>${february}</option>
+                <option value="3" ${requestScope.m3}>${march}</option>
+                <option value="4" ${requestScope.m4}>${april}</option>
+                <option value="5" ${requestScope.m5}>${may}</option>
+                <option value="6" ${requestScope.m6}>${june}</option>
+                <option value="7" ${requestScope.m7}>${july}</option>
+                <option value="8" ${requestScope.m8}>${august}</option>
+                <option value="9" ${requestScope.m9}>${september}</option>
+                <option value="10" ${requestScope.m10}>${october}</option>
+                <option value="11" ${requestScope.m11}>${november}</option>
+                <option value="12" ${requestScope.m12}>${december}</option>
+            </select>
+            <%--TODO think about max and min value--%>
+            <input type="number" class="text_year" name="year" value="${requestScope.year}" placeholder="${year_birthday}"
+                   min="1907" max="2003" size="60" required>
         </p>
         <!--Email-->
-        <p align="center">
-            <input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
+            <p align="center"><input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
                    name="emailNew" size="100" placeholder="${placeholder_email}">
             <!--Password-->
         <p align="center">
@@ -206,7 +263,11 @@
     <c:if test="${requestScope.email_exist != null}">
         <c:set var="email_exist" scope="request" value="${email_exist}"/>
     </c:if>
+    <c:if test="${requestScope.dateInputError != null}">
+        <c:set var="dateInputError" scope="request" value="${date_input_error}"/>
+    </c:if>
     <p align="center"><small>${requestScope.email_exist}</small></p>
+    <p align="center"><small>${requestScope.dateInputError}</small></p>
 </div>
 </body>
 </html>

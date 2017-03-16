@@ -3,7 +3,7 @@ package model;
 /**
  * Created on 07.03.2017.
  */
-public class University {
+public class University implements Cloneable{
 
     private int id;
     private int scientistId;
@@ -11,6 +11,9 @@ public class University {
     private String city;
     private String fullName;
     private Degree degree;
+    private boolean deleted;
+    private boolean created;
+    private boolean updated;
 
     public University(int id, int scientistId, String country, String city, String fullName, Degree degree) {
         this.id = id;
@@ -19,9 +22,39 @@ public class University {
         this.city = city;
         this.fullName = fullName;
         this.degree = degree;
+        this.deleted = false;
+        this.created = false;
+        this.updated = false;
     }
 
     public University() {
+        this.deleted = false;
+        this.created = false;
+        this.updated = false;
+    }
+
+    public boolean isUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
+    }
+
+    public boolean isCreated() {
+        return created;
+    }
+
+    public void setCreated(boolean created) {
+        this.created = created;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public int getId() {
@@ -112,10 +145,30 @@ public class University {
             return this;
         }
 
+        public Builder setDeleted(boolean deleted) {
+            University.this.deleted = deleted;
+            return this;
+        }
+
+        public Builder setCreated(boolean created) {
+            University.this.created = created;
+            return this;
+        }
+
+        public Builder setUpdated(boolean updated) {
+            University.this.updated = updated;
+            return this;
+        }
+
         public University build() {
             return University.this;
         }
 
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
@@ -127,6 +180,9 @@ public class University {
                 ", city='" + city + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", degree=" + degree +
+                ", deleted=" + deleted +
+                ", created=" + created +
+                ", updated=" + updated +
                 '}';
     }
 }

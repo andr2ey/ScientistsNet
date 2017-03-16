@@ -9,5 +9,8 @@ import java.util.List;
  */
 public interface UniversityDao {
     List<University> getAll(int scientistId);
-
+    void deleteAll(List<University> listToDelete);
+    boolean transactionCUD(List<University> listDeleted,
+                   List<University> listCreated,
+                   List<University> listUpdated);
 }
