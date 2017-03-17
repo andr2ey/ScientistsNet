@@ -29,11 +29,22 @@ public class UpdateBasicInfo extends HttpServlet {
             //verifies confirm password
             if (!service.verifyPassword(scientistOld.getEmail(), req.getAttribute("passwordNew"))) {
                 req.setAttribute(Const.CONFIRM_PASSWORD_ERROR, "Confirmation of password is invalid");
+                req.setAttribute("fail", "fail");
                 req.getRequestDispatcher("WEB-INF/main/baseinfo/index.jsp").forward(req, resp);
             }
-            Scientist scientistNew = new Scientist().builder().setFirstName()
-            if (service.update(scientistOld)) {
-
+            Scientist scientistNew = new Scientist().builder()
+                    .setFirstName(VALIDATOR.getValidFirstName())
+                    .setSecondName(VALIDATOR.getValidSecondName())
+                    .setMiddleName(VALIDATOR.getValidMiddleName())
+                    .setGender(VALIDATOR.getValidGender())
+                    .setDob(VALIDATOR.getValidDate())
+                    .setEmail(VALIDATOR.getValidNewEmail())
+                    .setPassword(VALIDATOR.getValidNewPassword()).build();
+            if (service.update(scientistOld, scientistNew)) {
+                req.setAttribute("exist_email", "Such email already exist");
+                req.setAttribute("fail", "fail");
+            } else {
+                req.setAttribute("success", "success");
             }
         }
         req.getRequestDispatcher("WEB-INF/main/baseinfo/index.jsp").forward(req, resp);
