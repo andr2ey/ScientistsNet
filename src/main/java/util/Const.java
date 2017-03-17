@@ -18,6 +18,10 @@ public interface Const {
     String FIRST_NAME_INPUT_ERROR = "firstNameInputError";
     String SECOND_NAME_INPUT_ERROR = "secondNameInputError";
     String MIDDLE_NAME_INPUT_ERROR = "middleNameInputError";
+    String GENDER_INPUT_ERROR = "middleNameInputError";
+
+    String CONFIRM_PASSWORD_ERROR = "confirmPasswordError";
+
 
     int TOP_EDGE_OF_AGE = 110;
     int BOTTOM_EDGE_OF_AGE = 14;

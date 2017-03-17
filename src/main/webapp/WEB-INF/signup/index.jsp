@@ -211,22 +211,20 @@
     <form action="/signup" method="post" id="/signup">
         <!--First name-->
         <p align="center">
-            <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]]{2,100}" required maxlength="100"
+            <input class="text" pattern="[A-Za-z\u0410-\u044F\d\-\., ]{2,100}" required maxlength="100"
                    name="first_name" size="100" placeholder="${your_first_name}" value="${requestScope.first_name}">
         </p>
         <!--Last name-->
         <p align="center">
-            <input class="text" pattern="[A-Za-zА-Яа-я0-9 ]{2,100}" required maxlength="100"
+            <input class="text" pattern="[A-Za-z\u0410-\u044F\d\-\., ]{2,100}" required maxlength="100"
                    name="second_name" size="100" placeholder="${your_last_name}" value="${requestScope.second_name}">
         </p>
         <!--Date of birthday-->
         <h5>${date_of_birthday}</h5>
-
         <p align="center">
             <input type="number" class="text_day" name="day" value="${requestScope.day}" placeholder="${day_birthday}"
                    min="1" max="31" size="40" required>
             <select class="text_month" name="month" size="1" required>
-
                 <option value="none">${month}</option>
                 <option value="1" ${requestScope.m1}>${january}</option>
                 <option value="2" ${requestScope.m2}>${february}</option>
@@ -246,12 +244,12 @@
                    min="${requestScope.minYear}" max="${requestScope.maxYear}" size="60" required>
         </p>
         <!--Email-->
-            <p align="center"><input type="email" class="text" required maxlength="100" pattern=".+@.+\..+"
+            <p align="center"><input type="email" class="text" required maxlength="100" pattern="^.+@.+\..+[^\.]$"
                    name="emailNew" size="100" placeholder="${placeholder_email}">
             <!--Password-->
         <p align="center">
         <div class="info" align="center" data-title="${data_title_password}">
-            <input type="password"  class="text" pattern="[A-Za-z0-9]{3,100}" required maxlength="100"
+            <input type="password"  class="text" pattern="^[\dA-Za-z]{3,100}$" required maxlength="100"
                    name="passwordNew" size="100" placeholder="${placeholder_password}"></div>
         <!--Sign up Button-->
         <p align="center"><input type="submit" class="button_sign_up" value="${button_signup}">

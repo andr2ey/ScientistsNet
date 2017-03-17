@@ -16,9 +16,7 @@ public class ScientistValidator {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\dA-Za-z]{3,100}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+[^\\.]$");
     private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\d\\-\\., ]{2,100}");
-    private static final Pattern GENDER_PATTERN = Pattern.compile("(?i)^(male|female|other|none)$");
-
-    private final Logger logger = Logger.getRootLogger();
+    private static final Pattern GENDER_PATTERN = Pattern.compile("(?i)^(male|female|none)$");
 
     private boolean valid = true;
 
@@ -30,7 +28,18 @@ public class ScientistValidator {
     private Gender validGender = Gender.NONE;
     private LocalDate validDate;
 
+    private String validNewPassword;
+    private String validNewEmail;
+
     public ScientistValidator() {
+    }
+
+    public String getValidNewPassword() {
+        return validNewPassword;
+    }
+
+    public String getValidNewEmail() {
+        return validNewEmail;
     }
 
     public String getValidPassword() {
@@ -72,22 +81,43 @@ public class ScientistValidator {
                 .isValid()) {
             req.setAttribute("first_name", req.getParameter("first_name"));
             req.setAttribute("second_name", req.getParameter("second_name"));
-            setDefaultAfterRegistration();
             return false;
         }
-        setDefaultAfterRegistration();
         return true;
     }
 
-    private void setDefaultAfterRegistration() {
-        validMiddleName = null;
-        validGender = Gender.NONE;
+    public boolean validateBaseInfoFields(HttpServletRequest req) {
+        if (!dob(req.getParameter("day"),
+                req.getParameter("month"),
+                req.getParameter("year"), req)
+                .emailNew(req.getParameter("emailNew"), req)
+                .passwordNew(req.getParameter("passwordNew"), req)
+                .firstName(req.getParameter("first_name"), req)
+                .secondName(req.getParameter("second_name"), req)
+                .secondName(req.getParameter("middle_name"), req)
+                .gender(req.getParameter("gender"), req)
+                .password(req.getParameter("password"), req)
+                .isValid()) {
+            req.setAttribute("first_name", req.getParameter("first_name"));
+            req.setAttribute("second_name", req.getParameter("second_name"));
+            req.setAttribute("middle_name", req.getParameter("middle_name"));
+            req.setAttribute("gender", req.getParameter("gender"));
+            req.setAttribute("day", req.getParameter("day"));
+            req.setAttribute("month", req.getParameter("month"));
+            req.setAttribute("year", req.getParameter("year"));
+            req.setAttribute("emailNew", req.getParameter("emailNew"));
+            return false;
+        }
+        return true;
     }
 
     private ScientistValidator dob(String day, String month, String year, HttpServletRequest req){
-        if (!valid)
+        if (!valid) {
+            validDate = null;
             return this;
+        }
         if (nullable(day, month, year)) {
+            validDate = null;
             valid = false;
             return this;
         }
@@ -97,12 +127,14 @@ public class ScientistValidator {
             LocalDate difference = LocalDate.now().minusYears(yearInt);
             int yearDiffer = difference.getYear();
             if (yearDiffer > Const.TOP_EDGE_OF_AGE || yearDiffer < Const.BOTTOM_EDGE_OF_AGE) {
+                validDate = null;
                 valid = false;
               req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
             } else {
                 validDate = dob;
             }
         } catch (NumberFormatException | DateTimeException e) {
+            validDate = null;
             valid = false;
             req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
         }
@@ -115,9 +147,11 @@ public class ScientistValidator {
 
     private ScientistValidator email(String email, HttpServletRequest req){
         if (!valid) {
+            validEmail = null;
             return this;
         }
         if (email == null || email.isEmpty()) {
+            validEmail = null;
             valid = false;
             return this;
         }
@@ -126,6 +160,21 @@ public class ScientistValidator {
             req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
         }
         validEmail = email;
+        return this;
+    }
+
+    private ScientistValidator emailNew(String emailNew, HttpServletRequest req){
+        if (!valid) {
+            return this;
+        }
+        if (emailNew == null || emailNew.isEmpty()) {
+            return this;
+        }
+        if (!EMAIL_PATTERN.matcher(emailNew.trim()).matches()) {
+            valid = false;
+            req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
+        }
+        validEmail = emailNew;
         return this;
     }
 
@@ -142,6 +191,21 @@ public class ScientistValidator {
             req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
         }
         validPassword = password;
+        return this;
+    }
+
+    private ScientistValidator passwordNew(String passwordNew, HttpServletRequest req){
+        if (!valid) {
+            return this;
+        }
+        if (passwordNew == null || passwordNew.isEmpty()) {
+            return this;
+        }
+        if (!PASSWORD_PATTERN.matcher(passwordNew.trim()).matches()) {
+            valid = false;
+            req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
+        }
+        validPassword = passwordNew;
         return this;
     }
 
@@ -193,7 +257,7 @@ public class ScientistValidator {
         return this;
     }
 
-    private ScientistValidator gender(String gender) {
+    private ScientistValidator gender(String gender, HttpServletRequest req) {
         if (!valid) {
             return this;
         }
@@ -203,6 +267,7 @@ public class ScientistValidator {
         }
         if (!GENDER_PATTERN.matcher(gender.trim()).matches()) {
             valid = false;
+            req.setAttribute(Const.GENDER_INPUT_ERROR, "Gender is incorrect!");
         }
         validGender = Gender.valueOf(gender.trim().toUpperCase());
         return this;

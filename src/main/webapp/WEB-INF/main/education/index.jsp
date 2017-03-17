@@ -9,8 +9,10 @@
 <fmt:message bundle="${lang}" key="lang.log.out.button" var="log_out_button"/>
 
 <fmt:message bundle="${lang}" key="lang.txt.success" var="txt_success"/>
+<fmt:message bundle="${lang}" key="lang.message.success" var="message_success"/>
 <fmt:message bundle="${lang}" key="lang.txt.fail" var="txt_fail"/>
 <fmt:message bundle="${lang}" key="lang.message.deleted" var="message_deleted"/>
+<fmt:message bundle="${lang}" key="lang.message.max.universities" var="message_max_universities"/>
 
 <fmt:message bundle="${lang}" key="lang.high.education" var="high_education"/>
 <fmt:message bundle="${lang}" key="lang.button.delete" var="delete_button"/>
@@ -224,9 +226,11 @@
                                                 <c:choose>
                                                     <c:when test="${requestScope.successOfTransaction == 'success'}">
                                                         ${txt_success}
+                                                        ${requestScope.successOfTransaction = null}
                                                     </c:when>
-                                                    <c:when test="${requestScope.successOfTransaction == 'success'}">
+                                                    <c:when test="${requestScope.successOfTransaction == 'fail'}">
                                                         ${txt_fail}
+                                                        ${requestScope.successOfTransaction = null}
                                                     </c:when>
                                                 </c:choose>
                                             </c:if>
@@ -256,16 +260,17 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <c:if test="${requestScope.updatedStatus != null}">
+                                                <c:if test="${university.updated == true
+                                                && requestScope.updatedStatus != null}">
                                                     <c:choose>
                                                         <c:when test="${requestScope.updatedStatus == 'success'}">
                                                             <p align="right">
-                                                                <small>${txt_success}</small>
+                                                                <small>${message_success}</small>
                                                             </p>
                                                         </c:when>
-                                                        <c:when test="${requestScope.updatedStatus == 'success'}">
+                                                        <c:when test="${requestScope.updatedStatus == 'fail'}">
                                                             <p align="right">
-                                                                <small>${txt_fail}</small>
+                                                                <small>${message_success}</small>
                                                             </p>
                                                         </c:when>
                                                     </c:choose>
@@ -374,7 +379,7 @@
                                            pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}" size="60"></p>
                                 <p align="center">
                                     <select name="education_degree" size="1" required class="text">
-                                        <option selected value="none">${txt_degree}</option>
+                                        <option disabled>${txt_degree}</option>
                                         <option value="bachelor">${bachelor}</option>
                                         <option value="master">${master}</option>
                                         <option value="specialist">${specialist}</option>
@@ -396,7 +401,7 @@
                             <%--Restriction of universities count--%>
                             <p align="center">
                                 <c:if test="${requestScope.maxUniversity != null}">
-                                    ${requestScope.maxUniversity}
+                                    ${message_max_universities}
                                 </c:if>
                             </p>
                         </div>
