@@ -112,11 +112,7 @@ public class ScientistValidator {
     }
 
     private ScientistValidator dob(String day, String month, String year, HttpServletRequest req){
-        if (!valid) {
-            validDate = null;
-            return this;
-        }
-        if (nullable(day, month, year)) {
+        if (!valid || nullable(day, month, year)) {
             validDate = null;
             valid = false;
             return this;
@@ -146,28 +142,24 @@ public class ScientistValidator {
     }
 
     private ScientistValidator email(String email, HttpServletRequest req){
-        if (!valid) {
-            validEmail = null;
-            return this;
-        }
-        if (email == null || email.isEmpty()) {
+        if (!valid || email == null || email.isEmpty()) {
             validEmail = null;
             valid = false;
             return this;
         }
         if (!EMAIL_PATTERN.matcher(email.trim()).matches()) {
+            validEmail = null;
             valid = false;
             req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
+            return this;
         }
         validEmail = email;
         return this;
     }
 
     private ScientistValidator emailNew(String emailNew, HttpServletRequest req){
-        if (!valid) {
-            return this;
-        }
-        if (emailNew == null || emailNew.isEmpty()) {
+        if (!valid || emailNew == null || emailNew.isEmpty()) {
+            validEmail = null;
             return this;
         }
         if (!EMAIL_PATTERN.matcher(emailNew.trim()).matches()) {
@@ -179,95 +171,93 @@ public class ScientistValidator {
     }
 
     private ScientistValidator password(String password, HttpServletRequest req){
-        if (!valid) {
-            return this;
-        }
-        if (password == null || password.isEmpty()) {
+        if (!valid || password == null || password.isEmpty()) {
             valid = false;
+            validPassword = null;
             return this;
         }
         if (!PASSWORD_PATTERN.matcher(password.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
+            validPassword = null;
+            return this;
         }
         validPassword = password;
         return this;
     }
 
     private ScientistValidator passwordNew(String passwordNew, HttpServletRequest req){
-        if (!valid) {
-            return this;
-        }
-        if (passwordNew == null || passwordNew.isEmpty()) {
+        if (!valid || passwordNew == null || passwordNew.isEmpty()) {
+            validNewPassword = null;
             return this;
         }
         if (!PASSWORD_PATTERN.matcher(passwordNew.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
+            validNewPassword = null;
+            return this;
         }
         validPassword = passwordNew;
         return this;
     }
 
     private ScientistValidator firstName(String firstName, HttpServletRequest req){
-        if (!valid) {
-            return this;
-        }
-        if (firstName == null || firstName.isEmpty()) {
+        if (!valid || firstName == null || firstName.isEmpty()) {
             valid = false;
+            validFirstName = null;
             return this;
         }
         if (!NAME_PATTERN.matcher(firstName.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.FIRST_NAME_INPUT_ERROR, "First name is incorrect!");
+            validFirstName = null;
+            return this;
         }
         validFirstName = firstName;
         return this;
     }
 
     private ScientistValidator secondName(String secondName, HttpServletRequest req){
-        if (!valid) {
-            return this;
-        }
-        if (secondName == null || secondName.isEmpty()) {
+        if (!valid || secondName == null || secondName.isEmpty()) {
             valid = false;
+            validSecondName = null;
             return this;
         }
         if (!NAME_PATTERN.matcher(secondName.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.SECOND_NAME_INPUT_ERROR, "Second name is incorrect!");
+            validSecondName = null;
+            return this;
         }
         validSecondName = secondName;
         return this;
     }
 
     private ScientistValidator middleName(String middleName, HttpServletRequest req){
-        if (!valid) {
-            return this;
-        }
-        if (middleName == null || middleName.isEmpty()) {
+        if (!valid || middleName == null || middleName.isEmpty()) {
             validMiddleName = null;
             return this;
         }
         if (!NAME_PATTERN.matcher(middleName.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.MIDDLE_NAME_INPUT_ERROR, "Middle name is incorrect!");
+            validMiddleName = null;
+            return this;
         }
         validMiddleName = middleName;
         return this;
     }
 
     private ScientistValidator gender(String gender, HttpServletRequest req) {
-        if (!valid) {
-            return this;
-        }
-        if (gender == null || gender.isEmpty()) {
+        if (!valid || gender == null || gender.isEmpty()) {
             validGender = Gender.NONE;
             return this;
         }
         if (!GENDER_PATTERN.matcher(gender.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.GENDER_INPUT_ERROR, "Gender is incorrect!");
+            validGender = Gender.NONE;
+            return this;
         }
         validGender = Gender.valueOf(gender.trim().toUpperCase());
         return this;
