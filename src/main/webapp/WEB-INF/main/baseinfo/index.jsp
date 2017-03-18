@@ -7,6 +7,10 @@
 <fmt:message bundle="${lang}" key="lang.button.rus" var="ru_button"/>
 <fmt:message bundle="${lang}" key="lang.button.en" var="en_button"/>
 
+<fmt:message bundle="${lang}" key="lang.gender.none" var="gender_none"/>
+<fmt:message bundle="${lang}" key="lang.gender.male" var="gender_male"/>
+<fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
+
 <fmt:message bundle="${lang}" key="lang.day.birthday" var="day_birthday"/>
 <fmt:message bundle="${lang}" key="lang.year.birthday" var="year_birthday"/>
 
@@ -23,6 +27,23 @@
 <fmt:message bundle="${lang}" key="lang.october" var="october"/>
 <fmt:message bundle="${lang}" key="lang.november" var="november"/>
 <fmt:message bundle="${lang}" key="lang.december" var="december"/>
+
+<fmt:message bundle="${lang}" key="lang.base.info" var="base_info"/>
+<fmt:message bundle="${lang}" key="lang.log.out.button" var="log_out_button"/>
+<fmt:message bundle="${lang}" key="lang.txt.dob" var="txt_dob"/>
+<fmt:message bundle="${lang}" key="lang.gender" var="txt_gender"/>
+<fmt:message bundle="${lang}" key="lang.txt.first.name" var="txt_first_name"/>
+<fmt:message bundle="${lang}" key="lang.txt.second.name" var="txt_second_name"/>
+<fmt:message bundle="${lang}" key="lang.txt.middle.name" var="txt_middle_name"/>
+<fmt:message bundle="${lang}" key="lang.txt.new.password" var="txt_new_password"/>
+<fmt:message bundle="${lang}" key="lang.txt.old.password" var="txt_old_password"/>
+<fmt:message bundle="${lang}" key="lang.button.save" var="button_save"/>
+
+
+<fmt:message bundle="${lang}" key="lang.button.my.profile" var="button_my_profile"/>
+<fmt:message bundle="${lang}" key="lang.button.friends" var="button_friends"/>
+<fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
+<fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
 <html>
 <head>
@@ -155,7 +176,7 @@
         <tr>
             <td valign="center" align="left" width="20%">
                 <form action="/main" method="post">
-                    <input type="submit" class="button_lang" name="logout" value="Log out">
+                    <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
             <td valign="center" align="center" width="60%">
@@ -184,19 +205,20 @@
             <div id="sidebar">
                 <form action="/main" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="My profile"></p>
+                                             value="${button_my_profile}"></p>
                 </form>
                 <form action="/friends" method="post">
-                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile" value="Friends">
+                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
+                                             value="${button_friends}">
                     </p>
                 </form>
                 <form action="/messages" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="Messages"></p>
+                                             value="${button_messages}"></p>
                 </form>
                 <form action="/articles" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="Articles"></p>
+                                             value="${button_articles}"></p>
                 </form>
             </div>
         </td>
@@ -210,10 +232,10 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>Base info</h3></td>
+                                    <td width="50%"><h3>${base_info}</h3></td>
                                     <td width="25%" align="right">
-                                        ${requestScope.fail}
-                                        ${requestScope.success}
+                                        <small>${requestScope.fail}</small>
+                                        <small>${requestScope.success}</small>
                                     </td>
                                 </tr>
                             </table>
@@ -222,7 +244,7 @@
                                     <!--First name-->
                                     <tr>
                                         <td width="30%">
-                                            first name<span>*</span>:
+                                            ${txt_first_name}<span>*</span>:
                                         </td>
                                         <td>
                                             <p align="center">
@@ -234,7 +256,7 @@
                                     <!--Last name-->
                                     <tr>
                                         <td width="20%">
-                                            last name<span>*</span>:
+                                            ${txt_second_name}<span>*</span>:
                                         </td>
                                         <td>
                                             <p align="center">
@@ -246,7 +268,7 @@
                                     <!--Middle name-->
                                     <tr>
                                         <td width="30%">
-                                            middle name:
+                                            ${txt_middle_name}:
                                         </td>
                                         <td>
                                             <p align="center">
@@ -258,34 +280,34 @@
                                     <tr>
                                         <!--Gender-->
                                         <td width="20%">
-                                            gender:
+                                            ${txt_gender}:
                                         </td>
                                         <td>
                                             <p align="center">
                                                 <c:choose>
                                                     <c:when test="${sessionScope.email.gender eq 'MALE'}">
-                                                        <c:set var="gender_male" scope="page" value="checked"/>
+                                                        <c:set var="gender_male_var" scope="page" value="checked"/>
                                                     </c:when>
                                                     <c:when test="${sessionScope.email.gender eq 'FEMALE'}">
-                                                        <c:set var="gender_female" scope="page" value="checked"/>
+                                                        <c:set var="gender_female_var" scope="page" value="checked"/>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:set var="gender_none" scope="page" value="checked"/>
+                                                        <c:set var="gender_none_var" scope="page" value="checked"/>
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <input name="gender" type="radio"
-                                                       value="male" placeholder="" ${gender_male}>Male
+                                                       value="male" placeholder="" ${gender_male_var}>${gender_male}
                                                 <input name="gender" type="radio"
-                                                       value="female" placeholder="" ${gender_female}>Female
+                                                       value="female" placeholder="" ${gender_female_var}>${gender_female}
                                                 <input name="gender" type="radio"
-                                                       value="none" placeholder="" ${gender_none}>None selected
+                                                       value="none" placeholder="" ${gender_none_var}>${gender_none}
                                             </p>
                                         </td>
                                     </tr>
                                     <tr>
                                         <!--Date of birthday-->
                                         <td width="30%">
-                                            date of birthday<span>*</span>:
+                                            ${txt_dob}<span>*</span>:
                                         </td>
                                         <td>
                                             <p align="center">
@@ -313,26 +335,27 @@
                                                        min="${requestScope.minYear}" max="${requestScope.maxYear}"
                                                        size="60" required>
                                             </p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <!--New Email-->
-                                        <td width="30%">
-                                            new email:
-                                        </td>
-                                        <td>
-                                            <p align="center">
-                                                <input type="email" maxlength="100" class="text"
-                                                       pattern="^.+@.+\..+[^\.]$" form="/info_save"
-                                                       name="emailNew" size="60" placeholder="new email"
-                                                       value="${requestScope.emailNew}">
                                             </p>
                                         </td>
                                     </tr>
+                                    <%--<tr>--%>
+                                        <%--<!--New Email-->--%>
+                                        <%--<td width="30%">--%>
+                                            <%--new email:--%>
+                                        <%--</td>--%>
+                                        <%--<td>--%>
+                                            <%--<p align="center">--%>
+                                                <%--<input type="email" maxlength="100" class="text"--%>
+                                                       <%--pattern="^.+@.+\..+[^\.]$" form="/info_save"--%>
+                                                       <%--name="emailNew" size="60" placeholder="new email"--%>
+                                                       <%--value="${requestScope.emailNew}">--%>
+                                            <%--</p>--%>
+                                        <%--</td>--%>
+                                    <%--</tr>--%>
                                     <tr>
                                         <!--New Password-->
                                         <td width="30%">
-                                            new password:
+                                            ${txt_new_password}:
                                         </td>
                                         <td>
                                             <p align="center">
@@ -340,7 +363,8 @@
                                                  data-title="Only latin letters and numbers, length 3-100">
                                                 <input type="password" pattern="^[\dA-Za-z]{3,100}$"
                                                        maxlength="100" form="/info_save"  class="text"
-                                                       name="passwordNew" size="60" placeholder="new password"></div>
+                                                       name="passwordNew" size="60"
+                                                       placeholder="${txt_new_password}"></div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -351,7 +375,7 @@
                                     <tr>
                                         <!--Old Password-->
                                         <td width="30%">
-                                            confirm password <span>*</span>:
+                                            ${txt_old_password}<span>*</span>:
                                         </td>
                                         <td>
                                             <p align="center">
@@ -359,18 +383,19 @@
                                                  data-title="Only latin letters and numbers, length 3-100">
                                                 <input type="password" pattern="^[\dA-Za-z]{3,100}$"
                                                        required maxlength="100" form="/info_save"  class="text"
-                                                       name="passwordOld" size="60" placeholder="password"></div>
+                                                       name="passwordOld" size="60"
+                                                       placeholder="${txt_old_password}"></div>
                                         </td>
                                     </tr>
                                 </table>
                                 <p align="center">
                                     <button type="submit" form="/info_save" class="button_update"
-                                            name="button_update_scientist" value="update">Save
+                                            name="button_update_scientist" value="update">${button_save}
                                     </button>
                                 </p>
                             </form>
-                            ${requestScope.confirmPasswordError}
-                            ${requestScope.exist_email}
+                            <p align="center">${requestScope.confirmPasswordError}</p>
+                            <p align="center">${requestScope.exist_email}</p>
                         </div>
                     </td>
                 </tr>

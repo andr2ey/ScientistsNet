@@ -11,7 +11,7 @@
 <fmt:message bundle="${lang}" key="lang.master" var="master"/>
 <fmt:message bundle="${lang}" key="lang.specialist" var="specialist"/>
 
-<fmt:message bundle="${lang}" key="lang.gender.other" var="gender_other"/>
+<fmt:message bundle="${lang}" key="lang.gender.none" var="gender_none"/>
 <fmt:message bundle="${lang}" key="lang.gender.male" var="gender_male"/>
 <fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
 
@@ -209,7 +209,7 @@
                                                 <c:set var="gender" scope="page" value="${gender_female}"/>
                                             </c:when>
                                             <c:otherwise >
-                                                <c:set var="gender" scope="page" value="${none}"/>
+                                                <c:set var="gender" scope="page" value="${gender_none}"/>
                                             </c:otherwise>
                                         </c:choose>
                                         <td>${gender}</td>

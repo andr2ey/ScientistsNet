@@ -30,6 +30,13 @@ public class ProfileEditor extends HttpServlet {
         req.setAttribute("year", localDate.getYear());
         req.setAttribute("day", localDate.getDayOfMonth());
         req.setAttribute("m"+localDate.getMonthValue(), "selected");
+        setYearsLimits(req);
         req.getRequestDispatcher("WEB-INF/main/baseinfo/index.jsp").forward(req, resp);
+    }
+
+    private void setYearsLimits(HttpServletRequest req) {
+        LocalDate localDate = LocalDate.now();
+        req.setAttribute(Const.MAX_YEAR_KEY, (localDate.getYear() - Const.BOTTOM_EDGE_OF_AGE) );
+        req.setAttribute(Const.MIN_YEAR_KEY, (localDate.getYear() - Const.TOP_EDGE_OF_AGE));
     }
 }
