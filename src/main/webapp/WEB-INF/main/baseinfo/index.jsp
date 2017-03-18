@@ -39,6 +39,13 @@
 <fmt:message bundle="${lang}" key="lang.txt.old.password" var="txt_old_password"/>
 <fmt:message bundle="${lang}" key="lang.button.save" var="button_save"/>
 
+<fmt:message bundle="${lang}" key="lang.txt.success" var="txt_success"/>
+<fmt:message bundle="${lang}" key="lang.txt.fail" var="txt_fail"/>
+<fmt:message bundle="${lang}" key="lang.txt.conformation.password" var="txt_conformation_password"/>
+<fmt:message bundle="${lang}" key="lang.email.exist" var="email_exist"/>
+
+
+
 
 <fmt:message bundle="${lang}" key="lang.button.my.profile" var="button_my_profile"/>
 <fmt:message bundle="${lang}" key="lang.button.friends" var="button_friends"/>
@@ -234,8 +241,16 @@
                                     <td width="25%"></td>
                                     <td width="50%"><h3>${base_info}</h3></td>
                                     <td width="25%" align="right">
-                                        <small>${requestScope.fail}</small>
-                                        <small>${requestScope.success}</small>
+                                        <small>
+                                            <c:if test="${requestScope.fail != null}">
+                                                ${txt_fail}
+                                            </c:if>
+                                        </small>
+                                        <small>
+                                            <c:if test="${requestScope.success != null}">
+                                                ${txt_success}
+                                            </c:if>
+                                        </small>
                                     </td>
                                 </tr>
                             </table>
@@ -274,6 +289,7 @@
                                             <p align="center">
                                                 <input form="/info_save" name="middle_name" class="text"
                                                        value="${sessionScope.email.middleName}" size="60"
+                                                       placeholder="${txt_middle_name}"
                                                        pattern="[A-Za-z\u0410-\u044F\d\-\., ]{2,100}">
                                         </td>
                                     </tr>
@@ -394,8 +410,12 @@
                                     </button>
                                 </p>
                             </form>
-                            <p align="center">${requestScope.confirmPasswordError}</p>
-                            <p align="center">${requestScope.exist_email}</p>
+                            <c:if test="${requestScope.confirmPasswordError != null}">
+                                <p align="center">${txt_conformation_password}</p>
+                            </c:if>
+                            <c:if test="${requestScope.exist_email != null}">
+                                <p align="center">${email_exist}</p>
+                            </c:if>
                         </div>
                     </td>
                 </tr>
