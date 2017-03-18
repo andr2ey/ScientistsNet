@@ -211,10 +211,13 @@
                                 <tr>
                                     <td width="25%"></td>
                                     <td width="50%"><h3>Base info</h3></td>
-                                    <td width="25%" align="right">${requestScope.successOfTransaction}</td>
+                                    <td width="25%" align="right">
+                                        ${requestScope.fail}
+                                        ${requestScope.success}
+                                    </td>
                                 </tr>
                             </table>
-                            <form action="/info_save" method="get" id="/info_save">
+                            <form action="/info_save" method="post" id="/info_save">
                                 <table border="0" width="100%" align="top">
                                     <!--First name-->
                                     <tr>
@@ -260,10 +263,10 @@
                                         <td>
                                             <p align="center">
                                                 <c:choose>
-                                                    <c:when test="${requestScope.email.gender eq 'male'}">
+                                                    <c:when test="${sessionScope.email.gender eq 'MALE'}">
                                                         <c:set var="gender_male" scope="page" value="checked"/>
                                                     </c:when>
-                                                    <c:when test="${requestScope.email.gender eq 'female'}">
+                                                    <c:when test="${sessionScope.email.gender eq 'FEMALE'}">
                                                         <c:set var="gender_female" scope="page" value="checked"/>
                                                     </c:when>
                                                     <c:otherwise>
@@ -319,9 +322,9 @@
                                         </td>
                                         <td>
                                             <p align="center">
-                                                <input type="email" required maxlength="100" class="text"
+                                                <input type="email" maxlength="100" class="text"
                                                        pattern="^.+@.+\..+[^\.]$" form="/info_save"
-                                                       name="emailNew" size="60" placeholder=""
+                                                       name="emailNew" size="60" placeholder="new email"
                                                        value="${requestScope.emailNew}">
                                             </p>
                                         </td>
@@ -336,7 +339,7 @@
                                             <div align="center" class="info"
                                                  data-title="Only latin letters and numbers, length 3-100">
                                                 <input type="password" pattern="^[\dA-Za-z]{3,100}$"
-                                                       required maxlength="100" form="/info_save"  class="text"
+                                                       maxlength="100" form="/info_save"  class="text"
                                                        name="passwordNew" size="60" placeholder="new password"></div>
                                         </td>
                                     </tr>
@@ -366,6 +369,8 @@
                                     </button>
                                 </p>
                             </form>
+                            ${requestScope.confirmPasswordError}
+                            ${requestScope.exist_email}
                         </div>
                     </td>
                 </tr>

@@ -87,28 +87,29 @@ public class ScientistValidator {
     }
 
     public boolean validateBaseInfoFields(HttpServletRequest req) {
-        if (!dob(req.getParameter("day"),
+        if (dob(req.getParameter("day"),
                 req.getParameter("month"),
                 req.getParameter("year"), req)
-                .emailNew(req.getParameter("emailNew"), req)
-                .passwordNew(req.getParameter("passwordNew"), req)
+                .emailNew(req.getParameter("emailNew"), req)       //
+                .passwordNew(req.getParameter("passwordNew"), req) //
                 .firstName(req.getParameter("first_name"), req)
                 .secondName(req.getParameter("second_name"), req)
-                .secondName(req.getParameter("middle_name"), req)
+                .middleName(req.getParameter("middle_name"), req)
                 .gender(req.getParameter("gender"), req)
-                .password(req.getParameter("password"), req)
+                .password(req.getParameter("passwordOld"), req)
                 .isValid()) {
-            req.setAttribute("first_name", req.getParameter("first_name"));
-            req.setAttribute("second_name", req.getParameter("second_name"));
-            req.setAttribute("middle_name", req.getParameter("middle_name"));
-            req.setAttribute("gender", req.getParameter("gender"));
-            req.setAttribute("day", req.getParameter("day"));
-            req.setAttribute("month", req.getParameter("month"));
-            req.setAttribute("year", req.getParameter("year"));
-            req.setAttribute("emailNew", req.getParameter("emailNew"));
-            return false;
+            return true;
         }
-        return true;
+        req.setAttribute("first_name", req.getParameter("first_name"));
+        req.setAttribute("second_name", req.getParameter("second_name"));
+        req.setAttribute("middle_name", req.getParameter("middle_name"));
+        req.setAttribute("gender", req.getParameter("gender"));
+        req.setAttribute("day", req.getParameter("day"));
+        req.setAttribute("month", req.getParameter("month"));
+        req.setAttribute("year", req.getParameter("year"));
+        req.setAttribute("m"+req.getParameter("month"), "selected");
+        req.setAttribute("emailNew", req.getParameter("emailNew"));
+        return false;
     }
 
     private ScientistValidator dob(String day, String month, String year, HttpServletRequest req){
@@ -159,14 +160,16 @@ public class ScientistValidator {
 
     private ScientistValidator emailNew(String emailNew, HttpServletRequest req){
         if (!valid || emailNew == null || emailNew.isEmpty()) {
-            validEmail = null;
+            validNewEmail = null;
             return this;
         }
         if (!EMAIL_PATTERN.matcher(emailNew.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
+            validNewEmail = null;
+            return this;
         }
-        validEmail = emailNew;
+        validNewEmail = emailNew;
         return this;
     }
 
@@ -197,7 +200,7 @@ public class ScientistValidator {
             validNewPassword = null;
             return this;
         }
-        validPassword = passwordNew;
+        validNewPassword = passwordNew;
         return this;
     }
 

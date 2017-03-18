@@ -28,7 +28,7 @@ CREATE TABLE scientist (
   s_gender_id   INT,
 
   UNIQUE (s_email),
-  PRIMARY KEY (s_id, s_email),
+  PRIMARY KEY (s_id),
   FOREIGN KEY (s_gender_id) REFERENCES gender (g_id)
 );
 

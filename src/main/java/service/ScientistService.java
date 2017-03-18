@@ -21,19 +21,19 @@ public class ScientistService {
         return scientistDao.get(id);
     }
 
-    public boolean exist(String email) {
-        return scientistDao.exist(email);
-    }
-
     public Scientist get(String email) {
         return scientistDao.get(email);
     }
 
-    public void remove(Scientist scientist) {
-        scientistDao.remove(scientist);
-    }
-
     public List<Scientist> getAll() {
         return scientistDao.getAll();
+    }
+
+    public boolean confirmPassword(int id, String password) {
+        return scientistDao.confirmPassword(id, password);
+    }
+
+    public boolean updateInfo(Scientist scientistNew, String email) {
+        return scientistDao.updateInfo(scientistNew, email);
     }
 }

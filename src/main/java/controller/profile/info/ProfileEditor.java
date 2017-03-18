@@ -1,11 +1,15 @@
 package controller.profile.info;
 
+import model.Scientist;
+import util.Const;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * Created on 15.03.2017.
@@ -19,8 +23,13 @@ public class ProfileEditor extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.err.println("ProfileEditor");
-        request.getRequestDispatcher("WEB-INF/main/baseinfo/index.jsp").forward(request, response);
+        LocalDate localDate = ((Scientist)req.getSession().getAttribute(Const.EMAIL_KEY)).getDob();
+        req.setAttribute("month", localDate.getMonthValue());
+        req.setAttribute("year", localDate.getYear());
+        req.setAttribute("day", localDate.getDayOfMonth());
+        req.setAttribute("m"+localDate.getMonthValue(), "selected");
+        req.getRequestDispatcher("WEB-INF/main/baseinfo/index.jsp").forward(req, resp);
     }
 }

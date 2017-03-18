@@ -18,33 +18,48 @@ import java.util.List;
 public class MySqlScientistDao implements ScientistDao {
 
     //CREATE
-    private final String SQL_CREATE_SCIENTIST = "INSERT INTO scientist (s_first_name, s_second_name, s_middle_name, " +
+    @SuppressWarnings("SqlResolve")
+    private static final String SQL_CREATE_SCIENTIST = "INSERT INTO scientist (s_first_name, s_second_name, s_middle_name, " +
             "s_email, s_password, s_dob, s_gender_id) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private final String SQL_ADD_TO_ROLE = "INSERT INTO roles (s_email, r_name) VALUES (?, ?)";
+    @SuppressWarnings("SqlResolve")
+    private static final String SQL_ADD_TO_ROLE = "INSERT INTO roles (s_email, r_name) VALUES (?, ?)";
 
     //READ
-    private final String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
+    private static final String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
             "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
             "g_name " +
             "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id";
-    private final String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT " +
+    private static final String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT " +
             "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
             "g_name " +
             "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id AND s_email = (?)";
-    private final String SQL_SELECT_EXISTING_SCIENTIST_BY_EMAIL = "SELECT s_email FROM scientist s WHERE s_email = (?)";
-    private final String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
+//    private static final String SQL_SELECT_EXISTING_SCIENTIST_BY_EMAIL = "SELECT s_email FROM scientist s WHERE s_email = (?)";
+    private static final String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
             "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
-            "g_name \n" +
-            "FROM scientist s, gender g\n" +
+            "g_name " +
+            "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id AND s_id = (?)";
+    @SuppressWarnings("SqlResolve")
+    private static final String SQL_VERIFY_PASSWORD_BY_ID= "SELECT s_password " +
+            "FROM scientist s WHERE s_id = (?)";
 
     //UPDATE
+    private static final String SQL_UPDATE_TEST= "INSERT INTO scientist(s_first_name , s_second_name," +
+            "s_middle_name, s_gender_id, s_dob, s_email, s_password) VALUES (?,?,?,?,?,?,?)" +
+            "ON DUPLICATE KEY UPDATE s_email = ?";
+    @SuppressWarnings("SqlResolve")
+    private static final String SQL_UPDATE_SCIENTIST_BY_ID = "UPDATE " +
+            "scientist SET s_first_name = (?), s_second_name = (?), s_middle_name = (?), s_gender_id = (?), " +
+            "s_dob = (?), s_email = (?), s_password = (?) " +
+            "WHERE s_id = (?)";
+    @SuppressWarnings("SqlResolve")
+    private static final String SQL_UPDATE_ROLE_BY_EMAIL = "UPDATE roles SET s_email = (?) WHERE s_email = (?)";
 
     //DELETE
-    private final static String SQL_REMOVE_SCEINTIST = "DELETE FROM Scientist WHERE";
+//    private final static String SQL_REMOVE_SCEINTIST = "DELETE FROM Scientist WHERE";
 
     //TODO how does it work?
     //TODO create own connection pool
@@ -53,6 +68,63 @@ public class MySqlScientistDao implements ScientistDao {
 
     public MySqlScientistDao(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    @Override
+    public boolean updateInfo(Scientist scientistNew, String email) {
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            System.err.println("in connection");
+
+            try (PreparedStatement preparedStatementRoles =
+                         connection.prepareStatement(SQL_UPDATE_ROLE_BY_EMAIL)) {
+                preparedStatementRoles.setString(1, scientistNew.getEmail());
+                preparedStatementRoles.setString(2, email);
+                System.err.println("in preparedStatementRoles");
+                System.err.println(preparedStatementRoles.executeUpdate());
+                try (PreparedStatement preparedStatement =
+                             connection.prepareStatement(SQL_UPDATE_SCIENTIST_BY_ID)) {
+                    preparedStatement.setString(1, scientistNew.getFirstName());
+                    preparedStatement.setString(2, scientistNew.getSecondName());
+                    preparedStatement.setString(3, scientistNew.getMiddleName());
+                    preparedStatement.setInt(4, scientistNew.getGender().ordinal() + 1);
+                    preparedStatement.setDate(5, Date.valueOf(scientistNew.getDob()));
+                    preparedStatement.setString(6, scientistNew.getEmail());
+                    preparedStatement.setString(7, scientistNew.getPassword());
+                    preparedStatement.setInt(8, scientistNew.getId());
+                    System.err.println("in preparedStatement before");
+                    System.err.println(preparedStatement.executeUpdate());
+                    System.err.println("in preparedStatement after");
+                }
+                connection.commit();
+                System.err.println("connection.commit()");
+                connection.setAutoCommit(true);
+                return true;
+            } catch (SQLException e) {
+                System.err.println("SQLException");
+                connection.rollback();
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean confirmPassword(int id, String password) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     SQL_VERIFY_PASSWORD_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next() && password.equals(resultSet.getString("s_password"));
+            }
+        } catch (SQLException e) {
+            logger.error(String.format("Confirm password by id = (%d) has been unsuccessful", id), e);
+            return false;
+        }
     }
 
     @Override
@@ -66,11 +138,10 @@ public class MySqlScientistDao implements ScientistDao {
             statementForScientist.setString(4, scientist.getEmail());
             statementForScientist.setString(5, scientist.getPassword());
             LocalDate localDate = scientist.getDob();
-            statementForScientist.setDate(6,
-                    (localDate == null ? null : Date.valueOf(localDate)));
+            statementForScientist.setDate(6, Date.valueOf(localDate));
             Gender gender = scientist.getGender();
             statementForScientist.setInt(7,
-                    (gender == null ? Gender.NONE.ordinal()+1 : gender.ordinal()+1 ));
+                    (gender == null ? Gender.NONE.ordinal()+1 : gender.ordinal()+1));
             int count = statementForScientist.executeUpdate();
 
             try (ResultSet generatedKeys = statementForScientist.getGeneratedKeys()) {
@@ -116,11 +187,6 @@ public class MySqlScientistDao implements ScientistDao {
     }
 
     @Override
-    public void remove(Scientist scientist) {
-
-    }
-
-    @Override
     public List<Scientist> getAll() {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
@@ -146,23 +212,6 @@ public class MySqlScientistDao implements ScientistDao {
             logger.error("Getting all users has been unsuccessful", e);
         }
         return Collections.emptyList();
-    }
-
-    @Override
-    public boolean exist(String email) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement =
-                     connection.prepareStatement(SQL_CREATE_SCIENTIST, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, email);
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("Getting user has been unsuccessful", e);
-        }
-        return false;
     }
 
     private Scientist getScientist(PreparedStatement preparedStatement) throws SQLException {

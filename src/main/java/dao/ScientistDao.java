@@ -12,8 +12,7 @@ public interface ScientistDao {
     int create(Scientist scientist);
     Scientist get(int id);
     Scientist get(String email);
-    //void update()
-    void remove(Scientist scientist);
     List<Scientist> getAll();
-    boolean exist(String email);
+    boolean confirmPassword(int id, String password);
+    boolean updateInfo(Scientist scientistNew, String email);
 }
