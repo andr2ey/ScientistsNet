@@ -43,12 +43,10 @@
 <fmt:message bundle="${lang}" key="lang.txt.fail" var="txt_fail"/>
 <fmt:message bundle="${lang}" key="lang.txt.conformation.password" var="txt_conformation_password"/>
 <fmt:message bundle="${lang}" key="lang.email.exist" var="email_exist"/>
-
-
-
+<fmt:message bundle="${lang}" key="lang.date.input.error" var="date_input_error"/>
 
 <fmt:message bundle="${lang}" key="lang.button.my.profile" var="button_my_profile"/>
-<fmt:message bundle="${lang}" key="lang.button.friends" var="button_friends"/>
+<fmt:message bundle="${lang}" key="lang.button.search" var="button_search"/>
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
@@ -214,18 +212,14 @@
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/friends" method="post">
+                <form action="/search" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_friends}">
+                                             value="${button_search}">
                     </p>
                 </form>
                 <form action="/messages" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}"></p>
-                </form>
-                <form action="/articles" method="post">
-                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_articles}"></p>
                 </form>
             </div>
         </td>
@@ -415,6 +409,9 @@
                             </c:if>
                             <c:if test="${requestScope.exist_email != null}">
                                 <p align="center">${email_exist}</p>
+                            </c:if>
+                            <c:if test="${requestScope.dateInputError != null}">
+                                <p align="center">${date_input_error}</p>
                             </c:if>
                         </div>
                     </td>

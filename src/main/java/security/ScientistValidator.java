@@ -109,6 +109,18 @@ public class ScientistValidator {
         req.setAttribute("year", req.getParameter("year"));
         req.setAttribute("m"+req.getParameter("month"), "selected");
         req.setAttribute("emailNew", req.getParameter("emailNew"));
+        req.setAttribute("fail", "fail");
+        return false;
+    }
+
+    public boolean validateSearchByName(HttpServletRequest req) {
+        if (firstName(req.getParameter("first_name"), req)
+                .secondName(req.getParameter("second_name"), req)
+                .isValid()) {
+            return true;
+        }
+        req.setAttribute("first_name", req.getParameter("first_name"));
+        req.setAttribute("second_name", req.getParameter("second_name"));
         return false;
     }
 

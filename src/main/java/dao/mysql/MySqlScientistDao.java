@@ -6,10 +6,9 @@ import model.Scientist;
 import org.apache.log4j.Logger;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -43,13 +42,18 @@ public class MySqlScientistDao implements ScientistDao {
             "FROM scientist s, gender g " +
             "WHERE s_gender_id = g_id AND s_id = (?)";
     @SuppressWarnings("SqlResolve")
+    private static final String SQL_SELECT_SCIENTISTS_BY_FULL_NAME = "SELECT " +
+            "s_id, s_first_name, s_second_name, s_middle_name, s_email " +
+            "FROM scientist s " +
+            "WHERE s_first_name = (?) AND s_second_name = (?)";
+    @SuppressWarnings("SqlResolve")
     private static final String SQL_VERIFY_PASSWORD_BY_ID= "SELECT s_password " +
             "FROM scientist s WHERE s_id = (?)";
 
     //UPDATE
-    private static final String SQL_UPDATE_TEST= "INSERT INTO scientist(s_first_name , s_second_name," +
-            "s_middle_name, s_gender_id, s_dob, s_email, s_password) VALUES (?,?,?,?,?,?,?)" +
-            "ON DUPLICATE KEY UPDATE s_email = ?";
+//    private static final String SQL_UPDATE_TEST= "INSERT INTO scientist(s_first_name , s_second_name," +
+//            "s_middle_name, s_gender_id, s_dob, s_email, s_password) VALUES (?,?,?,?,?,?,?)" +
+//            "ON DUPLICATE KEY UPDATE s_email = ?";
     @SuppressWarnings("SqlResolve")
     private static final String SQL_UPDATE_SCIENTIST_BY_ID = "UPDATE " +
             "scientist SET s_first_name = (?), s_second_name = (?), s_middle_name = (?), s_gender_id = (?), " +
@@ -68,6 +72,33 @@ public class MySqlScientistDao implements ScientistDao {
 
     public MySqlScientistDao(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    @Override
+    public Set<Scientist> getAllByFullName(String firstName, String secondName) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     SQL_SELECT_SCIENTISTS_BY_FULL_NAME, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, secondName);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                Set<Scientist> scientistSet = new TreeSet<>();
+                while (resultSet.next()) {
+                    Scientist scientist = new Scientist().builder()
+                            .setId(resultSet.getInt("s_id"))
+                            .setEmail(resultSet.getString("s_email"))
+                            .setFirstName(resultSet.getString("s_first_name"))
+                            .setSecondName(resultSet.getString("s_second_name"))
+                            .setMiddleName(resultSet.getString("s_middle_name"))
+                            .build();
+                    scientistSet.add(scientist);
+                }
+                return scientistSet;
+            }
+        } catch (SQLException e) {
+            logger.error("Getting all users has been unsuccessful", e);
+        }
+        return Collections.emptySet();
     }
 
     @Override

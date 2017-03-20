@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Created on 07.03.2017.
  */
-public class Scientist {
+public class Scientist implements Comparable<Scientist> {
 
     private int id;
     private String email;
@@ -16,18 +16,7 @@ public class Scientist {
     private LocalDate dob;
     private String formattedDob;
     private Gender gender;
-
-    public Scientist(int id, String email, String password, String firstName, String secondName, String middleName,
-                     LocalDate dob, Gender gender) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.middleName = middleName;
-        this.dob = dob;
-        this.gender = gender;
-    }
+    private FieldOfScience fieldOfScience;
 
     public Scientist() {
     }
@@ -108,6 +97,24 @@ public class Scientist {
         return this.new Builder();
     }
 
+    @Override
+    public int compareTo(Scientist o) {
+        int result = firstName.compareToIgnoreCase(o.getFirstName());
+        if (result == 0)
+            result = secondName.compareToIgnoreCase(o.getSecondName());
+        if (result == 0)
+            return email.compareTo(o.getEmail());
+        return result;
+    }
+
+    public FieldOfScience getFieldOfScience() {
+        return fieldOfScience;
+    }
+
+    public void setFieldOfScience(FieldOfScience fieldOfScience) {
+        this.fieldOfScience = fieldOfScience;
+    }
+
     public class Builder {
 
         private Builder() {
@@ -153,6 +160,11 @@ public class Scientist {
             return this;
         }
 
+        public Builder setGender(FieldOfScience fieldOfScience) {
+            Scientist.this.fieldOfScience = fieldOfScience;
+            return this;
+        }
+
         public Scientist build() {
             return Scientist.this;
         }
@@ -164,12 +176,13 @@ public class Scientist {
         return "Scientist{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", dob=" + dob +
+                ", formattedDob='" + formattedDob + '\'' +
                 ", gender=" + gender +
+                ", fieldOfScience=" + fieldOfScience +
                 '}';
     }
 }

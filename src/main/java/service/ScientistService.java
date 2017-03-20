@@ -4,6 +4,7 @@ import dao.ScientistDao;
 import model.Scientist;
 
 import java.util.List;
+import java.util.Set;
 
 public class ScientistService {
 
@@ -35,5 +36,9 @@ public class ScientistService {
 
     public boolean updateInfo(Scientist scientistNew, String email) {
         return scientistDao.updateInfo(scientistNew, email);
+    }
+
+    public Set<Scientist> getAllByFullName(String firstName, String secondName) {
+        return scientistDao.getAllByFullName(firstName, secondName);
     }
 }

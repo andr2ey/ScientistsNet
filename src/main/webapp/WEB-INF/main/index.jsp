@@ -31,7 +31,7 @@
 <fmt:message bundle="${lang}" key="lang.degree" var="txt_degree"/>
 
 <fmt:message bundle="${lang}" key="lang.button.my.profile" var="button_my_profile"/>
-<fmt:message bundle="${lang}" key="lang.button.friends" var="button_friends"/>
+<fmt:message bundle="${lang}" key="lang.button.search" var="button_search"/>
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
@@ -154,18 +154,14 @@
                     <p align="center"><input type="submit" name="button_profile" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/friends" method="post">
+                <form action="/search" method="post">
                     <p align="center"><input type="submit" name="button_friends" class="button_of_profile"
-                                             value="${button_friends}">
+                                             value="${button_search}">
                     </p>
                 </form>
                 <form action="/messages" method="post">
                     <p align="center"><input type="submit" name="button_message" class="button_of_profile"
                                              value="${button_messages}"></p>
-                </form>
-                <form action="/articles" method="post">
-                    <p align="center"><input type="submit" name="button_articles" class="button_of_profile"
-                                             value="${button_articles}"></p>
                 </form>
             </div>
         </td>
