@@ -150,8 +150,14 @@ public class Scientist implements Comparable<Scientist> {
             Scientist.this.middleName = middleName;
             return this;
         }
+
         public Builder setDob(LocalDate dob) {
             Scientist.this.dob = dob;
+            return this;
+        }
+
+        public Builder setFormattedDob(String formattedDob) {
+            Scientist.this.formattedDob = formattedDob;
             return this;
         }
 
@@ -160,10 +166,12 @@ public class Scientist implements Comparable<Scientist> {
             return this;
         }
 
-        public Builder setGender(FieldOfScience fieldOfScience) {
+        public Builder setFieldOfScience(FieldOfScience fieldOfScience) {
             Scientist.this.fieldOfScience = fieldOfScience;
             return this;
         }
+
+
 
         public Scientist build() {
             return Scientist.this;

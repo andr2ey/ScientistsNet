@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="language.lang" var="lang"/>
@@ -35,7 +36,9 @@
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
-
+<fmt:message bundle="${lang}"
+             key="lang.${fn:toLowerCase(sessionScope.email.fieldOfScience).replace('_', '.')}"
+             var="field_of_science"/>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -171,6 +174,16 @@
                     <td>
                         <div id="contentBaseInfo">
                             <table border="0" width="100%" align="top">
+                                <tr>
+                                    <td width="25%"></td>
+                                    <td width="50%">
+                                        <h3>
+                                            ${field_of_science}
+                                        </h3>
+                                    </td>
+                                    <td width="25%" align="right">
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td width="25%"></td>
                                     <td width="50%">

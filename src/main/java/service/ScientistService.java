@@ -4,6 +4,7 @@ import dao.ScientistDao;
 import model.Scientist;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class ScientistService {
@@ -18,12 +19,12 @@ public class ScientistService {
         return scientistDao.create(scientist);
     }
 
-    public Scientist get(int id) {
-        return scientistDao.get(id);
+    public Scientist get(int id, Locale locale) {
+        return scientistDao.get(id, locale);
     }
 
-    public Scientist get(String email) {
-        return scientistDao.get(email);
+    public Scientist get(String email, Locale locale) {
+        return scientistDao.get(email, locale);
     }
 
     public List<Scientist> getAll() {

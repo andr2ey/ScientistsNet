@@ -1,5 +1,6 @@
 package security;
 
+import model.FieldOfScience;
 import model.Gender;
 import org.apache.log4j.Logger;
 import util.Const;
@@ -25,13 +26,18 @@ public class ScientistValidator {
     private String validFirstName;
     private String validSecondName;
     private String validMiddleName;
-    private Gender validGender = Gender.NONE;
     private LocalDate validDate;
+    private Gender validGender = Gender.NONE;
+    private FieldOfScience validFieldOfScience = FieldOfScience.NONE;
 
     private String validNewPassword;
     private String validNewEmail;
 
     public ScientistValidator() {
+    }
+
+    public FieldOfScience getValidFieldOfScience() {
+        return validFieldOfScience;
     }
 
     public String getValidNewPassword() {
@@ -78,7 +84,9 @@ public class ScientistValidator {
                 .password(req.getParameter("passwordNew"), req)
                 .firstName(req.getParameter("first_name"), req)
                 .secondName(req.getParameter("second_name"), req)
+                .fieldOfScience(req.getParameter("field_of_science"), req)
                 .isValid()) {
+            req.setAttribute("f" + req.getParameter("field_of_science"), "selected");
             req.setAttribute("first_name", req.getParameter("first_name"));
             req.setAttribute("second_name", req.getParameter("second_name"));
             return false;
@@ -284,6 +292,28 @@ public class ScientistValidator {
             return false;
         }
         return true;
+    }
+
+    private ScientistValidator fieldOfScience(String fieldOfScience,  HttpServletRequest req) {
+        if (!valid || fieldOfScience == null || fieldOfScience.isEmpty()) {
+            valid = false;
+            validFieldOfScience = FieldOfScience.NONE;
+            return this;
+        }
+        try {
+            int ordinal = Integer.parseInt(fieldOfScience);
+            FieldOfScience[] fields = FieldOfScience.values();
+            if (ordinal > 0 && ordinal < fields.length) {
+                validFieldOfScience = fields[ordinal];
+                return this;
+            }
+        } catch (NumberFormatException e) {
+            //ignored
+        }
+        req.setAttribute(Const.FIELD_OF_SCIENCE_INPUT_ERROR, "Field of science is incorrect!");
+        valid = false;
+        validFieldOfScience = FieldOfScience.NONE;
+        return this;
     }
 
 }
