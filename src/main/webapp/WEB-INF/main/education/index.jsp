@@ -269,8 +269,7 @@
                                         <tr>
                                             <form action="/main/education" method="get" id="/education_delete">
                                                 <td width="3%" align="left" valign="bottom">
-                                                    <button type="submit"
-                                                            form="/education_delete" class="button_lang"
+                                                    <button type="submit" form="/education_delete" class="button_lang"
                                                             name="button_delete_education"
                                                             value="${number.index}">${delete_button}
                                                     </button>
@@ -301,7 +300,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <form action="/education_update" method="get" id="/education_update">
+                                    <form action="/main/education" method="get" id="/education_update">
                                         <table border="0" width="100%" align="top">
                                             <tr>
                                                 <td width="25%">
@@ -402,7 +401,7 @@
                                     <br/>
                                 </c:if>
                             </c:forEach>
-                            <form action="/education_add" method="post" id="/education_add">
+                            <form action="/main/education" method="post" id="/education_add">
                                 <p align="center">
                                     <input align="center" name="education_country" placeholder="${txt_country}"
                                            required class="text"

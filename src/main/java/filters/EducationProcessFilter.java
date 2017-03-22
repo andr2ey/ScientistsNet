@@ -29,7 +29,7 @@ public class EducationProcessFilter implements Filter {
                     (List<University>) httpReq.getSession().getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
             processDeletedCreatedUniversities(universityList, unmodifiedList);
         }
-
+        chain.doFilter(req, resp);
     }
 
     @Override

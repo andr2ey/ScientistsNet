@@ -24,7 +24,7 @@ public class SaveUniversity extends HttpServlet {
 
     private static final UniversityValidator VALIDATOR = new UniversityValidator();
     private static final String[] BUFFER = new String[4];
-    public static final String SUCCESS_OF_TRANSACTION = "successOfTransaction";
+    private static final String SUCCESS_OF_TRANSACTION = "successOfTransaction";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
