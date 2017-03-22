@@ -17,8 +17,6 @@
 <fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
 
 <fmt:message bundle="${lang}" key="lang.none" var="none"/>
-<%--log out button, High education, edit buttons 2
-    date of birthday, gender, email, country, city, university, degree--%>
 <fmt:message bundle="${lang}" key="lang.high.education" var="high_education"/>
 <fmt:message bundle="${lang}" key="lang.log.out.button" var="log_out_button"/>
 <fmt:message bundle="${lang}" key="lang.edit.button" var="edit_button"/>
@@ -37,7 +35,6 @@
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
 <fmt:message bundle="${lang}" key="lang.txt.graduation.year" var="txt_graduation_year"/>
-
 <fmt:message bundle="${lang}"
              key="lang.${fn:toLowerCase(sessionScope.email.fieldOfScience).replace('_', '.')}"
              var="field_of_science"/>
@@ -157,16 +154,16 @@
     <tr>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
+                <form action="/main" method="get">
                     <p align="center"><input type="submit" name="button_profile" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/search" method="post">
+                <form action="/main/search" method="get">
                     <p align="center"><input type="submit" name="button_friends" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/messages" method="post">
+                <form action="/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_message" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -195,7 +192,7 @@
                                         <h3>${sessionScope.email.middleName}</h3>
                                     </td>
                                     <td width="25%" align="right">
-                                        <form action="/baseinfo" method="get">
+                                        <form action="/main/baseinfo" method="get">
                                             <input type="submit" name="button_edit_info" class="button_lang"
                                                    value="${edit_button}">
                                         </form>

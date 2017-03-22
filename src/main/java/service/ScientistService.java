@@ -42,8 +42,9 @@ public class ScientistService {
         return scientistDao.confirmPassword(id, password);
     }
 
-    public boolean updateInfo(Scientist scientistNew, String email) {
-        return scientistDao.updateInfo(scientistNew, email);
+    public boolean updateInfo(Scientist scientistNew, Locale locale) {
+        scientistNew.setFormattedDob(formatDate(locale, scientistNew.getDob()));
+        return scientistDao.updateInfo(scientistNew);
     }
 
     public Set<Scientist> getAllByFullName(String firstName, String secondName) {

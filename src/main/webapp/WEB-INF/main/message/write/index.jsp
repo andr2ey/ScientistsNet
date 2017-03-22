@@ -153,7 +153,7 @@
             font: 11pt Arial, sans-serif;
         }
         textarea {
-            width: 100%;
+            width: 80%;
             resize: none; /* Запрещаем изменять размер */
         }
     </style>
@@ -172,12 +172,12 @@
             </td>
             <td valign="center" align="right" width="20%">
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/baseinfo">
+                    <input type="hidden" name="pathFrom" value="/main/message/write">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/baseinfo">
+                    <input type="hidden" name="pathFrom" value="/main/message/write">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
                 </form>
@@ -195,12 +195,12 @@
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/search" method="post">
+                <form action="/main/search" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/messages" method="post">
+                <form action="/main/messages" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -238,8 +238,9 @@
                                         <td width="10%" align="right">
                                             to:
                                         </td>
-                                        <td align="left">
-                                                ${requestScope.emailTo}
+                                        <td align="center">
+                                            ${requestScope.sciFirstName} ${requestScope.sciSecondName}
+                                            ${requestScope.emailTo}
                                         </td>
                                     </tr>
                                     <!--Message-->
@@ -248,7 +249,7 @@
                                         <td>
                                             <p align="center">
                                                 <textarea form="/send_message" name="txt_of_message" placeholder=""
-                                                          required maxlength="2000" rows="10" cols="40">
+                                                          required maxlength="2000" rows="10" cols="35">
                                                 </textarea>
                                         </td>
                                     </tr>

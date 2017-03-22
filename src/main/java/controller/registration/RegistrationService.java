@@ -58,6 +58,7 @@ public class RegistrationService implements Runnable {
                 HttpSession session = req.getSession();
                 validUser.setFormattedDob(formatDate(req.getLocale(), validUser.getDob()));
                 session.setAttribute(Const.EMAIL_KEY, validUser);
+                session.setAttribute(Const.UNIVERSITIES_CHANGED, false);
                 loadUniversities(session, validUser.getId());
                 req.setAttribute(Const.CREATED_USER_KEY, validUser);
             }

@@ -5,6 +5,7 @@ import util.Const;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -19,15 +20,17 @@ public class EducationProcessFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
         HttpServletRequest httpReq = (HttpServletRequest) req;
+        HttpSession session = httpReq.getSession();
+        if ((Boolean) session.getAttribute(Const.UNIVERSITIES_CHANGED)) {
+            chain.doFilter(req, resp);
+            return;
+        }
         if (!httpReq.getRequestURI().equals("/main/education")) {
-            //TODO add clear buffer
             //noinspection unchecked
-            List<University> universityList =
-                    (List<University>) httpReq.getSession().getAttribute(Const.UNIVERSITIES_KEY);
+            List<University> universityList = (List<University>) session.getAttribute(Const.UNIVERSITIES_KEY);
             //noinspection unchecked
-            List<University> unmodifiedList =
-                    (List<University>) httpReq.getSession().getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
-            processDeletedCreatedUniversities(universityList, unmodifiedList);
+            List<University> unmodifiedList = (List<University>) session.getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
+            rollbackModifiedUniversities(universityList, unmodifiedList);
         }
         chain.doFilter(req, resp);
     }
@@ -37,9 +40,8 @@ public class EducationProcessFilter implements Filter {
 
     }
 
-    private void processDeletedCreatedUniversities(List<University> universityList, List<University> unmodifiedList) {
+    private void rollbackModifiedUniversities(List<University> universityList, List<University> unmodifiedList) {
         Iterator<University> iterator = universityList.iterator();
-        //noinspection Duplicates
         int index = 0;
         while (iterator.hasNext()) {
             University university = iterator.next();

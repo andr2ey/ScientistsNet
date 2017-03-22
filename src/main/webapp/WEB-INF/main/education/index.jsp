@@ -197,12 +197,12 @@
             </td>
             <td valign="center" align="right" width="20%">
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/education">
+                    <input type="hidden" name="pathFrom" value="/main/education">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/education">
+                    <input type="hidden" name="pathFrom" value="/main/education">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
                 </form>
@@ -216,16 +216,16 @@
         <%--Control Buttons--%>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
+                <form action="/main" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/search" method="post">
+                <form action="/main/search" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/messages" method="post">
+                <form action="/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -267,7 +267,7 @@
                                 <c:if test="${university.deleted == false}">
                                     <table border="0" width="100%" align="top">
                                         <tr>
-                                            <form action="/main/education" method="get" id="/education_delete">
+                                            <form action="/main/education" method="post" id="/education_delete">
                                                 <td width="3%" align="left" valign="bottom">
                                                     <button type="submit" form="/education_delete" class="button_lang"
                                                             name="button_delete_education"
@@ -276,7 +276,7 @@
                                                 </td>
                                             </form>
                                             <td width="3%" align="left" valign="bottom">
-                                                <button type="submit" form="/education_update" class="button_lang"
+                                                <button type="submit" form="/education_update${number.index}" class="button_lang"
                                                         name="button_update_education"
                                                         value="${number.index}">${update_button}
                                                 </button>
@@ -300,7 +300,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <form action="/main/education" method="get" id="/education_update">
+                                    <form action="/main/education" method="post" id="/education_update${number.index}">
                                         <table border="0" width="100%" align="top">
                                             <tr>
                                                 <td width="25%">
@@ -308,8 +308,8 @@
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input form="/education_update" class="text"
-                                                               name="univ_country${number.index}"
+                                                        <input form="/education_update${number.index}" class="text"
+                                                               name="education_country${number.index}"
                                                                value="${university.country}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
@@ -321,8 +321,8 @@
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input form="/education_update" class="text"
-                                                               name="univ_city${number.index}"
+                                                        <input form="/education_update${number.index}" class="text"
+                                                               name="education_city${number.index}"
                                                                value="${university.city}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
@@ -334,8 +334,8 @@
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input form="/education_update" class="text"
-                                                               name="univ_full_name${number.index}"
+                                                        <input form="/education_update${number.index}" class="text"
+                                                               name="education_fullName${number.index}"
                                                                value="${university.fullName}" required size="60"
                                                                pattern="[A-Za-z\u0410-\u044F\d\- ]{2,100}">
                                                 </td>
@@ -347,8 +347,8 @@
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <select form="/education_update" class="text"
-                                                                name="univ_degree${number.index}" size="1" required>
+                                                        <select form="/education_update${number.index}" class="text"
+                                                                name="education_degree${number.index}" size="1" required>
                                                             <c:choose>
                                                                 <c:when test="${university.degree eq 'BACHELOR'}">
                                                                     <c:set var="bachelor_var" scope="page"
@@ -385,11 +385,13 @@
                                                 </td>
                                                 <td>
                                                     <p align="center">
-                                                        <input type="number" class="text_year" name="year"
+                                                        <input name="education_year${number.index}" type="number"
+                                                               form="/education_update${number.index}"
+                                                               class="text_year"
+                                                               min="${requestScope.minGraduationYear}"
+                                                               max="${requestScope.maxGraduationYear}"
                                                                value="${university.graduationYear}"
-                                                               placeholder="${year_birthday}"
-                                                               min="${requestScope.minYear}"
-                                                               max="${requestScope.maxYear}" size="60" required>
+                                                               size="60" required>
                                                 </td>
                                                 <td width="25%"></td>
                                             </tr>
@@ -422,10 +424,11 @@
                                     </select>
                                 </p>
                                 <p align="center">
-                                    <input name="year" placeholder="${year_birthday}" required
+                                    <input name="education_year" placeholder="${year_birthday}" required
                                            type="number" class="text_year"
-                                           min="${requestScope.minYear}"
-                                           max="${requestScope.maxYear}" size="60">
+                                           min="${requestScope.minGraduationYear}"
+                                           max="${requestScope.maxGraduationYear}"
+                                           size="60">
                                 </p>
                                 <p align="center">
                                     <button type="submit" form="/education_add" class="button_add"
@@ -433,7 +436,7 @@
                                     </button>
                                 </p>
                             </form>
-                            <form action="/education_save" method="get" id="/education_save">
+                            <form action="/main/education" method="get" id="/education_save">
                                 <p align="center">
                                     <button type="submit" form="/education_save" class="button_save"
                                             name="button_save_education" value="save">${save_button}

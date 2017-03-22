@@ -2,8 +2,10 @@ package security;
 
 import model.Degree;
 import org.apache.log4j.Logger;
+import util.Const;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 /**
@@ -13,14 +15,14 @@ public class UniversityValidator {
 
     private boolean valid = true;
     //TODO think about name pattern, if it is two spaces
-    private final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\d\\-\" ]{2,100}");
+    private final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\\\d\\-\\\" ]{2,100}");
     private final Pattern DEGREE_PATTERN = Pattern.compile("(?i)^(bachelor|master|specialist)$");
 
     private String validCountry;
     private String validCity;
     private String validFullName;
     private Degree validDegree = Degree.BACHELOR;
-    private int validYear;
+    private int validYear = Const.MIN_GRADUATION_YEAR;
 
     public UniversityValidator() {
     }
@@ -45,12 +47,21 @@ public class UniversityValidator {
         return validYear;
     }
 
-    public boolean validateChangedFields(HttpServletRequest req) {
+    public boolean validateChangedFields(HttpServletRequest req, int indexUpdated) {
+        return  country(req.getParameter("education_country" + indexUpdated))
+                .city(req.getParameter("education_city" + indexUpdated))
+                .fullName(req.getParameter("education_fullName" + indexUpdated))
+                .degree(req.getParameter("education_degree" + indexUpdated))
+                .year(req.getParameter("education_year" + indexUpdated))
+                .isValid();
+    }
+
+    public boolean validateAddedFields(HttpServletRequest req) {
         return  country(req.getParameter("education_country"))
                 .city(req.getParameter("education_city"))
                 .fullName(req.getParameter("education_fullName"))
                 .degree(req.getParameter("education_degree"))
-                .year(req.getParameter("year")).isValid();
+                .year(req.getParameter("education_year")).isValid();
     }
 
     private UniversityValidator country(String country){
@@ -99,13 +110,19 @@ public class UniversityValidator {
 
     private UniversityValidator year(String year){
         if (!valid || year == null || year.isEmpty()) {
-            validYear = 0;
+            validYear = Const.MIN_GRADUATION_YEAR;
             valid = false;
             return this;
         }
-        int yearInt = 0;
+        int yearInt = Const.MIN_GRADUATION_YEAR;
         try {
             yearInt = Integer.parseInt(year.trim());
+            if (yearInt < Const.MIN_GRADUATION_YEAR ||
+                    yearInt > (LocalDate.now().getYear() + Const.MAX_EDUCATION_TIME)) {
+                validYear = Const.MIN_GRADUATION_YEAR;
+                valid = false;
+                return this;
+            }
         } catch (NumberFormatException e) {
             validYear = yearInt;
             valid = false;
@@ -122,6 +139,5 @@ public class UniversityValidator {
         }
         return true;
     }
-
 
 }

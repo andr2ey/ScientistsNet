@@ -49,6 +49,7 @@
     </filter>
     <filter-mapping>
         <filter-name>LogInFilter</filter-name>
+        <url-pattern>/main/*</url-pattern>
         <url-pattern>/main</url-pattern>
     </filter-mapping>
 

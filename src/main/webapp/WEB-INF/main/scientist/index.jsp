@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="language.lang" var="lang"/>
@@ -34,7 +35,13 @@
 <fmt:message bundle="${lang}" key="lang.button.search" var="button_search"/>
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
+<fmt:message bundle="${lang}" key="lang.txt.graduation.year" var="txt_graduation_year"/>
 
+<fmt:message bundle="${lang}" key="lang.button.write.message" var="button_write_message"/>
+
+<fmt:message bundle="${lang}"
+             key="lang.${fn:toLowerCase(sessionScope.email.fieldOfScience).replace('_', '.')}"
+             var="field_of_science"/>
 
 <html>
 <head>
@@ -133,12 +140,12 @@
             </td>
             <td valign="center" align="right" width="20%">
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="pathFrom" value="/main/scientist">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main">
+                    <input type="hidden" name="pathFrom" value="/main/scientist">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
                 </form>
@@ -150,18 +157,19 @@
     <tr>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
+                <form action="/main" method="get">
                     <p align="center"><input type="submit" name="button_profile" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/search" method="post">
+                <form action="/main/search" method="get">
                     <p align="center"><input type="submit" name="button_friends" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/messages" method="post">
+                <form action="/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_message" class="button_of_profile"
-                                             value="${button_messages}"></p>
+                                             value="${button_messages}">
+                    </p>
                 </form>
             </div>
         </td>
@@ -172,12 +180,26 @@
                         <div id="contentBaseInfo">
                             <table border="0" width="100%" align="top">
                                 <tr>
+                                    <td width="25%"></td>
+                                    <td width="50%">
+                                        <h3>
+                                            ${field_of_science}
+                                        </h3>
+                                    </td>
+                                    <td width="25%" align="right">
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td width="25%">
-                                        <form action="/write_message" method="post" id="/write_message">
+                                        <form action="/main/message/write" method="post" id="/write_message">
+                                            <input type="hidden" name="sciFirstName"
+                                                   value="${requestScope.sciFirstName}">
+                                            <input type="hidden" name="sciSecondName"
+                                                   value="${requestScope.sciSecondName}">
                                             <button type="submit" form="/write_message" class="button_lang"
                                                     name="button_write_message"
                                                     value="${requestScope.scientist.email}">
-                                                Write message
+                                                ${button_write_message}
                                             </button>
                                         </form>
                                     </td>
@@ -267,6 +289,10 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <td align="left">${pageScope.degree}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" align="left">${txt_graduation_year}:</td>
+                                        <td align="left">${university.graduationYear}</td>
                                     </tr>
                                 </table>
                             </c:forEach>

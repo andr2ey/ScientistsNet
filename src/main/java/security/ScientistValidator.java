@@ -105,6 +105,7 @@ public class ScientistValidator {
                 .middleName(req.getParameter("middle_name"), req)
                 .gender(req.getParameter("gender"), req)
                 .password(req.getParameter("passwordOld"), req)
+                .fieldOfScience(req.getParameter("field_of_science"), req)
                 .isValid()) {
             return true;
         }
@@ -117,6 +118,7 @@ public class ScientistValidator {
         req.setAttribute("year", req.getParameter("year"));
         req.setAttribute("m"+req.getParameter("month"), "selected");
         req.setAttribute("emailNew", req.getParameter("emailNew"));
+        req.setAttribute("f"+req.getParameter("field_of_science"), "selected");
         req.setAttribute("fail", "fail");
         return false;
     }

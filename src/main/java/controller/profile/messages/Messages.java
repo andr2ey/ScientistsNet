@@ -3,8 +3,10 @@ package controller.profile.messages;
 import model.Message;
 import model.Scientist;
 import service.MessageService;
+import service.ScientistService;
 import util.Const;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,21 +18,26 @@ import java.util.Set;
 /**
  * Created on 20.03.2017.
  */
-@WebServlet("/messages")
+@WebServlet("/main/message")
 public class Messages extends HttpServlet {
+
+    private MessageService messageService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        messageService = (MessageService)config.getServletContext().getAttribute(Const.MESSAGE_SERVICE);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        Scientist scientist = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
+        Set<Message> messageSet = messageService.getAll(scientist.getEmail());
+        req.setAttribute("messageSet", messageSet);
+        req.getRequestDispatcher("/WEB-INF/main/message/index.jsp").forward(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        MessageService messageService = (MessageService)req.getServletContext().getAttribute(Const.MESSAGE_SERVICE);
-        Scientist scientist = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
-        Set<Message> messageSet = messageService.getAll(scientist.getEmail());
-        System.err.println(messageSet.size());
-        req.setAttribute("messageSet", messageSet);
-        req.getRequestDispatcher("WEB-INF/main/message/index.jsp").forward(req, resp);
+        doPost(req, resp);
     }
 }

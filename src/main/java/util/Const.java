@@ -9,6 +9,7 @@ public interface Const {
     String EMAIL_KEY = "email";
     String UNIVERSITIES_KEY = "universities";
     String UNMODIFIED_UNIVERSITIES_KEY = "unmodifiedUniversities";
+    String UNIVERSITIES_CHANGED = "universitiesChanged";
 
     //context
     String SCIENTIST_SERVICE = "ScientistService";
@@ -35,6 +36,11 @@ public interface Const {
     String SUCCESS_OF_TRANSACTION = "successOfTransaction";
     String UPDATED_STATUS = "updatedStatus";
     int MAX_UNIVERSITIES = 10;
+    String MAX_GRADUATION_YEAR_KEY = "maxGraduationYear";
+    String MIN_GRADUATION_YEAR_KEY = "minGraduationYear";
+    int MIN_GRADUATION_YEAR = 1900;
+    int MAX_EDUCATION_TIME = 10;
+
 
     //registration
     String VALID_USER_KEY = "validUser";

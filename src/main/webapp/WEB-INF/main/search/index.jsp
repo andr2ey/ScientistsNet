@@ -14,7 +14,7 @@
 
 <fmt:message bundle="${lang}" key="lang.txt.first.name" var="txt_first_name"/>
 <fmt:message bundle="${lang}" key="lang.txt.second.name" var="txt_second_name"/>
-
+<fmt:message bundle="${lang}" key="lang.full.name.not.found" var="full_name_not_found"/>
 
 <html>
 <head>
@@ -165,12 +165,12 @@
             </td>
             <td valign="center" align="right" width="20%">
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/baseinfo">
+                    <input type="hidden" name="pathFrom" value="/main/search">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/baseinfo">
+                    <input type="hidden" name="pathFrom" value="/main/search">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
                 </form>
@@ -184,18 +184,20 @@
         <%--Control Buttons--%>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
+                <form action="/main" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_my_profile}"></p>
+                                             value="${button_my_profile}">
+                    </p>
                 </form>
-                <form action="/search" method="post">
+                <form action="/main/search" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/messages" method="post">
+                <form action="/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_messages}"></p>
+                                             value="${button_messages}">
+                    </p>
                 </form>
             </div>
         </td>
@@ -209,13 +211,13 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>Search</h3></td>
+                                    <td width="50%"><h3>${button_search}</h3></td>
                                     <td width="25%" align="right">
 
                                     </td>
                                 </tr>
                             </table>
-                            <form action="/search_by_name" method="post" id="/search_by_name">
+                            <form action="/main/search" method="post" id="/search_by_name">
                                 <table border="0" width="100%" align="top">
                                     <!--First name-->
                                     <tr>
@@ -225,7 +227,8 @@
                                         <td>
                                             <p align="center">
                                                 <input form="/search_by_name" name="first_name" class="text"
-                                                       value="" size="50" placeholder="${txt_first_name}"
+                                                       value="${requestScope.scientistFirstName}" size="50"
+                                                       placeholder="${txt_first_name}"
                                                        required pattern="[A-Za-z\u0410-\u044F\d\-\., ]{2,100}">
                                         </td>
                                     </tr>
@@ -237,7 +240,8 @@
                                         <td>
                                             <p align="center">
                                                 <input form="/search_by_name" name="second_name" class="text"
-                                                       value="" size="50" placeholder="${txt_second_name}"
+                                                       value="${requestScope.scientistSecondName}" size="50"
+                                                       placeholder="${txt_second_name}"
                                                        required pattern="[A-Za-z\u0410-\u044F\d\-\., ]{2,100}">
                                         </td>
                                     </tr>
@@ -246,7 +250,7 @@
                                         <td>
                                             <p align="center">
                                                 <button type="submit" form="/search_by_name" class="button_update"
-                                                        name="button_search_scientist" value="update">Search
+                                                        name="button_search_scientist" value="update">${button_search}
                                                 </button>
                                             </p>
                                         </td>
@@ -257,7 +261,11 @@
                                 <c:forEach items="${requestScope.scientistSet}" var="scientists" varStatus="number">
                                     <tr>
                                         <td width="5%">
-                                            <form action="/scientist" method="post" id="/scientist">
+                                            <form action="/main/scientist" method="post" id="/scientist">
+                                                <input type="hidden" name="sciFirstName"
+                                                       value="${scientists.firstName}">
+                                                <input type="hidden" name="sciSecondName"
+                                                       value="${scientists.secondName}">
                                                 <button type="submit" form="/scientist" class="button_lang"
                                                         name="button_scientist" value="${scientists.email}">
                                                         ${number.index+1}
@@ -274,6 +282,9 @@
                                         </td>
                                     </tr>
                                 </c:forEach>
+                                <c:if test="${requestScope.scientistSet.isEmpty()}">
+                                    <p align="center">${full_name_not_found}
+                                </c:if>
                             </table>
                         </div>
                     </td>

@@ -50,6 +50,35 @@
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
+<fmt:message bundle="${lang}" key="lang.field.of.science" var="field_of_science"/>
+<fmt:message bundle="${lang}" key="lang.architecture" var="architecture"/>
+<fmt:message bundle="${lang}" key="lang.business.administration" var="business_administration"/>
+<fmt:message bundle="${lang}" key="lang.design" var="design"/>
+<fmt:message bundle="${lang}" key="lang.it" var="it"/>
+<fmt:message bundle="${lang}" key="lang.history" var="hystory"/>
+<fmt:message bundle="${lang}" key="lang.literature" var="literature"/>
+<fmt:message bundle="${lang}" key="lang.medicine" var="medicine"/>
+<fmt:message bundle="${lang}" key="lang.earth.sciences" var="earth_sciences"/>
+<fmt:message bundle="${lang}" key="lang.environmental.sciences" var="environmental_sciences"/>
+<fmt:message bundle="${lang}" key="lang.pedagogical.sciences" var="pedagocical_sciences"/>
+<fmt:message bundle="${lang}" key="lang.psychology" var="psychology"/>
+<fmt:message bundle="${lang}" key="lang.philosophy" var="philosophy"/>
+<fmt:message bundle="${lang}" key="lang.jurisprudence" var="jurisprudence"/>
+<fmt:message bundle="${lang}" key="lang.astronomy" var="astronomy"/>
+<fmt:message bundle="${lang}" key="lang.biology" var="biology"/>
+<fmt:message bundle="${lang}" key="lang.engineering" var="engineering"/>
+<fmt:message bundle="${lang}" key="lang.arts" var="arts"/>
+<fmt:message bundle="${lang}" key="lang.lingustics" var="lingustics"/>
+<fmt:message bundle="${lang}" key="lang.mathematics" var="mathematics"/>
+<fmt:message bundle="${lang}" key="lang.management" var="management"/>
+<fmt:message bundle="${lang}" key="lang.material.science" var="material_science"/>
+<fmt:message bundle="${lang}" key="lang.social.sciences" var="social_sciences"/>
+<fmt:message bundle="${lang}" key="lang.politics" var="politics"/>
+<fmt:message bundle="${lang}" key="lang.physics" var="physics"/>
+<fmt:message bundle="${lang}" key="lang.chemistry" var="chemistry"/>
+<fmt:message bundle="${lang}" key="lang.electrical.and.electronics" var="electrical_and_electronics"/>
+<fmt:message bundle="${lang}" key="lang.economics" var="economics"/>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -60,26 +89,31 @@
             margin: 0; /* Отступы на странице */
             background: #f0f0f0;
         }
+
         h1 {
             font-size: 24px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
             color: #f0f0f0; /* Цвет текста */
             text-align: center;
         }
+
         h2 {
             margin-top: 0; /* Убираем отступ сверху */
         }
+
         h3 {
             font-size: 24px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
             color: #690005; /* Цвет текста */
             text-align: center;
         }
+
         #header { /* Верхний блок */
             background: #690005; /* Цвет фона */
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
+
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -88,6 +122,7 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
+
         .text_day {
             width: 70px;
             height: 30px;
@@ -95,9 +130,10 @@
             padding: 2px 9px; /*внутренние поля*/
             background: #fcfdff;
             border: solid 1px #898989;
-            border-radius:  3px;
+            border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
+
         .text_month {
             width: 160px;
             height: 30px;
@@ -105,9 +141,10 @@
             padding: 2px 9px; /*внутренние поля*/
             background: #fcfdff;
             border: solid 1px #898989;
-            border-radius:  3px;
+            border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
+
         .text_year {
             width: 70px;
             height: 30px;
@@ -115,9 +152,10 @@
             padding: 2px 9px; /*внутренние поля*/
             background: #fcfdff;
             border: solid 1px #898989;
-            border-radius:  3px;
+            border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
+
         #contentEducation { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -163,6 +201,7 @@
             margin: 0;
             cursor: pointer;
         }
+
         .text {
             width: 340px;
             height: 30px;
@@ -189,12 +228,12 @@
             </td>
             <td valign="center" align="right" width="20%">
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/baseinfo">
+                    <input type="hidden" name="pathFrom" value="/main/baseinfo">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
                 <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/baseinfo">
+                    <input type="hidden" name="pathFrom" value="/main/baseinfo">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
                 </form>
@@ -208,18 +247,20 @@
         <%--Control Buttons--%>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
-                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_my_profile}"></p>
-                </form>
-                <form action="/search" method="post">
-                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_search}">
+                <form action="/main" method="get">
+                    <p align="center">
+                        <input type="submit" name="button_lang" class="button_of_profile" value="${button_my_profile}">
                     </p>
                 </form>
-                <form action="/messages" method="post">
-                    <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
-                                             value="${button_messages}"></p>
+                <form action="/main/search" method="get">
+                    <p align="center">
+                        <input type="submit" name="button_lang" class="button_of_profile" value="${button_search}">
+                    </p>
+                </form>
+                <form action="/main/messages" method="get">
+                    <p align="center">
+                        <input type="submit" name="button_lang" class="button_of_profile" value="${button_messages}">
+                    </p>
                 </form>
             </div>
         </td>
@@ -248,8 +289,53 @@
                                     </td>
                                 </tr>
                             </table>
-                            <form action="/info_save" method="post" id="/info_save">
+                            <form action="/main/baseinfo" method="post" id="/info_save">
                                 <table border="0" width="100%" align="top">
+                                    <!--Field of Science-->
+                                    <tr>
+                                        <td width="30%">
+                                            ${field_of_science}<span>*</span>:
+                                        </td>
+                                        <td>
+                                            <p align="center">
+                                                <select class="text" name="field_of_science" size="1" required>
+                                                    <option value="1" ${requestScope.f1}>${architecture}</option>
+                                                    <option value="2" ${requestScope.f2}>
+                                                        ${business_administration}</option>
+                                                    <option value="3" ${requestScope.f3}>${design}</option>
+                                                    <option value="4" ${requestScope.f4}>${it}</option>
+                                                    <option value="5" ${requestScope.f5}>${hystory}</option>
+                                                    <option value="6" ${requestScope.f6}>${literature}</option>
+                                                    <option value="7" ${requestScope.f7}>${medicine}</option>
+                                                    <option value="8" ${requestScope.f8}>${earth_sciences}</option>
+                                                    <option value="9" ${requestScope.f9}>
+                                                        ${environmental_sciences}
+                                                    </option>
+                                                    <option value="10" ${requestScope.f10}>
+                                                        ${pedagocical_sciences}
+                                                    </option>
+                                                    <option value="11" ${requestScope.f11}>${psychology}</option>
+                                                    <option value="12" ${requestScope.f12}>${philosophy}</option>
+                                                    <option value="13" ${requestScope.f13}>${jurisprudence}</option>
+                                                    <option value="14" ${requestScope.f14}>${astronomy}</option>
+                                                    <option value="15" ${requestScope.f15}>${biology}</option>
+                                                    <option value="16" ${requestScope.f16}>${engineering}</option>
+                                                    <option value="17" ${requestScope.f17}>${arts}</option>
+                                                    <option value="18" ${requestScope.f18}>${lingustics}</option>
+                                                    <option value="19" ${requestScope.f19}>${mathematics}</option>
+                                                    <option value="20" ${requestScope.f20}>${management}</option>
+                                                    <option value="21" ${requestScope.f21}>${material_science}</option>
+                                                    <option value="22" ${requestScope.f22}>${social_sciences}</option>
+                                                    <option value="23" ${requestScope.f23}>${politics}</option>
+                                                    <option value="24" ${requestScope.f24}>${physics}</option>
+                                                    <option value="25" ${requestScope.f25}>${chemistry}</option>
+                                                    <option value="26" ${requestScope.f26}>
+                                                        ${electrical_and_electronics}
+                                                    </option>
+                                                    <option value="27" ${requestScope.f27}>${economics}</option>
+                                                </select>
+                                        </td>
+                                    </tr>
                                     <!--First name-->
                                     <tr>
                                         <td width="30%">
@@ -308,7 +394,8 @@
                                                 <input name="gender" type="radio"
                                                        value="male" placeholder="" ${gender_male_var}>${gender_male}
                                                 <input name="gender" type="radio"
-                                                       value="female" placeholder="" ${gender_female_var}>${gender_female}
+                                                       value="female"
+                                                       placeholder="" ${gender_female_var}>${gender_female}
                                                 <input name="gender" type="radio"
                                                        value="none" placeholder="" ${gender_none_var}>${gender_none}
                                             </p>
@@ -348,20 +435,6 @@
                                             </p>
                                         </td>
                                     </tr>
-                                    <%--<tr>--%>
-                                        <%--<!--New Email-->--%>
-                                        <%--<td width="30%">--%>
-                                            <%--new email:--%>
-                                        <%--</td>--%>
-                                        <%--<td>--%>
-                                            <%--<p align="center">--%>
-                                                <%--<input type="email" maxlength="100" class="text"--%>
-                                                       <%--pattern="^.+@.+\..+[^\.]$" form="/info_save"--%>
-                                                       <%--name="emailNew" size="60" placeholder="new email"--%>
-                                                       <%--value="${requestScope.emailNew}">--%>
-                                            <%--</p>--%>
-                                        <%--</td>--%>
-                                    <%--</tr>--%>
                                     <tr>
                                         <!--New Password-->
                                         <td width="30%">
@@ -372,7 +445,7 @@
                                             <div align="center" class="info"
                                                  data-title="Only latin letters and numbers, length 3-100">
                                                 <input type="password" pattern="^[\dA-Za-z]{3,100}$"
-                                                       maxlength="100" form="/info_save"  class="text"
+                                                       maxlength="100" form="/info_save" class="text"
                                                        name="passwordNew" size="60"
                                                        placeholder="${txt_new_password}"></div>
                                         </td>
@@ -392,7 +465,7 @@
                                             <div align="center" class="info"
                                                  data-title="Only latin letters and numbers, length 3-100">
                                                 <input type="password" pattern="^[\dA-Za-z]{3,100}$"
-                                                       required maxlength="100" form="/info_save"  class="text"
+                                                       required maxlength="100" form="/info_save" class="text"
                                                        name="passwordOld" size="60"
                                                        placeholder="${txt_old_password}"></div>
                                         </td>

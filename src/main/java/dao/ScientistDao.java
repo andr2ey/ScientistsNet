@@ -15,7 +15,7 @@ public interface ScientistDao {
     Scientist get(String email);
     List<Scientist> getAll();
     boolean confirmPassword(int id, String password);
-    boolean updateInfo(Scientist scientistNew, String email);
+    boolean updateInfo(Scientist scientistNew);
     Set<Scientist> getAllByFullName(String firstName, String secondName);
 }
 
