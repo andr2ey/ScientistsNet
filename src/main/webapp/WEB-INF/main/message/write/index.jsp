@@ -18,6 +18,9 @@
 <fmt:message bundle="${lang}" key="lang.txt.success" var="txt_success"/>
 <fmt:message bundle="${lang}" key="lang.txt.fail" var="txt_fail"/>
 
+<fmt:message bundle="${lang}" key="lang.message.to" var="to"/>
+<fmt:message bundle="${lang}" key="lang.message.send" var="send_message"/>
+
 
 <html>
 <head>
@@ -155,6 +158,7 @@
         textarea {
             width: 80%;
             resize: none; /* Запрещаем изменять размер */
+            font: 12pt Arial, sans-serif; /* Рубленый шрифт текста */
         }
     </style>
 </head>
@@ -171,16 +175,7 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main/message/write">
-                    <input type="hidden" name="lang" value="en">
-                    <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
-                </form>
-                <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main/message/write">
-                    <input type="hidden" name="lang" value="ru">
-                    <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
-                </form>
+
             </td>
         </tr>
     </table>
@@ -216,7 +211,7 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>Send message</h3></td>
+                                    <td width="50%"><h3>${send_message}</h3></td>
                                     <td width="25%" align="right">
                                         <small>
                                             <c:if test="${requestScope.fail != null}">
@@ -231,12 +226,12 @@
                                     </td>
                                 </tr>
                             </table>
-                            <form action="/send_message" method="post" id="/send_message">
+                            <form action="/main/message/send" method="post" id="/send_message">
                                 <table border="0" width="100%" align="top">
                                     <!--Email-->
                                     <tr>
                                         <td width="10%" align="right">
-                                            to:
+                                            ${to}:
                                         </td>
                                         <td align="center">
                                             ${requestScope.sciFirstName} ${requestScope.sciSecondName}
@@ -249,8 +244,7 @@
                                         <td>
                                             <p align="center">
                                                 <textarea form="/send_message" name="txt_of_message" placeholder=""
-                                                          required maxlength="2000" rows="10" cols="35">
-                                                </textarea>
+                                                          required maxlength="2000" rows="10" cols="35"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
@@ -258,8 +252,12 @@
                                         <td align="center">
                                                 <button type="submit" form="/send_message" class="button_update"
                                                         name="button_send_message" value="${requestScope.emailTo}">
-                                                    Send message
+                                                    ${send_message}
                                                 </button>
+                                            <input type="hidden" name="sciFirstName"
+                                                   value="${requestScope.sciFirstName}">
+                                            <input type="hidden" name="sciSecondName"
+                                                   value="${requestScope.sciSecondName}">
                                         </td>
                                     </tr>
                                 </table>

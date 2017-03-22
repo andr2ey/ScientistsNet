@@ -14,9 +14,13 @@ public class WriteMessage extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("emailTo", req.getParameter("button_write_message"));
-        req.setAttribute("sciFirstName", req.getParameter("sciFirstName"));
-        req.setAttribute("sciSecondName", req.getParameter("sciSecondName"));
-        req.getRequestDispatcher("/WEB-INF/main/message/write/index.jsp").forward(req, resp);
+        if (req.getParameter("button_write_message") != null) {
+            req.setAttribute("emailTo", req.getParameter("button_write_message"));
+            req.setAttribute("sciFirstName", req.getParameter("sciFirstName"));
+            req.setAttribute("sciSecondName", req.getParameter("sciSecondName"));
+            req.getRequestDispatcher("/WEB-INF/main/message/write/index.jsp").forward(req, resp);
+        } else {
+            resp.sendRedirect("/main");
+        }
     }
 }

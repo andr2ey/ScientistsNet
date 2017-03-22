@@ -1,14 +1,11 @@
 package dao.mysql;
 
 import dao.MessageDao;
-import model.Degree;
 import model.Message;
-import model.Scientist;
-import model.University;
+
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 
@@ -17,13 +14,13 @@ public class MySqlMessageDao implements MessageDao{
     //CREATE
     @SuppressWarnings("SqlResolve")
     private static final String SQL_CREATE_MESSAGE = "INSERT INTO messages (m_from, m_to, " +
-            "m_text, m_date, m_time) " +
-            "VALUES (?, ?, ?, ?, ?)";
+            "m_text, m_datetime) " +
+            "VALUES (?, ?, ?, ?)";
 
     //READ
     @SuppressWarnings("SqlResolve")
     private static final String SQL_SELECT_MESSAGES_BY_FROM_OR_TO = "SELECT m_id, m_from, m_to, " +
-            "m_text, m_date, m_time " +
+            "m_text, m_datetime " +
             "FROM messages m " +
             "WHERE m_from = (?) OR m_to = (?)";
 
@@ -43,14 +40,12 @@ public class MySqlMessageDao implements MessageDao{
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 Set<Message> messagesSet = new TreeSet<>();
                 while (resultSet.next()) {
-                    System.err.println("HERE GET ALL");
                     Message message = new Message().builder()
                             .setId(resultSet.getInt("m_id"))
                             .setFrom(resultSet.getString("m_from"))
                             .setTo(resultSet.getString("m_to"))
                             .setTxt(resultSet.getString("m_text"))
-                            .setLocalDate(resultSet.getDate("m_date").toLocalDate())
-                            .setLocalTime(resultSet.getTime("m_time").toLocalTime())
+                            .setLocalDateTime(resultSet.getTimestamp("m_datetime").toLocalDateTime())
                             .build();
                     messagesSet.add(message);
                 }
@@ -69,8 +64,7 @@ public class MySqlMessageDao implements MessageDao{
             prepareStatement.setString(1, message.getFrom());
             prepareStatement.setString(2, message.getTo());
             prepareStatement.setString(3, message.getTxt());
-            prepareStatement.setDate(4, Date.valueOf(message.getLocalDate()));
-            prepareStatement.setTime(5, Time.valueOf(message.getLocalTime()));
+            prepareStatement.setTimestamp(4, Timestamp.valueOf(message.getLocalDateTime()));
             return prepareStatement.executeUpdate() != 0;
         } catch (SQLException e) {
             return false;

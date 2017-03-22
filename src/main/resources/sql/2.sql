@@ -105,16 +105,20 @@ VALUES ('andrey.andronov92@gmail.com',
 
 INSERT INTO roles (s_email, r_name) VALUES ('andrey.andronov92@gmail.com', 'user');
 
-INSERT INTO messages (m_from, m_to, m_text, m_date, m_time)
+INSERT INTO messages (m_from, m_to, m_text, m_datetime)
 VALUES ('ao.andronov@gmail.com',
         'andrey.andronov92@gmail.com',
         'MESSAGE',
-        '2017-03-19',
-        '23:59:30');
+        '2017-03-19 23:59:30.001');
 
-INSERT INTO messages (m_from, m_to, m_text, m_date, m_time)
+INSERT INTO messages (m_from, m_to, m_text, m_datetime)
 VALUES ('ao.andronov@gmail.com',
         'kkad@mail.ru',
         'MESSAGE',
-        '2017-03-19',
-        '23:59:30');
+        '2017-03-19 23:59:30.002');
+
+INSERT INTO messages (m_from, m_to, m_text, m_datetime)
+VALUES ('ao.andronov@gmail.com',
+        'kkad@mail.ru',
+        'MESSAGE',
+        '2017-03-19 23:59:30.000');

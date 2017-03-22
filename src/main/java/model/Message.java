@@ -13,23 +13,14 @@ public class Message implements Comparable<Message> {
     private String from;
     private String to;
     private String txt;
-    private LocalDate localDate;
-    private LocalTime localTime;
+    private LocalDateTime localDateTime;
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
-    }
-
-    public LocalTime getLocalTime() {
-        return localTime;
-    }
-
-    public void setLocalTime(LocalTime localTime) {
-        this.localTime = localTime;
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 
     public Message.Builder builder(){
@@ -73,11 +64,11 @@ public class Message implements Comparable<Message> {
 
     @Override
     public int compareTo(Message o) {
-        int result = localDate.compareTo(o.getLocalDate());
-        if (result == 0)
-            result = localTime.compareTo(o.getLocalTime());
+        int result = o.getLocalDateTime().compareTo(localDateTime);
         if (result == 0)
             result = from.compareTo(o.from);
+        if (result == 0)
+            result = to.compareTo(o.to);
         return result;
     }
 
@@ -107,13 +98,8 @@ public class Message implements Comparable<Message> {
             return this;
         }
 
-        public Message.Builder setLocalDate(LocalDate localDate) {
-            Message.this.localDate = localDate;
-            return this;
-        }
-
-        public Message.Builder setLocalTime(LocalTime localTime) {
-            Message.this.localTime = localTime;
+        public Message.Builder setLocalDateTime(LocalDateTime localDateTime) {
+            Message.this.localDateTime = localDateTime;
             return this;
         }
 

@@ -21,7 +21,7 @@ public class EducationProcessFilter implements Filter {
             throws ServletException, IOException {
         HttpServletRequest httpReq = (HttpServletRequest) req;
         HttpSession session = httpReq.getSession();
-        if ((Boolean) session.getAttribute(Const.UNIVERSITIES_CHANGED)) {
+        if (session.getAttribute(Const.UNIVERSITIES_CHANGED) == null) {
             chain.doFilter(req, resp);
             return;
         }
@@ -31,6 +31,7 @@ public class EducationProcessFilter implements Filter {
             //noinspection unchecked
             List<University> unmodifiedList = (List<University>) session.getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
             rollbackModifiedUniversities(universityList, unmodifiedList);
+            session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
         }
         chain.doFilter(req, resp);
     }

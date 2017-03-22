@@ -49,7 +49,7 @@ CREATE TABLE university (
   u_country         VARCHAR(100)  NOT NULL,
   u_city            VARCHAR(100)  NOT NULL,
   u_full_name       VARCHAR(1000) NOT NULL,
-  u_graduation_year INT          NOT NULL,
+  u_graduation_year INT           NOT NULL,
   u_degree_id       INT           NOT NULL,
 
   PRIMARY KEY (u_id),
@@ -61,8 +61,7 @@ CREATE TABLE messages (
   m_from VARCHAR(100)  NOT NULL,
   m_to   VARCHAR(100)  NOT NULL,
   m_text VARCHAR(2000) NOT NULL,
-  m_date DATE          NOT NULL,
-  m_time TIME          NOT NULL,
+  m_datetime DATETIME(3)   NOT NULL,
 
   PRIMARY KEY (m_id)
 );

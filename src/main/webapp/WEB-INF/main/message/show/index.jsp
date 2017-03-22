@@ -12,12 +12,11 @@
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
-<fmt:message bundle="${lang}" key="lang.txt.first.name" var="txt_first_name"/>
-<fmt:message bundle="${lang}" key="lang.txt.second.name" var="txt_second_name"/>
+<fmt:message bundle="${lang}" key="lang.message.to" var="to"/>
+<fmt:message bundle="${lang}" key="lang.message.from" var="from"/>
 
-<fmt:message bundle="${lang}" key="lang.messages" var="messages"/>
-<fmt:message bundle="${lang}" key="lang.message.to" var="message_to"/>
-<fmt:message bundle="${lang}" key="lang.message.from" var="message_from"/>
+<fmt:message bundle="${lang}" key="lang.message" var="message"/>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -151,6 +150,15 @@
             border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
+        textarea {
+            width: 80%;
+            margin: 0;
+            padding: 0;
+            resize: none; /* Запрещаем изменять размер */
+            font: 12pt Arial, sans-serif; /* Рубленый шрифт текста */
+            outline: none;
+            overflow: auto;
+        }
     </style>
 </head>
 <body>
@@ -166,16 +174,7 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main/messages">
-                    <input type="hidden" name="lang" value="en">
-                    <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
-                </form>
-                <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main/messages">
-                    <input type="hidden" name="lang" value="ru">
-                    <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
-                </form>
+
             </td>
         </tr>
     </table>
@@ -211,56 +210,43 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>Messages</h3></td>
+                                    <td width="50%"><h3>${message}</h3></td>
                                     <td width="25%" align="right">
 
                                     </td>
                                 </tr>
                             </table>
-                            <form action="/main/message/show" method="get" id="/message_show">
                                 <table border="0" width="100%" align="top">
-                                    <c:forEach items="${requestScope.messageSet}" var="messages" varStatus="number">
-                                        <tr>
-                                            <c:choose>
-                                                <c:when test="${messages.from eq sessionScope.email.email}">
-                                                    <td width="5%" align="left">
-                                                        <input type="hidden" name="email${number.index}"
-                                                               value="${messages.to}">
-                                                        <input type="hidden" name="direction${number.index}"
-                                                               value="to">
-                                                        <input type="hidden" name="message${number.index}"
-                                                               value="${messages.txt}">
-                                                        <button type="submit" form="/message_show" class="button_lang"
-                                                                name="button_show_message" value="${number.index}">
-                                                                ${message_to}:
-                                                        </button>
-                                                    </td>
-                                                    <td width="95%">
-                                                            ${messages.to}
-                                                    </td>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <td width="5%" align="left">
-                                                        <input type="hidden" name="email${number.index}"
-                                                               value="${messages.from}">
-                                                        <input type="hidden" name="direction${number.index}"
-                                                               value="from">
-                                                        <input type="hidden" name="message${number.index}"
-                                                               value="${messages.txt}">
-                                                        <button type="submit" form="/message_show" class="button_lang"
-                                                                name="button_show_message" value="${number.index}">
-                                                                ${message_from}:
-                                                        </button>
-                                                    </td>
-                                                    <td width="95%">
-                                                            ${messages.from}
-                                                    </td>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </tr>
-                                    </c:forEach>
+                                    <!--Email-->
+                                    <tr>
+                                        <td width="10%" align="right">
+                                            <c:if test="${requestScope.direction eq 'to'}">
+                                                ${to}:
+                                            </c:if>
+                                            <c:if test="${requestScope.direction eq 'from'}">
+                                                ${from}:
+                                            </c:if>
+                                        </td>
+                                        <td align="center">
+                                            <form action="/main/scientist" method="post" id="/scientist">
+                                                <button type="submit" form="/scientist" class="button_lang"
+                                                        name="button_scientist" value="${requestScope.email}">
+                                                    ${requestScope.email}
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <!--Message-->
+                                    <tr>
+                                        <td width="10%"></td>
+                                        <td>
+                                            <p align="center">
+                                                <textarea name="txt_of_message" placeholder=""
+                                                          readonly required
+                                                          maxlength="2000">${requestScope.text}</textarea>
+                                        </td>
+                                    </tr>
                                 </table>
-                            </form>
                         </div>
                     </td>
                 </tr>

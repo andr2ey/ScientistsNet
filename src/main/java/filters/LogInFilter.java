@@ -48,7 +48,7 @@ public class LogInFilter implements Filter {
         if (email != null && request.getSession().getAttribute(Const.EMAIL_KEY) == null) {
             Scientist scientist = scientistService.get(email, req.getLocale());
             session.setAttribute(Const.EMAIL_KEY, scientist);
-            session.setAttribute(Const.UNIVERSITIES_CHANGED, false);
+            session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
             loadUniversities(session, scientist.getId());
         }
         chain.doFilter(request, resp);

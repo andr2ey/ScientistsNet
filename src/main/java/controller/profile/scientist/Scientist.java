@@ -29,7 +29,6 @@ public class Scientist extends HttpServlet {
         serviceUniversity = (UniversityService) config.getServletContext().getAttribute(Const.UNIVERSITY_SERVICE);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String scientistEmail = req.getParameter("button_scientist");

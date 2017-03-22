@@ -139,16 +139,7 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main/scientist">
-                    <input type="hidden" name="lang" value="en">
-                    <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
-                </form>
-                <form action="/language" method="post">
-                    <input type="hidden" name="pathFrom" value="/main/scientist">
-                    <input type="hidden" name="lang" value="ru">
-                    <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
-                </form>
+
             </td>
         </tr>
     </table>
