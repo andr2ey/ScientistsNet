@@ -20,38 +20,33 @@ import java.util.List;
  * Created on 13.03.2017.
  */
 @WebServlet("/education_save")
-public class SaveUniversity extends HttpServlet {
-
-    private static final UniversityValidator VALIDATOR = new UniversityValidator();
-    private static final String[] BUFFER = new String[4];
-    private static final String SUCCESS_OF_TRANSACTION = "successOfTransaction";
+public class EducationSave extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.err.println("SaveUniversity");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //noinspection unchecked
         List<University> universityList =
-                (List<University>) request.getSession().getAttribute(Const.UNIVERSITIES_KEY);
-        if (transactionCUDSuccess(request, universityList)) {
-            request.setAttribute(SUCCESS_OF_TRANSACTION, "success");
+                (List<University>) req.getSession().getAttribute(Const.UNIVERSITIES_KEY);
+        UniversityService service =
+                (UniversityService) req.getServletContext().getAttribute(Const.UNIVERSITY_SERVICE);
+        if (transactionCUDSuccess(service, universityList)) {
+            req.setAttribute(Const.SUCCESS_OF_TRANSACTION, "success");
         } else {
-            request.setAttribute(SUCCESS_OF_TRANSACTION, "fail");
+            req.setAttribute(Const.SUCCESS_OF_TRANSACTION, "fail");
         }
-        request.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(request, response);
+        req.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(req, resp);
     }
 
-    private boolean transactionCUDSuccess(HttpServletRequest request, List<University> universityList) {
-        UniversityService service =
-                (UniversityService) request.getServletContext().getAttribute(Const.UNIVERSITY_SERVICE);
-        Iterator<University> iterator = universityList.iterator();
+    private boolean transactionCUDSuccess(UniversityService service, List<University> universityList) {
         List<University> listDeleted = new ArrayList<>();
         List<University> listCreated = new ArrayList<>();
         List<University> listUpdated = new ArrayList<>();
+        Iterator<University> iterator = universityList.iterator();
         while (iterator.hasNext()) {
             University university = iterator.next();
             if (university.isDeleted()) {

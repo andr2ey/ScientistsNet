@@ -422,6 +422,12 @@
                                     </select>
                                 </p>
                                 <p align="center">
+                                    <input name="year" placeholder="${year_birthday}" required
+                                           type="number" class="text_year"
+                                           min="${requestScope.minYear}"
+                                           max="${requestScope.maxYear}" size="60">
+                                </p>
+                                <p align="center">
                                     <button type="submit" form="/education_add" class="button_add"
                                             name="button_add_education" value="add">${add_button}
                                     </button>

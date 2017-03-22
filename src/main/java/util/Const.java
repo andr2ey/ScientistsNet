@@ -15,6 +15,7 @@ public interface Const {
     String UNIVERSITY_SERVICE = "UniversityService";
     String MESSAGE_SERVICE = "MessageService";
 
+    //thread pool
     String THREAD_POOL = "threadPool";
     int NUMBER_OF_THREADS = 10;
 
@@ -30,6 +31,10 @@ public interface Const {
 
     String CONFIRM_PASSWORD_ERROR = "confirmPasswordError";
 
+    //education
+    String SUCCESS_OF_TRANSACTION = "successOfTransaction";
+    String UPDATED_STATUS = "updatedStatus";
+    int MAX_UNIVERSITIES = 10;
 
     //registration
     String VALID_USER_KEY = "validUser";
@@ -41,6 +46,6 @@ public interface Const {
     int BOTTOM_EDGE_OF_AGE = 14;
     String MAX_YEAR_KEY = "maxYear";
     String MIN_YEAR_KEY = "minYear";
-    int INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES = 10;
+    int INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES = MAX_UNIVERSITIES;
 
 }
