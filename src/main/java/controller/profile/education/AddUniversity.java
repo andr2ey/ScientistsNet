@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created on 13.03.2017.
  */
-@WebServlet("/education_add")
+@WebServlet("/main/education/add")
 public class AddUniversity extends HttpServlet {
 
     private static final UniversityValidator VALIDATOR = new UniversityValidator();
@@ -50,7 +50,7 @@ public class AddUniversity extends HttpServlet {
                         .setDegree(Degree.valueOf(BUFFER[3].toUpperCase())).build());
 
             }
-            request.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/main/education/index.jsp").forward(request, response);
         }
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created on 14.03.2017.
  */
-@WebServlet("/education_update")
+@WebServlet("/main/education/update")
 public class UpdateUniversity extends HttpServlet {
 
     private static final UniversityValidator VALIDATOR = new UniversityValidator();
@@ -31,10 +31,7 @@ public class UpdateUniversity extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.err.println("UpdateUniversity");
         int indexUpdated = new Integer(request.getParameter("button_update_education"));
-        System.err.println(indexUpdated);
-
         HttpSession httpSession = request.getSession();
         //noinspection unchecked
         List<University> universityList = (List<University>) httpSession.getAttribute(Const.UNIVERSITIES_KEY);
@@ -74,6 +71,6 @@ public class UpdateUniversity extends HttpServlet {
         } else {
             request.setAttribute(UPDATED_STATUS, "fail");
         }
-        request.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/main/education/index.jsp").forward(request, response);
     }
 }

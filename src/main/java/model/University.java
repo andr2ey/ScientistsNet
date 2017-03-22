@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 /**
  * Created on 07.03.2017.
  */
@@ -11,26 +13,20 @@ public class University implements Cloneable{
     private String city;
     private String fullName;
     private Degree degree;
+    private int graduationYear;
     private boolean deleted;
     private boolean created;
     private boolean updated;
 
-    public University(int id, int scientistId, String country, String city, String fullName, Degree degree) {
-        this.id = id;
-        this.scientistId = scientistId;
-        this.country = country;
-        this.city = city;
-        this.fullName = fullName;
-        this.degree = degree;
-        this.deleted = false;
-        this.created = false;
-        this.updated = false;
+    public University() {
     }
 
-    public University() {
-        this.deleted = false;
-        this.created = false;
-        this.updated = false;
+    public int getGraduationYear() {
+        return graduationYear;
+    }
+
+    public void setGraduationYear(int graduationYear) {
+        this.graduationYear = graduationYear;
     }
 
     public boolean isUpdated() {
@@ -145,6 +141,11 @@ public class University implements Cloneable{
             return this;
         }
 
+        public Builder setGraduationYear(int graduationYear) {
+            University.this.graduationYear = graduationYear;
+            return this;
+        }
+
         public Builder setDeleted(boolean deleted) {
             University.this.deleted = deleted;
             return this;
@@ -169,20 +170,5 @@ public class University implements Cloneable{
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    @Override
-    public String toString() {
-        return "University{" +
-                "id=" + id +
-                ", scientistId=" + scientistId +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", degree=" + degree +
-                ", deleted=" + deleted +
-                ", created=" + created +
-                ", updated=" + updated +
-                '}';
     }
 }

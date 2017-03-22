@@ -25,7 +25,7 @@ public class MySqlUniversityDao implements UniversityDao {
 
     //READ
     private static final String SQL_SELECT_ALL_UNIVERSITIES_BY_USER_ID = "SELECT " +
-            "u_id, u_scientist_id, u_country, u_city, u_full_name, u_degree_id, d_id, d_name " +
+            "u_id, u_scientist_id, u_country, u_city, u_full_name, u_degree_id, u_graduation_year, d_id, d_name " +
             "FROM university u, degree d " +
             "WHERE u_degree_id = d_id AND u_scientist_id = (?)";
     private static final String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
@@ -64,9 +64,9 @@ public class MySqlUniversityDao implements UniversityDao {
                             .setScientistId(scientistId)
                             .setCountry(resultSet.getString("u_country"))
                             .setFullName(resultSet.getString("u_full_name"))
-                            .setDegree(Degree.values()[resultSet.getInt("u_degree_id") - 1]);
+                            .setDegree(Degree.values()[resultSet.getInt("u_degree_id") - 1])
+                            .setGraduationYear(resultSet.getInt("u_graduation_year"));
                     list.add(builder.build());
-
                 }
                 return list;
             }

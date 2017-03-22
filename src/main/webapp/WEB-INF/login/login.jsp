@@ -170,7 +170,7 @@
 
     </form>
     <!--Sign up Button-->
-    <form method="post" action="/signup">
+    <form method="post" action="/registration">
         <p align="center"><input type="submit"  class="button_sign_up" value="${button_signup}">
     </form>
     <c:if test="${sessionScope.error_login != null}">

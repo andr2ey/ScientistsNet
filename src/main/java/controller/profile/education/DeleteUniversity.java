@@ -16,29 +16,23 @@ import java.util.List;
 /**
  * Created on 13.03.2017.
  */
-@WebServlet("/education_delete")
+@WebServlet("/main/education/delete")
 public class DeleteUniversity extends HttpServlet {
-    private static final UniversityValidator VALIDATOR = new UniversityValidator();
-    private static final String[] BUFFER = new String[4];
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.err.println("DeleteUniversity");
-        int indexDeleted = new Integer(request.getParameter("button_delete_education"));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        HttpSession httpSession = request.getSession();
+        int indexDeleted = new Integer(req.getParameter("button_delete_education"));
+        HttpSession httpSession = req.getSession();
         //noinspection unchecked
         List<University> universityList = (List<University>) httpSession.getAttribute(Const.UNIVERSITIES_KEY);
-
-
-
         universityList.get(indexDeleted).setDeleted(true);
 
-        request.getRequestDispatcher("WEB-INF/main/education/index.jsp").forward(request, response);
+        req.getRequestDispatcher("/WEB-INF/main/education/index.jsp").forward(req, resp);
     }
 }

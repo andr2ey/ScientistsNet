@@ -3,6 +3,9 @@ package service;
 import dao.ScientistDao;
 import model.Scientist;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -20,11 +23,15 @@ public class ScientistService {
     }
 
     public Scientist get(int id, Locale locale) {
-        return scientistDao.get(id, locale);
+        Scientist scientist = scientistDao.get(id);
+        scientist.setFormattedDob(formatDate(locale, scientist.getDob()));
+        return scientist;
     }
 
     public Scientist get(String email, Locale locale) {
-        return scientistDao.get(email, locale);
+        Scientist scientist = scientistDao.get(email);
+        scientist.setFormattedDob(formatDate(locale, scientist.getDob()));
+        return scientist;
     }
 
     public List<Scientist> getAll() {
@@ -41,5 +48,10 @@ public class ScientistService {
 
     public Set<Scientist> getAllByFullName(String firstName, String secondName) {
         return scientistDao.getAllByFullName(firstName, secondName);
+    }
+
+    private synchronized String formatDate(Locale locale, LocalDate localDate) {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+        return df.format(Date.valueOf(localDate));
     }
 }

@@ -15,6 +15,7 @@
 <fmt:message bundle="${lang}" key="lang.message.max.universities" var="message_max_universities"/>
 
 <fmt:message bundle="${lang}" key="lang.high.education" var="high_education"/>
+<fmt:message bundle="${lang}" key="lang.message.about.fields" var="message_about_fields"/>
 <fmt:message bundle="${lang}" key="lang.button.delete" var="delete_button"/>
 <fmt:message bundle="${lang}" key="lang.button.update" var="update_button"/>
 <fmt:message bundle="${lang}" key="lang.button.add" var="add_button"/>
@@ -33,6 +34,24 @@
 <fmt:message bundle="${lang}" key="lang.bachelor" var="bachelor"/>
 <fmt:message bundle="${lang}" key="lang.master" var="master"/>
 <fmt:message bundle="${lang}" key="lang.specialist" var="specialist"/>
+<fmt:message bundle="${lang}" key="lang.txt.graduation.year" var="txt_graduation_date"/>
+
+<fmt:message bundle="${lang}" key="lang.january" var="january"/>
+<fmt:message bundle="${lang}" key="lang.february" var="february"/>
+<fmt:message bundle="${lang}" key="lang.march" var="march"/>
+<fmt:message bundle="${lang}" key="lang.april" var="april"/>
+<fmt:message bundle="${lang}" key="lang.may" var="may"/>
+<fmt:message bundle="${lang}" key="lang.june" var="june"/>
+<fmt:message bundle="${lang}" key="lang.july" var="july"/>
+<fmt:message bundle="${lang}" key="lang.august" var="august"/>
+<fmt:message bundle="${lang}" key="lang.september" var="september"/>
+<fmt:message bundle="${lang}" key="lang.october" var="october"/>
+<fmt:message bundle="${lang}" key="lang.november" var="november"/>
+<fmt:message bundle="${lang}" key="lang.december" var="december"/>
+
+<fmt:message bundle="${lang}" key="lang.day.birthday" var="day_birthday"/>
+<fmt:message bundle="${lang}" key="lang.year.birthday" var="year_birthday"/>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -61,13 +80,17 @@
             color: #690005; /* Цвет текста */
             text-align: center;
         }
-
+        h4 {
+            font-size: 16px; /* Размер шрифта */
+            margin: 0; /* Убираем отступы */
+            color: #690005; /* Цвет текста */
+            text-align: center;
+        }
         #header { /* Верхний блок */
             background: #690005; /* Цвет фона */
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
-
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -76,7 +99,26 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
+        .text_year {
+            width: 80px;
+            height: 30px;
+            margin: 2px;
+            padding: 2px 9px; /*внутренние поля*/
+            background: #fcfdff;
+            border: solid 1px #898989;
+            border-radius: 3px;
+            font: 11pt Arial, sans-serif;
+        }
+        .text {
+            width: 320px;
+            height: 30px;
+            margin: 0;
+            padding: 2px 9px; /*внутренние поля*/
+            background: #fcfdff;
+            border: solid 1px #898989;
+            border-radius: 3px;
+            font: 11pt Arial, sans-serif;
+        }
         #contentBaseInfo { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -84,7 +126,6 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
         #contentEducation { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -92,7 +133,6 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
         .button_lang { /* Кнопка регистрации */
             background: #f0f0f0;
             border: solid 1px #494949;
@@ -102,7 +142,6 @@
             font: 8pt Arial, sans-serif;
             cursor: pointer;
         }
-
         .button_of_profile { /* Кнопка регистрации */
             background: #494949;
             border: solid 1px #494949;
@@ -116,7 +155,6 @@
             margin: 0;
             cursor: pointer;
         }
-
         .button_add { /* Кнопка регистрации */
             background: #690005;
             border: solid 1px #494949;
@@ -130,7 +168,6 @@
             margin: 0;
             cursor: pointer;
         }
-
         .button_save { /* Кнопка регистрации */
             background: #0f6100;
             border: solid 1px #636363;
@@ -143,17 +180,6 @@
             font: 12pt Arial, sans-serif;
             margin: 0;
             cursor: pointer;
-        }
-
-        .text {
-            width: 320px;
-            height: 30px;
-            margin: 0;
-            padding: 2px 9px; /*внутренние поля*/
-            background: #fcfdff;
-            border: solid 1px #898989;
-            border-radius: 3px;
-            font: 11pt Arial, sans-serif;
         }
     </style>
 </head>
@@ -215,7 +241,10 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>${high_education}</h3></td>
+                                    <td width="50%">
+                                        <h3>${high_education}</h3>
+                                        <h4>${message_about_fields}</h4>
+                                    </td>
                                     <td width="25%" align="right">
                                         <small>
                                             <c:if test="${requestScope.successOfTransaction != null}">
@@ -236,11 +265,9 @@
                             </table>
                             <c:forEach items="${sessionScope.universities}" var="university" varStatus="number">
                                 <c:if test="${university.deleted == false}">
-                                    <%--Don't delete next block--%>
-
                                     <table border="0" width="100%" align="top">
                                         <tr>
-                                            <form action="/education_delete" method="get" id="/education_delete">
+                                            <form action="/main/education" method="get" id="/education_delete">
                                                 <td width="3%" align="left" valign="bottom">
                                                     <button type="submit"
                                                             form="/education_delete" class="button_lang"
@@ -350,6 +377,20 @@
                                                             <option ${specialist_var}
                                                                     value="specialist">${specialist}</option>
                                                         </select>
+                                                </td>
+                                                <td width="25%"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="25%">
+                                                        ${txt_graduation_date}:
+                                                </td>
+                                                <td>
+                                                    <p align="center">
+                                                        <input type="number" class="text_year" name="year"
+                                                               value="${university.graduationYear}"
+                                                               placeholder="${year_birthday}"
+                                                               min="${requestScope.minYear}"
+                                                               max="${requestScope.maxYear}" size="60" required>
                                                 </td>
                                                 <td width="25%"></td>
                                             </tr>

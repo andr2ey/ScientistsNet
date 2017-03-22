@@ -35,7 +35,8 @@ public class SaveUniversity extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.err.println("SaveUniversity");
         //noinspection unchecked
-        List<University> universityList = (List<University>) request.getSession().getAttribute(Const.UNIVERSITIES_KEY);
+        List<University> universityList =
+                (List<University>) request.getSession().getAttribute(Const.UNIVERSITIES_KEY);
         if (transactionCUDSuccess(request, universityList)) {
             request.setAttribute(SUCCESS_OF_TRANSACTION, "success");
         } else {
@@ -45,7 +46,8 @@ public class SaveUniversity extends HttpServlet {
     }
 
     private boolean transactionCUDSuccess(HttpServletRequest request, List<University> universityList) {
-        UniversityService service = (UniversityService) request.getServletContext().getAttribute(Const.UNIVERSITY_SERVICE);
+        UniversityService service =
+                (UniversityService) request.getServletContext().getAttribute(Const.UNIVERSITY_SERVICE);
         Iterator<University> iterator = universityList.iterator();
         List<University> listDeleted = new ArrayList<>();
         List<University> listCreated = new ArrayList<>();

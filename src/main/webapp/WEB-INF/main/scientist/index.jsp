@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="language.lang" var="lang"/>
@@ -36,11 +35,7 @@
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
-<fmt:message bundle="${lang}" key="lang.txt.graduation.year" var="txt_graduation_year"/>
 
-<fmt:message bundle="${lang}"
-             key="lang.${fn:toLowerCase(sessionScope.email.fieldOfScience).replace('_', '.')}"
-             var="field_of_science"/>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -75,7 +70,6 @@
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
-
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -84,7 +78,6 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
         #contentBaseInfo { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -179,49 +172,43 @@
                         <div id="contentBaseInfo">
                             <table border="0" width="100%" align="top">
                                 <tr>
-                                    <td width="25%"></td>
-                                    <td width="50%">
-                                        <h3>
-                                            ${field_of_science}
-                                        </h3>
-                                    </td>
-                                    <td width="25%" align="right">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="25%"></td>
-                                    <td width="50%">
-                                        <h3>${sessionScope.email.firstName} ${sessionScope.email.secondName}</h3>
-                                        <h3>${sessionScope.email.middleName}</h3>
-                                    </td>
-                                    <td width="25%" align="right">
-                                        <form action="/baseinfo" method="get">
-                                            <input type="submit" name="button_edit_info" class="button_lang"
-                                                   value="${edit_button}">
+                                    <td width="25%">
+                                        <form action="/write_message" method="post" id="/write_message">
+                                            <button type="submit" form="/write_message" class="button_lang"
+                                                    name="button_write_message"
+                                                    value="${requestScope.scientist.email}">
+                                                Write message
+                                            </button>
                                         </form>
+                                    </td>
+                                    <td width="50%">
+                                        <h3>${requestScope.scientist.firstName} ${requestScope.scientist.secondName}</h3>
+                                        <h3>${requestScope.scientist.middleName}</h3>
+                                    </td>
+                                    <td width="25%" align="right">
                                     </td>
                                 </tr>
                             </table>
                             <table border="0" width="100%" cellpadding="5" align="top">
-                                <c:if test="${sessionScope.email.formattedDob != null}">
+                                <c:if test="${requestScope.scientist.formattedDob != null}">
                                     <tr>
                                         <td width="40%"></td>
                                         <td>${txt_dob}:</td>
-                                        <td>${sessionScope.email.formattedDob}</td>
+                                        <td>${requestScope.scientist.formattedDob}</td>
                                     </tr>
                                 </c:if>
-                                <c:if test="${sessionScope.email.gender != 'NONE'}">
+                                <c:if test="${requestScope.scientist.gender != 'NONE'}">
                                     <tr>
                                         <td width="40%"></td>
                                         <td>${txt_gender}:</td>
                                         <c:choose>
-                                            <c:when test="${sessionScope.email.gender eq 'MALE'}">
+                                            <c:when test="${requestScope.scientist.gender eq 'MALE'}">
                                                 <c:set var="gender" scope="page" value="${gender_male}"/>
                                             </c:when>
-                                            <c:when test="${sessionScope.email.gender eq 'FEMALE'}">
+                                            <c:when test="${requestScope.scientist.gender eq 'FEMALE'}">
                                                 <c:set var="gender" scope="page" value="${gender_female}"/>
                                             </c:when>
-                                            <c:otherwise>
+                                            <c:otherwise >
                                                 <c:set var="gender" scope="page" value="${gender_none}"/>
                                             </c:otherwise>
                                         </c:choose>
@@ -231,7 +218,7 @@
                                 <tr>
                                     <td width="40%"></td>
                                     <td>${txt_email}:</td>
-                                    <td>${sessionScope.email.email}</td>
+                                    <td>${requestScope.scientist.email}</td>
                                 </tr>
                             </table>
                         </div>
@@ -245,14 +232,10 @@
                                     <td width="25%"></td>
                                     <td width="50%"><h3>${high_education}</h3></td>
                                     <td width="25%" align="right">
-                                        <form action="/main/education" method="get">
-                                            <input type="submit" name="button_edit_education" class="button_lang"
-                                                   value="${edit_button}">
-                                        </form>
                                     </td>
                                 </tr>
                             </table>
-                            <c:forEach items="${sessionScope.universities}" var="university" varStatus="number">
+                            <c:forEach items="${requestScope.universities}" var="university" varStatus="number">
                                 <br>
                                 <table border="0" width="60%" align="center">
                                     <tr>
@@ -279,15 +262,11 @@
                                             <c:when test="${university.degree eq 'SPECIALIST'}">
                                                 <c:set var="degree" scope="page" value="${specialist}"/>
                                             </c:when>
-                                            <c:otherwise>
+                                            <c:otherwise >
                                                 <c:set var="degree" scope="page" value="${none}"/>
                                             </c:otherwise>
                                         </c:choose>
                                         <td align="left">${pageScope.degree}</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%" align="left">${txt_graduation_year}:</td>
-                                        <td align="left">${university.graduationYear}</td>
                                     </tr>
                                 </table>
                             </c:forEach>

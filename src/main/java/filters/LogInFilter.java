@@ -20,15 +20,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created on 08.03.2017.
  */
 
 public class LogInFilter implements Filter {
-
-    private static final Logger logger = Logger.getRootLogger();
-    private static final int INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES = 10;
 
     private ScientistService scientistService;
     private UniversityService universityService;
@@ -38,38 +36,31 @@ public class LogInFilter implements Filter {
         ServletContext servletContext = filterConfig.getServletContext();
         scientistService = (ScientistService) servletContext.getAttribute(Const.SCIENTIST_SERVICE);
         universityService = (UniversityService) servletContext.getAttribute(Const.UNIVERSITY_SERVICE);
-
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        System.err.println("LogInFilter");
         HttpServletRequest request = (HttpServletRequest) req;
         HttpSession session = request.getSession();
 
         String email = request.getRemoteUser();
         // first-time login
         if (email != null && request.getSession().getAttribute(Const.EMAIL_KEY) == null) {
-            Scientist scientist = scientistService.get(email);
-            scientist.setFormattedDob(formatDate(request, scientist.getDob()));
+            Scientist scientist = scientistService.get(email, req.getLocale());
             session.setAttribute(Const.EMAIL_KEY, scientist);
-
-            logger.info(String.format("Authorization of User (%s) ", scientist));
-
             loadUniversities(session, scientist.getId());
         }
-        chain.doFilter(request, resp); // Just continue chain.
+        chain.doFilter(request, resp);
     }
 
-    private String formatDate(HttpServletRequest req, LocalDate localDate) {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, req.getLocale());
-        return df.format(Date.valueOf(localDate));
-    }
+    @Override
+    public void destroy() {}
 
+    @SuppressWarnings("Duplicates")
     private void loadUniversities(HttpSession session, int scientistId) {
         //buffer for unmodified universities
-        List<University> unmodifiedUniversities = new ArrayList<>(INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES);
-        for (int i = 0; i < INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES; i++)
+        List<University> unmodifiedUniversities = new ArrayList<>(Const.INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES);
+        for (int i = 0; i < Const.INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES; i++)
             unmodifiedUniversities.add(i, null);
         session.setAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY, unmodifiedUniversities);
 

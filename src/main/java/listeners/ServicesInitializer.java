@@ -1,7 +1,9 @@
 package listeners;
 
+import dao.mysql.MySqlMessageDao;
 import dao.mysql.MySqlScientistDao;
 import dao.mysql.MySqlUniversityDao;
+import service.MessageService;
 import service.ScientistService;
 import service.UniversityService;
 import util.Const;
@@ -18,7 +20,7 @@ import javax.sql.DataSource;
  */
 
 @WebListener
-public class Init implements ServletContextListener {
+public class ServicesInitializer implements ServletContextListener {
 
     @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
@@ -26,9 +28,11 @@ public class Init implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
-        servletContext.setAttribute(Const.SCIENTIST_SERVICE, new ScientistService(new MySqlScientistDao(dataSource)));
-        servletContext.setAttribute(Const.UNIVERSITY_SERVICE, new UniversityService(new MySqlUniversityDao(dataSource)));
-
-
+        servletContext.setAttribute(Const.SCIENTIST_SERVICE,
+                new ScientistService(new MySqlScientistDao(dataSource)));
+        servletContext.setAttribute(Const.UNIVERSITY_SERVICE,
+                new UniversityService(new MySqlUniversityDao(dataSource)));
+        servletContext.setAttribute(Const.MESSAGE_SERVICE,
+                new MessageService(new MySqlMessageDao(dataSource)));
     }
 }

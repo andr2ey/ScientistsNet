@@ -34,6 +34,16 @@
     </session-config>
 
     <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>filters.EncodingFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>LogInFilter</filter-name>
         <filter-class>filters.LogInFilter</filter-class>
     </filter>
@@ -43,12 +53,23 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>EncodingFilter</filter-name>
-        <filter-class>filters.EncodingFilter</filter-class>
+        <filter-name>RegistrationEntranceFilter</filter-name>
+        <filter-class>filters.registration.EntranceFilter</filter-class>
+        <async-supported>true</async-supported>
     </filter>
     <filter-mapping>
-        <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <filter-name>RegistrationEntranceFilter</filter-name>
+        <url-pattern>/registration</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>EducationProcessFilter</filter-name>
+        <filter-class>filters.EducationProcessFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EducationProcessFilter</filter-name>
+        <url-pattern>/main</url-pattern>
+        <url-pattern>/main/*</url-pattern>
     </filter-mapping>
 
 </web-app>

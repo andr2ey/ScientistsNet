@@ -117,9 +117,7 @@ public class Scientist implements Comparable<Scientist> {
 
     public class Builder {
 
-        private Builder() {
-            // private constructor
-        }
+        private Builder() {}
 
         public Builder setId(int id) {
             Scientist.this.id = id;
@@ -170,8 +168,6 @@ public class Scientist implements Comparable<Scientist> {
             Scientist.this.fieldOfScience = fieldOfScience;
             return this;
         }
-
-
 
         public Scientist build() {
             return Scientist.this;

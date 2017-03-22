@@ -11,8 +11,8 @@ import java.util.Set;
  */
 public interface ScientistDao {
     int create(Scientist scientist);
-    Scientist get(int id, Locale locale);
-    Scientist get(String email, Locale locale);
+    Scientist get(int id);
+    Scientist get(String email);
     List<Scientist> getAll();
     boolean confirmPassword(int id, String password);
     boolean updateInfo(Scientist scientistNew, String email);

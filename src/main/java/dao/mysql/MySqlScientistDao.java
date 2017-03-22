@@ -201,12 +201,12 @@ public class MySqlScientistDao implements ScientistDao {
     }
 
     @Override
-    public Scientist get(int id, Locale locale) {
+    public Scientist get(int id) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      SQL_SELECT_SCIENTIST_BY_ID)) {
             preparedStatement.setInt(1, id);
-            return getScientist(preparedStatement, locale);
+            return getScientist(preparedStatement);
         } catch (SQLException e) {
             logger.error(String.format("Getting user by id = (%d) has been unsuccessful", id), e);
         }
@@ -214,12 +214,12 @@ public class MySqlScientistDao implements ScientistDao {
     }
 
     @Override
-    public Scientist get(String email, Locale locale) {
+    public Scientist get(String email) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      SQL_SELECT_SCIENTIST_BY_EMAIL)) {
             preparedStatement.setString(1, email);
-            return getScientist(preparedStatement, locale);
+            return getScientist(preparedStatement);
         } catch (SQLException e) {
             logger.error(String.format("Getting user by email = (%s) has been unsuccessful", email), e);
         }
@@ -254,7 +254,7 @@ public class MySqlScientistDao implements ScientistDao {
         return Collections.emptyList();
     }
 
-    private Scientist getScientist(PreparedStatement preparedStatement, Locale locale) throws SQLException {
+    private Scientist getScientist(PreparedStatement preparedStatement) throws SQLException {
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {
                 Scientist.Builder builder = new Scientist().builder()
@@ -268,16 +268,10 @@ public class MySqlScientistDao implements ScientistDao {
                         .setFieldOfScience(FieldOfScience.valueOf(resultSet.getString("f_name")));
                 String gender = resultSet.getString("g_name");
                 builder.setGender(gender != null ? Gender.valueOf(gender) : null);
-                builder.setFormattedDob(formatDate(locale, resultSet.getDate("s_dob").toLocalDate()));
                 return builder.build();
             }
         }
         logger.fatal("Scientist model hasn't created");
         return new Scientist();
-    }
-
-    private synchronized String formatDate(Locale locale, LocalDate localDate) {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-        return df.format(Date.valueOf(localDate));
     }
 }
