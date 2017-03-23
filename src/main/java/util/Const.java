@@ -1,9 +1,9 @@
 package util;
 
-/**
- * Created on 14.03.2017.
- */
 public interface Const {
+
+    String APP_ENCODING = "UTF-8";
+    String LOGOUT = "logout";
 
     //session
     String EMAIL_KEY = "email";
@@ -18,7 +18,7 @@ public interface Const {
 
     //thread pool
     String THREAD_POOL = "threadPool";
-    int NUMBER_OF_THREADS = 10;
+    int NUMBER_OF_THREADS = 30;
 
     //request validate names
     String DATE_INPUT_ERROR = "dateInputError";
@@ -41,7 +41,6 @@ public interface Const {
     int MIN_GRADUATION_YEAR = 1900;
     int MAX_EDUCATION_TIME = 10;
 
-
     //registration
     String VALID_USER_KEY = "validUser";
     String CREATED_USER_KEY = "createdUser";
@@ -52,6 +51,8 @@ public interface Const {
     int BOTTOM_EDGE_OF_AGE = 14;
     String MAX_YEAR_KEY = "maxYear";
     String MIN_YEAR_KEY = "minYear";
-    int INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES = MAX_UNIVERSITIES;
+    String CLEARTEXT_PASSWORD = "clearPassword";
+    String FAIL = "fail";
+    String SUCCESS = "success";
 
 }

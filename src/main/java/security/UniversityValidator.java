@@ -1,20 +1,14 @@
 package security;
 
 import model.Degree;
-import org.apache.log4j.Logger;
 import util.Const;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
-/**
- * Created on 14.03.2017.
- */
 public class UniversityValidator {
 
     private boolean valid = true;
-    //TODO think about name pattern, if it is two spaces
     private final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z\\u0410-\\u044F\\\\d\\-\\\" ]{2,100}");
     private final Pattern DEGREE_PATTERN = Pattern.compile("(?i)^(bachelor|master|specialist)$");
 

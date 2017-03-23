@@ -1,7 +1,6 @@
 package dao;
 
 import model.Message;
-
 import java.util.Set;
 
 public interface MessageDao {

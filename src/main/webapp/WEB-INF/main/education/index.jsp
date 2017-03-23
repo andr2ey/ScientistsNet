@@ -62,18 +62,15 @@
             margin: 0; /* Отступы на странице */
             background: #f0f0f0;
         }
-
         h1 {
             font-size: 24px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
             color: #f0f0f0; /* Цвет текста */
             text-align: center;
         }
-
         h2 {
             margin-top: 0; /* Убираем отступ сверху */
         }
-
         h3 {
             font-size: 24px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
@@ -118,13 +115,6 @@
             border: solid 1px #898989;
             border-radius: 3px;
             font: 11pt Arial, sans-serif;
-        }
-        #contentBaseInfo { /* Правая колонка */
-            background: #e0e0e0; /* Цвет фона */
-            border: solid 1px #898989; /* Параметры рамки вокруг */
-            width: 600px; /* Ширина колонки */
-            padding: 5px; /* Поля вокруг текста */
-            border-radius: 3px;
         }
         #contentEducation { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
@@ -196,12 +186,12 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="post">
+                <form action="/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main/education">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
-                <form action="/language" method="post">
+                <form action="/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main/education">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">

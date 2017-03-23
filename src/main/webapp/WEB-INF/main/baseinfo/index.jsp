@@ -89,31 +89,26 @@
             margin: 0; /* Отступы на странице */
             background: #f0f0f0;
         }
-
         h1 {
             font-size: 24px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
             color: #f0f0f0; /* Цвет текста */
             text-align: center;
         }
-
         h2 {
             margin-top: 0; /* Убираем отступ сверху */
         }
-
         h3 {
             font-size: 24px; /* Размер шрифта */
             margin: 0; /* Убираем отступы */
             color: #690005; /* Цвет текста */
             text-align: center;
         }
-
         #header { /* Верхний блок */
             background: #690005; /* Цвет фона */
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
-
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -122,7 +117,6 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
         .text_day {
             width: 70px;
             height: 30px;
@@ -133,7 +127,6 @@
             border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
-
         .text_month {
             width: 160px;
             height: 30px;
@@ -144,7 +137,6 @@
             border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
-
         .text_year {
             width: 70px;
             height: 30px;
@@ -155,7 +147,6 @@
             border-radius: 3px;
             font: 11pt Arial, sans-serif;
         }
-
         #contentEducation { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -163,7 +154,6 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
-
         .button_lang { /* Кнопка регистрации */
             background: #f0f0f0;
             border: solid 1px #494949;
@@ -173,7 +163,6 @@
             font: 8pt Arial, sans-serif;
             cursor: pointer;
         }
-
         .button_of_profile { /* Кнопка регистрации */
             background: #494949;
             border: solid 1px #494949;
@@ -187,7 +176,6 @@
             margin: 0;
             cursor: pointer;
         }
-
         .button_update { /* Кнопка регистрации */
             background: #0f6100;
             border: solid 1px #494949;
@@ -201,7 +189,6 @@
             margin: 0;
             cursor: pointer;
         }
-
         .text {
             width: 340px;
             height: 30px;
@@ -227,12 +214,12 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="post">
+                <form action="/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main/baseinfo">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
-                <form action="/language" method="post">
+                <form action="/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main/baseinfo">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">

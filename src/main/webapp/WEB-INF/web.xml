@@ -74,7 +74,7 @@
 
     <filter>
         <filter-name>EducationProcessFilter</filter-name>
-        <filter-class>filters.EducationProcessFilter</filter-class>
+        <filter-class>filters.education.EducationProcessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>EducationProcessFilter</filter-name>

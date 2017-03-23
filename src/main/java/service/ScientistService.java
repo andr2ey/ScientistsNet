@@ -2,11 +2,9 @@ package service;
 
 import dao.ScientistDao;
 import model.Scientist;
-
 import java.sql.Date;
 import java.text.DateFormat;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -32,10 +30,6 @@ public class ScientistService {
         Scientist scientist = scientistDao.get(email);
         scientist.setFormattedDob(formatDate(locale, scientist.getDob()));
         return scientist;
-    }
-
-    public List<Scientist> getAll() {
-        return scientistDao.getAll();
     }
 
     public boolean confirmPassword(int id, String password) {

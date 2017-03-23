@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutorService;
 @WebServlet(urlPatterns = "/registration", asyncSupported = true)
 public class SignUp extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(SignUp.class);
     private ExecutorService threadPool;
 
     @Override
@@ -31,7 +30,6 @@ public class SignUp extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //creates new user
         AsyncContext asyncContext = req.startAsync();
         asyncContext.addListener(new RegistrationListener());
         threadPool.execute(new RegistrationService(asyncContext));

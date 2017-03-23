@@ -32,9 +32,9 @@ public class EducationEditor extends HttpServlet {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        //noinspection unchecked
         List<University> universityList = (List<University>) session.getAttribute(Const.UNIVERSITIES_KEY);
         if (req.getParameter("button_delete_education") != null) {
             session.setAttribute(Const.UNIVERSITIES_CHANGED, true);

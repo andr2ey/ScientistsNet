@@ -10,26 +10,15 @@ import util.Const;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.DateFormatter;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-/**
- * Created on 08.03.2017.
- */
 
 public class LogInFilter implements Filter {
 
     private ScientistService scientistService;
     private UniversityService universityService;
+    private static final Logger LOGGER = Logger.getLogger(LogInFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,8 +36,8 @@ public class LogInFilter implements Filter {
         // first-time login
         if (email != null && request.getSession().getAttribute(Const.EMAIL_KEY) == null) {
             Scientist scientist = scientistService.get(email, req.getLocale());
+            LOGGER.info(String.format("User - (%s) is successfully authorized", scientist));
             session.setAttribute(Const.EMAIL_KEY, scientist);
-            session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
             loadUniversities(session, scientist.getId());
         }
         chain.doFilter(request, resp);
@@ -60,10 +49,11 @@ public class LogInFilter implements Filter {
     @SuppressWarnings("Duplicates")
     private void loadUniversities(HttpSession session, int scientistId) {
         //buffer for unmodified universities
-        List<University> unmodifiedUniversities = new ArrayList<>(Const.INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES);
-        for (int i = 0; i < Const.INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES; i++)
+        List<University> unmodifiedUniversities = new ArrayList<>(Const.MAX_UNIVERSITIES);
+        for (int i = 0; i < Const.MAX_UNIVERSITIES; i++)
             unmodifiedUniversities.add(i, null);
         session.setAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY, unmodifiedUniversities);
+        session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
 
         List<University> universities = universityService.getAll(scientistId);
         session.setAttribute(Const.UNIVERSITIES_KEY, universities);

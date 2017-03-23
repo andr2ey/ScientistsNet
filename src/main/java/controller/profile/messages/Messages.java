@@ -31,8 +31,9 @@ public class Messages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Scientist scientist = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
+
         Set<Message> messageSet = messageService.getAll(scientist.getEmail());
-        System.err.println(messageSet);
+
         req.setAttribute("messageSet", messageSet);
         req.getRequestDispatcher("/WEB-INF/main/message/index.jsp").forward(req, resp);
     }

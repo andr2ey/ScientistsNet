@@ -39,29 +39,20 @@ public class RegistrationService implements Runnable {
     @Override
     public void run() {
         if (validator.validateRegistrationFields(req)) {
-            Scientist validUser = new Scientist().builder()
-                    .setEmail(validator.getValidEmail())
-                    .setPassword(RealmBase.Digest(validator.getValidPassword(), "MD5", "utf-8"))
-                    .setFirstName(validator.getValidFirstName()).setSecondName(validator.getValidSecondName())
-                    .setMiddleName(validator.getValidMiddleName()).setDob(validator.getValidDate())
-                    .setGender(validator.getValidGender()).setFieldOfScience(validator.getValidFieldOfScience()).build();
+            Scientist validUser = new Scientist().builder().
+                    setEmail(validator.getValidEmail()).
+                    setPassword(RealmBase.Digest(validator.getValidPassword(), "MD5", "utf-8")).
+                    setFirstName(validator.getValidFirstName()).setSecondName(validator.getValidSecondName()).
+                    setMiddleName(validator.getValidMiddleName()).setDob(validator.getValidDate()).
+                    setGender(validator.getValidGender()).setFieldOfScience(validator.getValidFieldOfScience()).build();
             req.setAttribute(Const.VALID_USER_KEY, validUser);
-            req.setAttribute("clearPassword", validator.getValidPassword());
+            req.setAttribute(Const.CLEARTEXT_PASSWORD, validator.getValidPassword());
             if (scientistService.create(validUser) == 0) {
-                req.setAttribute("email_exist", "Such email already exist");
-                req.setAttribute("first_name", validUser.getFirstName());
-                req.setAttribute("second_name", validUser.getSecondName());
-                LocalDate localDate = validUser.getDob();
-                req.setAttribute("month", localDate.getMonthValue());
-                req.setAttribute("year", localDate.getYear());
-                req.setAttribute("day", localDate.getDayOfMonth());
-                req.setAttribute("m" + localDate.getMonthValue(), "selected");
-                req.setAttribute("f" + validUser.getFieldOfScience().ordinal(), "selected");
+                setAttributes(req, validUser);
             } else {
                 HttpSession session = req.getSession();
                 validUser.setFormattedDob(formatDate(req.getLocale(), validUser.getDob()));
                 session.setAttribute(Const.EMAIL_KEY, validUser);
-                session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
                 loadUniversities(session, validUser.getId());
                 req.setAttribute(Const.CREATED_USER_KEY, validUser);
             }
@@ -69,13 +60,26 @@ public class RegistrationService implements Runnable {
         asyncContext.complete();
     }
 
-    @SuppressWarnings("Duplicates")
+    private void setAttributes(HttpServletRequest req, Scientist validUser) {
+        req.setAttribute("email_exist", "Such email already exist");
+        req.setAttribute("first_name", validUser.getFirstName());
+        req.setAttribute("second_name", validUser.getSecondName());
+        LocalDate localDate = validUser.getDob();
+        req.setAttribute("month", localDate.getMonthValue());
+        req.setAttribute("year", localDate.getYear());
+        req.setAttribute("day", localDate.getDayOfMonth());
+        req.setAttribute("m" + localDate.getMonthValue(), "selected");
+        req.setAttribute("f" + validUser.getFieldOfScience().ordinal(), "selected");
+    }
+
     private void loadUniversities(HttpSession session, int scientistId) {
         //buffer for unmodified universities
-        List<University> unmodifiedUniversities = new ArrayList<>(Const.INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES);
-        for (int i = 0; i < Const.INITIAL_CAPACITY_UNMODIFIED_UNIVERSITIES; i++)
-            unmodifiedUniversities.add(i, null);
+        List<University> unmodifiedUniversities = new ArrayList<>(Const.MAX_UNIVERSITIES);
         session.setAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY, unmodifiedUniversities);
+        for (int i = 0; i < Const.MAX_UNIVERSITIES; i++)
+            unmodifiedUniversities.add(i, null);
+        session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
+
         List<University> universities = universityService.getAll(scientistId);
         session.setAttribute(Const.UNIVERSITIES_KEY, universities);
     }

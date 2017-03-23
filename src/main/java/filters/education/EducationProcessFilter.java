@@ -1,8 +1,7 @@
-package filters;
+package filters.education;
 
 import model.University;
 import util.Const;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,6 +16,7 @@ public class EducationProcessFilter implements Filter {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
         HttpServletRequest httpReq = (HttpServletRequest) req;
@@ -26,9 +26,7 @@ public class EducationProcessFilter implements Filter {
             return;
         }
         if (!httpReq.getRequestURI().equals("/main/education")) {
-            //noinspection unchecked
             List<University> universityList = (List<University>) session.getAttribute(Const.UNIVERSITIES_KEY);
-            //noinspection unchecked
             List<University> unmodifiedList = (List<University>) session.getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
             rollbackModifiedUniversities(universityList, unmodifiedList);
             session.setAttribute(Const.UNIVERSITIES_CHANGED, null);

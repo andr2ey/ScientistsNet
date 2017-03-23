@@ -4,7 +4,6 @@ import dao.mysql.MySqlMessageDao;
 import dao.mysql.MySqlScientistDao;
 import dao.mysql.MySqlUniversityDao;
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import service.MessageService;
@@ -14,7 +13,6 @@ import util.Const;
 import util.connection.pool.MyConnectionPool;
 import util.connection.pool.MyConnectionPoolException;
 
-import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -34,15 +32,15 @@ import java.util.regex.Pattern;
 @WebListener
 public class AppInitializer implements ServletContextListener {
 
-    //    @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
     private MyConnectionPool connectionPool;
+    private static Logger logger;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
-        //TODO think about logging
         initRootLogger(servletContext);
+        logger = Logger.getLogger(AppInitializer.class);
         initConnectionPool(servletContext.getInitParameter("ConnectionPool"));
         initDB(servletContext);
         initServices(servletContext);
@@ -51,7 +49,11 @@ public class AppInitializer implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         if (sce.getServletContext().getInitParameter("ConnectionPool").equals("my"))
-            connectionPool.destroy();
+            try {
+                connectionPool.destroy();
+            } catch (MyConnectionPoolException e) {
+                logger.warn("Connection pool destroy failed", e);
+            }
     }
 
     private void initConnectionPool(String id) {
@@ -59,20 +61,20 @@ public class AppInitializer implements ServletContextListener {
             try {
                 connectionPool = new MyConnectionPool();
                 connectionPool.init();
+                dataSource = connectionPool;
             } catch (MyConnectionPoolException e) {
-                throw new RuntimeException("Error in opening my connection pool.");
-                //TODO add log
+                logger.fatal("Error in opening my connection pool", e);
             }
-            dataSource = connectionPool;
+            logger.info("My connection pool is successfully initialized");
         } else {
             try {
                 Context initContext = new InitialContext();
                 Context envContext = (Context) initContext.lookup("java:/comp/env");
                 dataSource = (DataSource) envContext.lookup("jdbc/TestDB");
             } catch (NamingException e) {
-                throw new RuntimeException("Error in opening tomcat's connection pool.");
-                //TODO add log
+                logger.fatal("Error in opening tomcat's connection pool", e);
             }
+            logger.info("Tomcat's connection pool is successfully initialized");
         }
     }
 
@@ -82,7 +84,6 @@ public class AppInitializer implements ServletContextListener {
             PropertyConfigurator.configure(inputStream);
         } catch (IOException e) {
             BasicConfigurator.configure();
-            //TODO - add log
         }
     }
 
@@ -93,6 +94,7 @@ public class AppInitializer implements ServletContextListener {
                 new UniversityService(new MySqlUniversityDao(dataSource)));
         servletContext.setAttribute(Const.MESSAGE_SERVICE,
                 new MessageService(new MySqlMessageDao(dataSource)));
+        logger.info("Services are being initialized");
     }
 
     private void initDB(ServletContext servletContext) {
@@ -105,7 +107,7 @@ public class AppInitializer implements ServletContextListener {
                 return;
             for (File fileSql : filesSql)
                 try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(new FileInputStream(fileSql), Charset.forName("utf-8")))) {
+                        new InputStreamReader(new FileInputStream(fileSql), Charset.forName(Const.APP_ENCODING)))) {
                     String line;
                     StringBuilder sb = new StringBuilder();
                     while ((line = reader.readLine()) != null) {
@@ -118,7 +120,7 @@ public class AppInitializer implements ServletContextListener {
                     statement.executeBatch();
                 }
         } catch (SQLException | IOException e) {
-            //TODO add log
+            logger.fatal("DB initialize failed", e);
         }
     }
 }

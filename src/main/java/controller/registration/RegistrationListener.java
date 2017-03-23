@@ -23,12 +23,12 @@ public class RegistrationListener extends AsyncListenerAdapter {
                 req.getRequestDispatcher(Const.REGISTRATION_PAGE_FULL_PATH).forward(req, resp);
             } else {
                 Scientist scientist = (Scientist) req.getAttribute(Const.VALID_USER_KEY);
-                req.login(scientist.getEmail(), (String) req.getAttribute("clearPassword"));
-                req.setAttribute("clearPassword", null);
+                req.login(scientist.getEmail(), (String) req.getAttribute(Const.CLEARTEXT_PASSWORD));
+                req.setAttribute(Const.CLEARTEXT_PASSWORD, null);
                 resp.sendRedirect(Const.MAIN_PAGE);
             }
         } catch (ServletException e) {
-            //TODO add log
+            throw new IOException("ServletException", e);
         }
     }
 

@@ -247,12 +247,12 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td align="right" width="20%">
-                <form action="/language" method="post">
+                <form action="/language" method="get">
                     <input type="hidden" name="pathFrom" value="/registration">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
-                <form action="/language" method="post">
+                <form action="/language" method="get">
                     <input type="hidden" name="pathFrom" value="/registration">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">

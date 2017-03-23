@@ -1,7 +1,9 @@
 package controller.profile.baseinfo;
 
+import controller.profile.Profile;
 import model.Scientist;
 import org.apache.catalina.realm.RealmBase;
+import org.apache.log4j.Logger;
 import security.ScientistValidator;
 import service.ScientistService;
 import service.UniversityService;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 public class ProfileEditor extends HttpServlet {
 
     private final ScientistValidator validator = new ScientistValidator();
+    private static final Logger LOGGER = Logger.getLogger(ProfileEditor.class);
 
     private ScientistService service;
 
@@ -53,12 +56,12 @@ public class ProfileEditor extends HttpServlet {
         Scientist scientistOld = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
         String digestedOldPassword = RealmBase.Digest(validator.getValidPassword(), "MD5", "utf-8");
         if (!service.confirmPassword(scientistOld.getId(), digestedOldPassword)) {
-            req.setAttribute(Const.CONFIRM_PASSWORD_ERROR, "Confirmation of password is invalid");
-            req.setAttribute("fail", "fail");
+            req.setAttribute(Const.CONFIRM_PASSWORD_ERROR, "Confirmation of password failed");
+            req.setAttribute(Const.FAIL, Const.FAIL);
+            LOGGER.info("Confirmation of password failed");
         } else {
             String passwordNew = validator.getValidNewPassword();
-            passwordNew = passwordNew == null || passwordNew.isEmpty() ?
-                    validator.getValidPassword() : passwordNew;
+            passwordNew = passwordNew == null || passwordNew.isEmpty() ? validator.getValidPassword() : passwordNew;
             Scientist scientistNew = new Scientist().builder()
                     .setFirstName(validator.getValidFirstName())
                     .setSecondName(validator.getValidSecondName())
@@ -71,12 +74,12 @@ public class ProfileEditor extends HttpServlet {
                     .setId(scientistOld.getId())
                     .build();
             if (service.updateInfo(scientistNew, req.getLocale())) {
-                req.setAttribute("success", "success");
+                req.setAttribute(Const.SUCCESS, Const.SUCCESS);
                 scientistNew.setPassword(null);
                 scientistNew.setEmail(scientistOld.getEmail());
                 req.getSession().setAttribute(Const.EMAIL_KEY, scientistNew);
             } else {
-                req.setAttribute("fail", "fail");
+                req.setAttribute(Const.FAIL, Const.FAIL);
             }
         }
     }

@@ -1,5 +1,7 @@
 package util.connection.pool;
 
+import org.apache.log4j.Logger;
+
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -9,11 +11,8 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Logger;
 
-/**
- * Created on 23.03.2017.
- */
+
 public class MyConnectionPool implements DataSource{
 
     private BlockingQueue<Connection> connectionQueue;
@@ -52,12 +51,12 @@ public class MyConnectionPool implements DataSource{
         }
     }
 
-    public void destroy() {
+    public void destroy() throws MyConnectionPoolException {
         try {
             clearConnectionQueue(givenAwayConQueue);
             clearConnectionQueue(connectionQueue);
         } catch (SQLException e) {
-            //TODO add log
+            throw new MyConnectionPoolException("SQLException in MyConnectionPool", e);
         }
     }
 
@@ -118,7 +117,7 @@ public class MyConnectionPool implements DataSource{
     }
 
     @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
         throw new UnsupportedOperationException();
     }
 }

@@ -23,12 +23,6 @@ public class MySqlScientistDao implements ScientistDao {
     private static final String SQL_ADD_TO_ROLE = "INSERT INTO roles (s_email, r_name) VALUES (?, ?)";
 
     //READ
-    @SuppressWarnings("SqlResolve")
-    private static final String SQL_SELECT_ALL_SCIENTISTS = "SELECT " +
-            "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
-            "g_name " +
-            "FROM scientist s, gender g " +
-            "WHERE s_gender_id = g_id";
     private static final String SQL_SELECT_SCIENTIST_BY_EMAIL = "SELECT " +
             "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, s_field_id, " +
             "g_name, f_name " +
@@ -160,6 +154,7 @@ public class MySqlScientistDao implements ScientistDao {
                 }
                 connection.commit();
                 connection.setAutoCommit(true);
+                LOGGER.info(String.format("User %s registered", scientist));
                 return scientist.getId();
             } catch (SQLException e) {
                 connection.rollback();
@@ -188,43 +183,17 @@ public class MySqlScientistDao implements ScientistDao {
 
     @Override
     public Scientist get(String email) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     SQL_SELECT_SCIENTIST_BY_EMAIL)) {
-            preparedStatement.setString(1, email);
-            return getScientist(preparedStatement);
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                     SQL_SELECT_SCIENTIST_BY_EMAIL, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)){
+                preparedStatement.setString(1, email);
+                return getScientist(preparedStatement);
+            }
         } catch (SQLException e) {
-            logger.error(String.format("Getting user by email = (%s) has been unsuccessful", email), e);
+            LOGGER.error(String.format("Getting user by email = (%s) has been unsuccessful", email), e);
         }
         return null;
-    }
-
-    @Override
-    public List<Scientist> getAll() {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     SQL_SELECT_ALL_SCIENTISTS);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            ArrayList<Scientist> list = new ArrayList<>(resultSet.getRow());
-            while (resultSet.next()) {
-                Scientist.Builder builder = new Scientist().builder()
-                        .setId(resultSet.getInt("s_id"))
-//                        .setPassword(resultSet.getString("s_password")) //TODO think about safety
-                        .setEmail(resultSet.getString("s_email"))
-                        .setFirstName(resultSet.getString("s_first_name"))
-                        .setSecondName(resultSet.getString("s_second_name"))
-                        .setMiddleName(resultSet.getString("s_middle_name"))
-                        .setDob(resultSet.getDate("s_dob").toLocalDate())
-                        .setFieldOfScience(FieldOfScience.valueOf(resultSet.getString("f_name")));
-                String gender = resultSet.getString("g_name");
-                builder.setGender(gender != null ? Gender.valueOf(gender) : null);
-                list.add(builder.build());
-            }
-            return list;
-        } catch (SQLException e) {
-            //TODO add log
-        }
-        return Collections.emptyList();
     }
 
     private Scientist getScientist(PreparedStatement preparedStatement) throws SQLException {
@@ -243,7 +212,6 @@ public class MySqlScientistDao implements ScientistDao {
                 return builder.build();
             }
         }
-        //TODO add log
         return new Scientist();
     }
 }

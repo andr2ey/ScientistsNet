@@ -2,7 +2,6 @@ package security;
 
 import model.FieldOfScience;
 import model.Gender;
-import org.apache.log4j.Logger;
 import util.Const;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +9,6 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
-/**
- * Created on 10.03.2017.
- */
 public class ScientistValidator {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\dA-Za-z]{3,100}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^.+@.+\\..+[^\\.]$");
@@ -201,6 +197,7 @@ public class ScientistValidator {
             validPassword = null;
             return this;
         }
+        //noinspection Duplicates
         if (!PASSWORD_PATTERN.matcher(password.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
@@ -216,6 +213,7 @@ public class ScientistValidator {
             validNewPassword = null;
             return this;
         }
+        //noinspection Duplicates
         if (!PASSWORD_PATTERN.matcher(passwordNew.trim()).matches()) {
             valid = false;
             req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
