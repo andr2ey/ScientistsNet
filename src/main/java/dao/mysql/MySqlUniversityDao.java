@@ -3,6 +3,7 @@ package dao.mysql;
 import dao.UniversityDao;
 import model.Degree;
 import model.University;
+import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -40,6 +41,7 @@ public class MySqlUniversityDao implements UniversityDao {
     private static final String SQL_REMOVE_UNIVERSITY = "DELETE FROM university WHERE u_id = (?)";
 
     private DataSource dataSource;
+    private static final Logger LOGGER = Logger.getLogger(MySqlUniversityDao.class);
 
     public MySqlUniversityDao(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -47,49 +49,35 @@ public class MySqlUniversityDao implements UniversityDao {
 
     @Override
     public List<University> getAll(int scientistId) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_UNIVERSITIES_BY_USER_ID)) {
-            preparedStatement.setInt(1, scientistId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                ArrayList<University> list = new ArrayList<>(resultSet.getRow());
-                while (resultSet.next()) {
-                    University.Builder builder = new University().builder()
-                            .setCity(resultSet.getString("u_city"))
-                            .setId(resultSet.getInt("u_id"))
-                            .setScientistId(scientistId)
-                            .setCountry(resultSet.getString("u_country"))
-                            .setFullName(resultSet.getString("u_full_name"))
-                            .setDegree(Degree.values()[resultSet.getInt("u_degree_id") - 1])
-                            .setGraduationYear(resultSet.getInt("u_graduation_year"));
-                    list.add(builder.build());
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            try (PreparedStatement preparedStatement =
+                         connection.prepareStatement(SQL_SELECT_ALL_UNIVERSITIES_BY_USER_ID,
+                                 ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                preparedStatement.setInt(1, scientistId);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    ArrayList<University> list = new ArrayList<>(resultSet.getRow());
+                    while (resultSet.next()) {
+                        University.Builder builder = new University().builder()
+                                .setCity(resultSet.getString("u_city"))
+                                .setId(resultSet.getInt("u_id"))
+                                .setScientistId(scientistId)
+                                .setCountry(resultSet.getString("u_country"))
+                                .setFullName(resultSet.getString("u_full_name"))
+                                .setDegree(Degree.values()[resultSet.getInt("u_degree_id") - 1])
+                                .setGraduationYear(resultSet.getInt("u_graduation_year"));
+                        list.add(builder.build());
+                    }
+                    return list;
                 }
-                return list;
+            } catch (SQLException e) {
+                connection.rollback();
+                LOGGER.error(String.format("Getting all universities by scientist id %d failed", scientistId), e);
             }
         } catch (SQLException e) {
-            //TODO add log
+            LOGGER.error("Connection failed", e);
         }
         return Collections.emptyList();
-    }
-
-    @Override
-    public void deleteAll(List<University> listToDelete) {
-        try (Connection connection = dataSource.getConnection()) {
-            int transactionLevel = connection.getTransactionIsolation();
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            connection.setAutoCommit(false);
-            try (PreparedStatement preparedStatement = connection.prepareStatement(
-                    SQL_REMOVE_UNIVERSITY)) {
-                for (University university : listToDelete) {
-                    preparedStatement.setInt(1, university.getId());
-                    preparedStatement.executeUpdate();
-                }
-                connection.commit();
-            }
-            connection.setAutoCommit(true);
-            connection.setTransactionIsolation(transactionLevel);
-        } catch (SQLException e) {
-            //TODO add log
-        }
     }
 
     @Override
@@ -97,8 +85,8 @@ public class MySqlUniversityDao implements UniversityDao {
                                   List<University> listCreated,
                                   List<University> listUpdated) {
         try (Connection connection = dataSource.getConnection()) {
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             try {
                 processDeleted(connection, listDeleted);
                 processCreated(connection, listCreated);
@@ -108,11 +96,11 @@ public class MySqlUniversityDao implements UniversityDao {
                 return true;
             } catch (SQLException e) {
                 connection.rollback();
-                //TODO add log
+                LOGGER.error("Updating universities failed", e);
                 return false;
             }
         } catch (SQLException e) {
-            //TODO add log
+            LOGGER.error("Connection failed", e);
             return false;
         }
     }

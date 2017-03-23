@@ -34,7 +34,6 @@ public class MySqlScientistDao implements ScientistDao {
             "g_name, f_name " +
             "FROM scientist s, gender g, field f " +
             "WHERE s_gender_id = g_id AND s_field_id = f_id AND s_email = (?)";
-    //    private static final String SQL_SELECT_EXISTING_SCIENTIST_BY_EMAIL = "SELECT s_email FROM scientist s WHERE s_email = (?)";
     @SuppressWarnings("SqlResolve")
     private static final String SQL_SELECT_SCIENTIST_BY_ID = "SELECT " +
             "s_id, s_first_name, s_second_name, s_middle_name, s_email, s_dob, s_gender_id, " +
@@ -56,13 +55,9 @@ public class MySqlScientistDao implements ScientistDao {
             "scientist SET s_first_name = (?), s_second_name = (?), s_middle_name = (?), s_gender_id = (?), " +
             "s_dob = (?), s_field_id = (?), s_password = (?) " +
             "WHERE s_id = (?)";
-    @SuppressWarnings("SqlResolve")
-    private static final String SQL_UPDATE_ROLE_BY_EMAIL = "UPDATE roles SET s_email = (?) WHERE s_email = (?)";
 
-    //TODO how does it work?
-    //TODO create own connection pool
     private DataSource dataSource;
-    private final Logger logger = Logger.getRootLogger();
+    private static final Logger LOGGER = Logger.getLogger(MySqlScientistDao.class);
 
     public MySqlScientistDao(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -70,27 +65,30 @@ public class MySqlScientistDao implements ScientistDao {
 
     @Override
     public Set<Scientist> getAllByFullName(String firstName, String secondName) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     SQL_SELECT_SCIENTISTS_BY_FULL_NAME, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
-            preparedStatement.setString(1, firstName);
-            preparedStatement.setString(2, secondName);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                Set<Scientist> scientistSet = new TreeSet<>();
-                while (resultSet.next()) {
-                    Scientist scientist = new Scientist().builder()
-                            .setId(resultSet.getInt("s_id"))
-                            .setEmail(resultSet.getString("s_email"))
-                            .setFirstName(resultSet.getString("s_first_name"))
-                            .setSecondName(resultSet.getString("s_second_name"))
-                            .setMiddleName(resultSet.getString("s_middle_name"))
-                            .build();
-                    scientistSet.add(scientist);
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    SQL_SELECT_SCIENTISTS_BY_FULL_NAME, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                preparedStatement.setString(1, firstName);
+                preparedStatement.setString(2, secondName);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    Set<Scientist> scientistSet = new TreeSet<>();
+                    while (resultSet.next()) {
+                        Scientist scientist = new Scientist().builder()
+                                .setId(resultSet.getInt("s_id"))
+                                .setEmail(resultSet.getString("s_email"))
+                                .setFirstName(resultSet.getString("s_first_name"))
+                                .setSecondName(resultSet.getString("s_second_name"))
+                                .setMiddleName(resultSet.getString("s_middle_name"))
+                                .build();
+                        scientistSet.add(scientist);
+                    }
+                    return scientistSet;
                 }
-                return scientistSet;
             }
         } catch (SQLException e) {
-            logger.error("Getting all users has been unsuccessful", e);
+            LOGGER.error(String.format("Getting all users by (%s %s) has been unsuccessful",
+                    firstName, secondName), e);
         }
         return Collections.emptySet();
     }
@@ -98,7 +96,7 @@ public class MySqlScientistDao implements ScientistDao {
     @Override
     public boolean updateInfo(Scientist scientistNew) {
         try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             try (PreparedStatement preparedStatement =
                          connection.prepareStatement(SQL_UPDATE_SCIENTIST_BY_ID)) {
                 preparedStatement.setString(1, scientistNew.getFirstName());
@@ -113,31 +111,33 @@ public class MySqlScientistDao implements ScientistDao {
                 return true;
             }
         } catch (SQLException e) {
-            //TODO add log
-            return false;
+            LOGGER.error(String.format("Update user - %s has been unsuccessful", scientistNew), e);
         }
+        return false;
     }
 
     @Override
     public boolean confirmPassword(int id, String password) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     SQL_VERIFY_PASSWORD_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next() && password.equals(resultSet.getString("s_password"));
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    SQL_VERIFY_PASSWORD_BY_ID, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                preparedStatement.setInt(1, id);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    return resultSet.next() && password.equals(resultSet.getString("s_password"));
+                }
             }
         } catch (SQLException e) {
-            logger.error(String.format("Confirm password by id = (%d) has been unsuccessful", id), e);
-            return false;
+            LOGGER.error(String.format("Password confirmation of user's id = %d has been unsuccessful", id), e);
         }
+        return false;
     }
 
     @Override
     public int create(Scientist scientist) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             try (PreparedStatement statementForScientist =
                          connection.prepareStatement(SQL_CREATE_SCIENTIST, Statement.RETURN_GENERATED_KEYS)) {
                 statementForScientist.setString(1, scientist.getFirstName());
@@ -160,27 +160,28 @@ public class MySqlScientistDao implements ScientistDao {
                 }
                 connection.commit();
                 connection.setAutoCommit(true);
+                return scientist.getId();
             } catch (SQLException e) {
-                //TODO add log
                 connection.rollback();
-                return 0;
+                LOGGER.error(String.format("Creation user - %s has been unsuccessful", scientist), e);
             }
         } catch (SQLException e) {
-            //TODO add log
-            return 0;
+            LOGGER.error("Getting connection from data source failed", e);
         }
-        return scientist.getId();
+        return 0;
     }
 
     @Override
     public Scientist get(int id) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     SQL_SELECT_SCIENTIST_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            return getScientist(preparedStatement);
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    SQL_SELECT_SCIENTIST_BY_ID)) {
+                preparedStatement.setInt(1, id);
+                return getScientist(preparedStatement);
+            }
         } catch (SQLException e) {
-            logger.error(String.format("Getting user by id = (%d) has been unsuccessful", id), e);
+            LOGGER.error(String.format("Getting user by id = (%d) has been unsuccessful", id), e);
         }
         return null;
     }

@@ -31,10 +31,10 @@ public class MyConnectionPool implements DataSource{
         url = bundle.getString("mysql.url");
         user = bundle.getString("mysql.user");
         password = bundle.getString("mysql.password");
-        poolSize = Integer.parseInt(bundle.getString("mysql.poolSize"));
+        poolSize = Integer.parseInt(bundle.getString("mysql.poolsize"));
     }
 
-    public void initPoolData() throws MyConnectionPoolException {
+    public void init() throws MyConnectionPoolException {
         try{
             Class.forName(driverName);
             givenAwayConQueue = new ArrayBlockingQueue<>(poolSize);
@@ -52,7 +52,7 @@ public class MyConnectionPool implements DataSource{
         }
     }
 
-    public void dispose() {
+    public void destroy() {
         try {
             clearConnectionQueue(givenAwayConQueue);
             clearConnectionQueue(connectionQueue);

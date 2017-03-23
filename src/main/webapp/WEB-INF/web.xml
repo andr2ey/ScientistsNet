@@ -5,6 +5,16 @@
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+    <context-param>
+        <!--"my" - MyConnectionPool or default Tomcat's-->
+        <param-name>ConnectionPool</param-name>
+        <param-value>my</param-value>
+    </context-param>
+    <context-param>
+        <param-name>log4j-config-location</param-name>
+        <param-value>/WEB-INF/classes/log/log4j.properties</param-value>
+    </context-param>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>User</web-resource-name>
