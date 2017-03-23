@@ -64,7 +64,7 @@ VALUES (1,
 
 INSERT INTO scientist (s_email, s_password, s_first_name, s_second_name, s_middle_name, s_dob, s_gender_id, s_field_id)
   VALUES ('ao.andronov@gmail.com',
-        '123',
+        '202cb962ac59075b964b07152d234b70',
         'Андрей',
         'Андронов',
         'Олегович',
@@ -84,7 +84,7 @@ VALUES (2,
 
 INSERT INTO scientist (s_email, s_password, s_first_name, s_second_name, s_dob, s_gender_id, s_field_id)
 VALUES ('kkad@mail.ru',
-        '123',
+        '202cb962ac59075b964b07152d234b70',
         'Людмила',
         'Попова',
         '1993-10-27',
@@ -95,7 +95,7 @@ INSERT INTO roles (s_email, r_name) VALUES ('kkad@mail.ru', 'user');
 
 INSERT INTO scientist (s_email, s_password, s_first_name, s_second_name, s_middle_name, s_dob, s_gender_id, s_field_id)
 VALUES ('andrey.andronov92@gmail.com',
-        '123',
+        '202cb962ac59075b964b07152d234b70',
         'Андрей',
         'Андронов',
         'Олегович',

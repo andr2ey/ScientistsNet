@@ -2,6 +2,7 @@ package controller.registration;
 
 import model.Scientist;
 import model.University;
+import org.apache.catalina.realm.RealmBase;
 import security.ScientistValidator;
 import service.ScientistService;
 import service.UniversityService;
@@ -39,11 +40,13 @@ public class RegistrationService implements Runnable {
     public void run() {
         if (validator.validateRegistrationFields(req)) {
             Scientist validUser = new Scientist().builder()
-                    .setEmail(validator.getValidEmail()).setPassword(validator.getValidPassword())
+                    .setEmail(validator.getValidEmail())
+                    .setPassword(RealmBase.Digest(validator.getValidPassword(), "MD5", "utf-8"))
                     .setFirstName(validator.getValidFirstName()).setSecondName(validator.getValidSecondName())
                     .setMiddleName(validator.getValidMiddleName()).setDob(validator.getValidDate())
                     .setGender(validator.getValidGender()).setFieldOfScience(validator.getValidFieldOfScience()).build();
             req.setAttribute(Const.VALID_USER_KEY, validUser);
+            req.setAttribute("clearPassword", validator.getValidPassword());
             if (scientistService.create(validUser) == 0) {
                 req.setAttribute("email_exist", "Such email already exist");
                 req.setAttribute("first_name", validUser.getFirstName());

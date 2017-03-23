@@ -1,6 +1,7 @@
 package controller.profile.baseinfo;
 
 import model.Scientist;
+import org.apache.catalina.realm.RealmBase;
 import security.ScientistValidator;
 import service.ScientistService;
 import service.UniversityService;
@@ -50,7 +51,8 @@ public class ProfileEditor extends HttpServlet {
 
     private void updateInfo(HttpServletRequest req) {
         Scientist scientistOld = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
-        if (!service.confirmPassword(scientistOld.getId(), validator.getValidPassword())) {
+        String digestedOldPassword = RealmBase.Digest(validator.getValidPassword(), "MD5", "utf-8");
+        if (!service.confirmPassword(scientistOld.getId(), digestedOldPassword)) {
             req.setAttribute(Const.CONFIRM_PASSWORD_ERROR, "Confirmation of password is invalid");
             req.setAttribute("fail", "fail");
         } else {
@@ -64,7 +66,7 @@ public class ProfileEditor extends HttpServlet {
                     .setGender(validator.getValidGender())
                     .setDob(validator.getValidDate())
                     .setEmail(validator.getValidNewEmail())
-                    .setPassword(passwordNew)
+                    .setPassword(RealmBase.Digest(passwordNew, "MD5", "utf-8"))
                     .setFieldOfScience(validator.getValidFieldOfScience())
                     .setId(scientistOld.getId())
                     .build();

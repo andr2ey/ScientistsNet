@@ -33,7 +33,7 @@
               type="javax.sql.DataSource"
               maxTotal="100"
               maxIdle="30"
-              maxWaitMillis="5000"
+              maxWaitMillis="10000"
               username="root"
               password="root"
               driverClassName="com.mysql.jdbc.Driver"
@@ -48,5 +48,9 @@
            userNameCol="s_email"
            userCredCol="s_password"
            userRoleTable="roles"
-           roleNameCol="r_name"/>
+           roleNameCol="r_name">
+        <CredentialHandler
+        className="org.apache.catalina.realm.MessageDigestCredentialHandler"
+        algorithm="md5"/>
+    </Realm>
 </Context>

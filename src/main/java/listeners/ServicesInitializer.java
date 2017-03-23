@@ -35,4 +35,9 @@ public class ServicesInitializer implements ServletContextListener {
         servletContext.setAttribute(Const.MESSAGE_SERVICE,
                 new MessageService(new MySqlMessageDao(dataSource)));
     }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+
+    }
 }

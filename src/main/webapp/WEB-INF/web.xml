@@ -7,7 +7,7 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>user</web-resource-name>
+            <web-resource-name>User</web-resource-name>
             <url-pattern>/main/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
@@ -20,7 +20,6 @@
     </security-role>
 
     <login-config>
-        <!--TODO change FORM to DIGEST-->
         <auth-method>FORM</auth-method>
         <form-login-config>
             <form-login-page>/WEB-INF/login/login.jsp</form-login-page>

@@ -1,6 +1,5 @@
 package listeners;
 
-import dao.mysql.MySqlScientistDao;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -17,13 +16,8 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
-/**
- * Created on 07.03.2017.
- */
 
 @WebListener
 public class DBandLoggerInit implements ServletContextListener {
@@ -39,6 +33,11 @@ public class DBandLoggerInit implements ServletContextListener {
         //TODO think about logging
         rootLogger = initRootLogger(servletContext);
         initDB(sce);
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+
     }
 
     private Logger initRootLogger(ServletContext servletContext) {
