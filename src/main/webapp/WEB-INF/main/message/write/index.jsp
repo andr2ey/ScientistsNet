@@ -114,7 +114,7 @@
     <table border="0" width="100%" cellpadding="0">
         <tr>
             <td valign="center" align="left" width="20%">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
@@ -133,16 +133,16 @@
         <%--Control Buttons--%>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/main/search" method="post">
+                <form action="${pageContext.request.contextPath}/main/search" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/main/messages" method="post">
+                <form action="${pageContext.request.contextPath}/main/messages" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -173,7 +173,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <form action="/main/message/send" method="post" id="/send_message">
+                            <form action="${pageContext.request.contextPath}/main/message/send"
+                                  method="post" id="/send_message">
                                 <table border="0" width="100%" align="top">
                                     <!--Email-->
                                     <tr>

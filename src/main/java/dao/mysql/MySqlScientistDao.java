@@ -154,6 +154,7 @@ public class MySqlScientistDao implements ScientistDao {
                 }
                 connection.commit();
                 connection.setAutoCommit(true);
+                scientist.setPassword(null);
                 LOGGER.info(String.format("User %s registered", scientist));
                 return scientist.getId();
             } catch (SQLException e) {

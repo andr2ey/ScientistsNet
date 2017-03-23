@@ -146,12 +146,12 @@
                                              value="${button_my_profile}">
                     </p>
                 </form>
-                <form action="/main/search" method="get">
+                <form action="${pageContext.request.contextPath}/main/search" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/main/messages" method="get">
+                <form action="${pageContext.request.contextPath}/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}">
                     </p>
@@ -174,7 +174,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <form action="/main/search" method="post" id="/search_by_name">
+                            <form action="${pageContext.request.contextPath}/main/search"
+                                  method="post" id="/search_by_name">
                                 <table border="0" width="100%" align="top">
                                     <!--First name-->
                                     <tr>
@@ -218,7 +219,8 @@
                                 <c:forEach items="${requestScope.scientistSet}" var="scientists" varStatus="number">
                                     <tr>
                                         <td width="5%">
-                                            <form action="/main/scientist" method="post" id="/scientist">
+                                            <form action="${pageContext.request.contextPath}/main/scientist"
+                                                  method="post" id="/scientist">
                                                 <input type="hidden" name="sciFirstName"
                                                        value="${scientists.firstName}">
                                                 <input type="hidden" name="sciSecondName"

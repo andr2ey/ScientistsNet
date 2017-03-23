@@ -57,7 +57,7 @@ public class AppInitializer implements ServletContextListener {
     }
 
     private void initConnectionPool(String id) {
-        if (id.equals("my")) {
+        if (id.equals("mine")) {
             try {
                 connectionPool = new MyConnectionPool();
                 connectionPool.init();

@@ -178,7 +178,7 @@
     <table border="0" width="100%" cellpadding="0">
         <tr>
             <td valign="center" align="left" width="20%">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
@@ -186,12 +186,12 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="get">
+                <form action="${pageContext.request.contextPath}/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main/education">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
-                <form action="/language" method="get">
+                <form action="${pageContext.request.contextPath}/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main/education">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
@@ -206,16 +206,16 @@
         <%--Control Buttons--%>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="get">
+                <form action="${pageContext.request.contextPath}/main" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/main/search" method="get">
+                <form action="${pageContext.request.contextPath}/main/search" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/main/messages" method="get">
+                <form action="${pageContext.request.contextPath}/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -257,7 +257,9 @@
                                 <c:if test="${university.deleted == false}">
                                     <table border="0" width="100%" align="top">
                                         <tr>
-                                            <form action="/main/education" method="post" id="/education_delete">
+                                            <%--suppress HtmlUnknownTag --%>
+                                            <form action="${pageContext.request.contextPath}/main/education"
+                                                  method="post" id="/education_delete">
                                                 <td width="3%" align="left" valign="bottom">
                                                     <button type="submit" form="/education_delete" class="button_lang"
                                                             name="button_delete_education"
@@ -290,7 +292,8 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <form action="/main/education" method="post" id="/education_update${number.index}">
+                                    <form action="${pageContext.request.contextPath}/main/education"
+                                          method="post" id="/education_update${number.index}">
                                         <table border="0" width="100%" align="top">
                                             <tr>
                                                 <td width="25%">
@@ -393,7 +396,8 @@
                                     <br/>
                                 </c:if>
                             </c:forEach>
-                            <form action="/main/education" method="post" id="/education_add">
+                            <form action="${pageContext.request.contextPath}/main/education"
+                                  method="post" id="/education_add">
                                 <p align="center">
                                     <input align="center" name="education_country" placeholder="${txt_country}"
                                            required class="text"
@@ -426,7 +430,8 @@
                                     </button>
                                 </p>
                             </form>
-                            <form action="/main/education" method="get" id="/education_save">
+                            <form action="${pageContext.request.contextPath}/main/education"
+                                  method="get" id="/education_save">
                                 <p align="center">
                                     <button type="submit" form="/education_save" class="button_save"
                                             name="button_save_education" value="save">${save_button}

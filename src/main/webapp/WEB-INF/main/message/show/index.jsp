@@ -100,7 +100,7 @@
     <table border="0" width="100%" cellpadding="0">
         <tr>
             <td valign="center" align="left" width="20%">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
@@ -119,16 +119,16 @@
         <%--Control Buttons--%>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/main/search" method="post">
+                <form action="${pageContext.request.contextPath}/main/search" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/main/messages" method="post">
+                <form action="${pageContext.request.contextPath}/main/messages" method="post">
                     <p align="center"><input type="submit" name="button_lang" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -162,7 +162,8 @@
                                             </c:if>
                                         </td>
                                         <td align="center">
-                                            <form action="/main/scientist" method="post" id="/scientist">
+                                            <form action="${pageContext.request.contextPath}/main/scientist"
+                                                  method="post" id="/scientist">
                                                 <button type="submit" form="/scientist" class="button_lang"
                                                         name="button_scientist" value="${requestScope.email}">
                                                     ${requestScope.email}

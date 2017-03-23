@@ -22,9 +22,9 @@ test.testLogging.showStandardStreams = true
 
 dependencies {
     compileOnly 'org.apache.tomcat:tomcat-api:8.5.8',
-            'org.apache.tomcat:tomcat-jsp-api:8.5.8'
+            'org.apache.tomcat:tomcat-jsp-api:8.5.8',
+            'mysql:mysql-connector-java:5.1.30'//driver of connection with db
     compile 'log4j:log4j:1.2.17',
-            'mysql:mysql-connector-java:5.1.30',//driver of connection with db
             'javax.servlet:jstl:1.2',
             'org.apache.tomcat:tomcat-catalina:8.5.8'//for digest of password
     testCompile 'junit:junit:+'

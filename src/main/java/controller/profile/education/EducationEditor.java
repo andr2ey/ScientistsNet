@@ -68,6 +68,7 @@ public class EducationEditor extends HttpServlet {
         universityList.get(indexDeleted).setDeleted(true);
     }
 
+    @SuppressWarnings("unchecked")
     private void updatedProcess(HttpServletRequest req, HttpSession session, List<University> universityList) {
         int indexUpdated = new Integer(req.getParameter("button_update_education"));
         if (validator.validateChangedFields(req, indexUpdated)) {
@@ -75,7 +76,6 @@ public class EducationEditor extends HttpServlet {
             University university = universityList.get(indexUpdated);
             //add not updated old values to buffer
             if (!university.isUpdated() && !university.isCreated()) {
-                //noinspection unchecked
                 List<University> bufferUnmodified =
                         (List<University>) session.getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
                 try {

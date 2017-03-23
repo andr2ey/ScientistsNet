@@ -247,12 +247,12 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td align="right" width="20%">
-                <form action="/language" method="get">
+                <form action="${pageContext.request.contextPath}/language" method="get">
                     <input type="hidden" name="pathFrom" value="/registration">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
-                <form action="/language" method="get">
+                <form action="${pageContext.request.contextPath}/language" method="get">
                     <input type="hidden" name="pathFrom" value="/registration">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
@@ -266,9 +266,10 @@
     <h3>${signup_title}</h3>
     <h4>${message_about_fields}</h4>
 
-    <form action="/registration" method="post" id="/registration">
+    <form action="${pageContext.request.contextPath}/registration" method="post" id="/registration">
         <!--Field of Science-->
         <p align="center">
+            <%--suppress HtmlFormInputWithoutLabel --%>
             <select class="text_field" name="field_of_science" size="1" required>
                 <option value="none">${field_of_science}</option>
                 <option value="1" ${requestScope.f1}>${architecture}</option>
@@ -315,6 +316,7 @@
         <p align="center">
             <input type="number" class="text_day" name="day" value="${requestScope.day}" placeholder="${day_birthday}"
                    min="1" max="31" size="40" required>
+            <%--suppress HtmlFormInputWithoutLabel --%>
             <select class="text_month" name="month" size="1" required>
                 <option value="none">${month}</option>
                 <option value="1" ${requestScope.m1}>${january}</option>
@@ -346,7 +348,7 @@
         <p align="center"><input type="submit" class="button_sign_up" value="${button_signup}">
     </form>
     <!--Log in Button-->
-    <form action="/" method="post">
+    <form action="${pageContext.request.contextPath}/" method="post">
         <p align="center"><input type="submit" class="button_log_in" value="${button_login}">
     </form>
     <c:if test="${requestScope.email_exist != null}">

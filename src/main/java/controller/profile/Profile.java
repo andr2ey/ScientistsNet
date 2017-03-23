@@ -23,6 +23,9 @@ public class Profile extends HttpServlet {
             resp.sendRedirect(Const.MAIN_PAGE);
         } else {
             //to profile
+            if (req.getParameter("button_show_full") != null) {
+                req.setAttribute("button_show_full", true);
+            }
             req.getRequestDispatcher(Const.MAIN_PAGE_FULL_PATH).forward(req, resp);
         }
     }

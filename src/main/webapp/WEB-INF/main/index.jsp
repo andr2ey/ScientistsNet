@@ -34,6 +34,7 @@
 <fmt:message bundle="${lang}" key="lang.button.messages" var="button_messages"/>
 <fmt:message bundle="${lang}" key="lang.button.articles" var="button_articles"/>
 
+<fmt:message bundle="${lang}" key="lang.button.show.full" var="button_show_full_info"/>
 <fmt:message bundle="${lang}" key="lang.txt.graduation.year" var="txt_graduation_year"/>
 <fmt:message bundle="${lang}"
              key="lang.${fn:toLowerCase(sessionScope.email.fieldOfScience).replace('_', '.')}"
@@ -128,7 +129,7 @@
     <table border="0" width="100%" cellpadding="0">
         <tr>
             <td valign="center" align="left" width="20%">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
@@ -136,12 +137,12 @@
                 <h1>ScientistsNet</h1>
             </td>
             <td valign="center" align="right" width="20%">
-                <form action="/language" method="get">
+                <form action="${pageContext.request.contextPath}/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main">
                     <input type="hidden" name="lang" value="en">
                     <input type="submit" name="button_lang" class="button_lang" value="${en_button}">
                 </form>
-                <form action="/language" method="get">
+                <form action="${pageContext.request.contextPath}/language" method="get">
                     <input type="hidden" name="pathFrom" value="/main">
                     <input type="hidden" name="lang" value="ru">
                     <input type="submit" name="button_lang" class="button_lang" value="${ru_button}">
@@ -154,16 +155,16 @@
     <tr>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="get">
+                <form action="${pageContext.request.contextPath}/main" method="get">
                     <p align="center"><input type="submit" name="button_profile" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/main/search" method="get">
+                <form action="${pageContext.request.contextPath}/main/search" method="get">
                     <p align="center"><input type="submit" name="button_friends" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/main/messages" method="get">
+                <form action="${pageContext.request.contextPath}/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_message" class="button_of_profile"
                                              value="${button_messages}"></p>
                 </form>
@@ -192,7 +193,7 @@
                                         <h3>${sessionScope.email.middleName}</h3>
                                     </td>
                                     <td width="25%" align="right">
-                                        <form action="/main/baseinfo" method="get">
+                                        <form action="${pageContext.request.contextPath}/main/baseinfo" method="get">
                                             <input type="submit" name="button_edit_info" class="button_lang"
                                                    value="${edit_button}">
                                         </form>
@@ -242,52 +243,68 @@
                                     <td width="25%"></td>
                                     <td width="50%"><h3>${high_education}</h3></td>
                                     <td width="25%" align="right">
-                                        <form action="/main/education" method="get">
+                                        <form action="${pageContext.request.contextPath}/main/education" method="get">
                                             <input type="submit" name="button_edit_education" class="button_lang"
                                                    value="${edit_button}">
                                         </form>
                                     </td>
                                 </tr>
                             </table>
-                            <c:forEach items="${sessionScope.universities}" var="university" varStatus="number">
-                                <br>
-                                <table border="0" width="60%" align="center">
-                                    <tr>
-                                        <td width="30%" align="left">${txt_country}:</td>
-                                        <td align="left">${university.country}</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%" align="left">${txt_city}:</td>
-                                        <td align="left">${university.city}</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%" align="left">${txt_university}:</td>
-                                        <td align="left">${university.fullName}</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%" align="left">${txt_degree}:</td>
-                                        <c:choose>
-                                            <c:when test="${university.degree eq 'BACHELOR'}">
-                                                <c:set var="degree" scope="page" value="${bachelor}"/>
-                                            </c:when>
-                                            <c:when test="${university.degree eq 'MASTER'}">
-                                                <c:set var="degree" scope="page" value="${master}"/>
-                                            </c:when>
-                                            <c:when test="${university.degree eq 'SPECIALIST'}">
-                                                <c:set var="degree" scope="page" value="${specialist}"/>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <c:set var="degree" scope="page" value="${none}"/>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <td align="left">${pageScope.degree}</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%" align="left">${txt_graduation_year}:</td>
-                                        <td align="left">${university.graduationYear}</td>
-                                    </tr>
-                                </table>
-                            </c:forEach>
+                            <c:if test="${sessionScope.universities.size() > 0}">
+                                <c:if test="${requestScope.button_show_full == null}">
+                                    <c:set var="show_full" scope="page" value="0"/>
+                                </c:if>
+                                <c:if test="${requestScope.button_show_full != null}">
+                                    <c:set var="show_full" scope="page" value="${sessionScope.universities.size()}"/>
+                                </c:if>
+                                <c:forEach items="${sessionScope.universities}" var="university"
+                                           end="${show_full}" varStatus="number">
+                                    <br>
+                                    <table border="0" width="60%" align="center">
+                                        <tr>
+                                            <td width="30%" align="left">${txt_country}:</td>
+                                            <td align="left">${university.country}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" align="left">${txt_city}:</td>
+                                            <td align="left">${university.city}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" align="left">${txt_university}:</td>
+                                            <td align="left">${university.fullName}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" align="left">${txt_degree}:</td>
+                                            <c:choose>
+                                                <c:when test="${university.degree eq 'BACHELOR'}">
+                                                    <c:set var="degree" scope="page" value="${bachelor}"/>
+                                                </c:when>
+                                                <c:when test="${university.degree eq 'MASTER'}">
+                                                    <c:set var="degree" scope="page" value="${master}"/>
+                                                </c:when>
+                                                <c:when test="${university.degree eq 'SPECIALIST'}">
+                                                    <c:set var="degree" scope="page" value="${specialist}"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="degree" scope="page" value="${none}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <td align="left">${pageScope.degree}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" align="left">${txt_graduation_year}:</td>
+                                            <td align="left">${university.graduationYear}</td>
+                                        </tr>
+                                    </table>
+                                </c:forEach>
+                                <c:if test="${requestScope.button_show_full == null}">
+                                    <form action="${pageContext.request.contextPath}/main" method="get">
+                                        <p align="center"><input type="submit" name="button_show_full"
+                                                                 class="button_lang"
+                                                                 value="${button_show_full_info}">
+                                    </form>
+                                </c:if>
+                            </c:if>
                         </div>
                     </td>
                 </tr>

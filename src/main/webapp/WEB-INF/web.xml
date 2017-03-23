@@ -6,9 +6,9 @@
          version="3.1">
 
     <context-param>
-        <!--"my" - MyConnectionPool or default Tomcat's-->
+        <!--"mine" - MyConnectionPool or default Tomcat's-->
         <param-name>ConnectionPool</param-name>
-        <param-value>my</param-value>
+        <param-value>mine</param-value>
     </context-param>
     <context-param>
         <param-name>log4j-config-location</param-name>
@@ -24,11 +24,9 @@
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
-
     <security-role>
         <role-name>user</role-name>
     </security-role>
-
     <login-config>
         <auth-method>FORM</auth-method>
         <form-login-config>
@@ -37,9 +35,10 @@
         </form-login-config>
     </login-config>
 
-    <!--TODO add in program setMaxInactiveInterval(int sec)-->
     <session-config>
-        <session-timeout>60</session-timeout>
+        <!--one day 1440 min-->
+        <!--setMaxInactiveInterval(int sec)-->
+        <session-timeout>1440</session-timeout>
     </session-config>
 
     <filter>
