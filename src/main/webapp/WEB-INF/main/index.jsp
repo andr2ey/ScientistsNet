@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="dl" uri="/WEB-INF/tld/datel10n.tld" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="language.lang" var="lang"/>
@@ -201,14 +202,10 @@
                                 </tr>
                             </table>
                             <table border="0" width="100%" cellpadding="5" align="top">
-                                <fmt:parseDate value="${sessionScope.email.dob}" pattern="yyyy-MM-dd"
-                                               var="parsedDate" type="date"/>
-                                <fmt:formatDate value="${parsedDate}" var="dob"
-                                                type="date" pattern="dd.MM.yyyy"/>
                                 <tr>
                                     <td width="40%"></td>
                                     <td>${txt_dob}:</td>
-                                    <td>${dob}</td>
+                                    <td><dl:datel10n dob="${sessionScope.email.dob}"/></td>
                                 </tr>
                                 <c:if test="${sessionScope.email.gender != 'NONE'}">
                                     <tr>

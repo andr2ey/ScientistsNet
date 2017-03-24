@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="dl" uri="/WEB-INF/tld/datel10n.tld" %>
+
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="language.lang" var="lang"/>
@@ -17,8 +19,6 @@
 <fmt:message bundle="${lang}" key="lang.gender.female" var="gender_female"/>
 
 <fmt:message bundle="${lang}" key="lang.none" var="none"/>
-<%--log out button, High education, edit buttons 2
-    date of birthday, gender, email, country, city, university, degree--%>
 <fmt:message bundle="${lang}" key="lang.high.education" var="high_education"/>
 <fmt:message bundle="${lang}" key="lang.log.out.button" var="log_out_button"/>
 <fmt:message bundle="${lang}" key="lang.edit.button" var="edit_button"/>
@@ -206,14 +206,10 @@
                                 </tr>
                             </table>
                             <table border="0" width="100%" cellpadding="5" align="top">
-                                <fmt:parseDate value="${requestScope.scientist.dob}" pattern="yyyy-MM-dd"
-                                               var="parsedDate" type="date"/>
-                                <fmt:formatDate value="${parsedDate}" var="dob"
-                                                type="date" pattern="dd.MM.yyyy"/>
                                 <tr>
                                     <td width="40%"></td>
                                     <td>${txt_dob}:</td>
-                                    <td>${dob}</td>
+                                    <td><dl:datel10n dob="${requestScope.scientist.dob}"/></td>
                                 </tr>
                                 <c:if test="${requestScope.scientist.gender != 'NONE'}">
                                     <tr>

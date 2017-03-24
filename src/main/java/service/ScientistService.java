@@ -2,7 +2,6 @@ package service;
 
 import dao.ScientistDao;
 import model.Scientist;
-import java.util.Locale;
 import java.util.Set;
 
 public class ScientistService {

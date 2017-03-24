@@ -19,14 +19,6 @@ public class Scientist implements Comparable<Scientist> {
     public Scientist() {
     }
 
-    public String getFormattedDob() {
-        return formattedDob;
-    }
-
-    public void setFormattedDob(String formattedDob) {
-        this.formattedDob = formattedDob;
-    }
-
     public int getId() {
         return id;
     }
