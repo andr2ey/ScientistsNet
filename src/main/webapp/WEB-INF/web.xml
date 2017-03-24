@@ -44,7 +44,6 @@
     <filter>
         <filter-name>EncodingFilter</filter-name>
         <filter-class>filters.EncodingFilter</filter-class>
-        <async-supported>true</async-supported>
     </filter>
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
@@ -64,7 +63,6 @@
     <filter>
         <filter-name>RegistrationEntranceFilter</filter-name>
         <filter-class>filters.registration.EntranceFilter</filter-class>
-        <async-supported>true</async-supported>
     </filter>
     <filter-mapping>
         <filter-name>RegistrationEntranceFilter</filter-name>

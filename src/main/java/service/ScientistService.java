@@ -45,7 +45,7 @@ public class ScientistService {
         return scientistDao.getAllByFullName(firstName, secondName);
     }
 
-    private synchronized String formatDate(Locale locale, LocalDate localDate) {
+    private String formatDate(Locale locale, LocalDate localDate) {
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         return df.format(Date.valueOf(localDate));
     }

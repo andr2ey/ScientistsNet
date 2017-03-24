@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created on 19.03.2017.
- */
 @WebServlet("/main/scientist")
 public class Scientist extends HttpServlet {
 

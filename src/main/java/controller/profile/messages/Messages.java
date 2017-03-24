@@ -3,7 +3,6 @@ package controller.profile.messages;
 import model.Message;
 import model.Scientist;
 import service.MessageService;
-import service.ScientistService;
 import util.Const;
 
 import javax.servlet.ServletConfig;
@@ -15,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
-/**
- * Created on 20.03.2017.
- */
 @WebServlet("/main/messages")
 public class Messages extends HttpServlet {
 

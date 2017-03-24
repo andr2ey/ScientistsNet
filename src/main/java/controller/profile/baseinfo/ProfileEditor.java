@@ -1,12 +1,10 @@
 package controller.profile.baseinfo;
 
-import controller.profile.Profile;
 import model.Scientist;
 import org.apache.catalina.realm.RealmBase;
 import org.apache.log4j.Logger;
 import security.ScientistValidator;
 import service.ScientistService;
-import service.UniversityService;
 import util.Const;
 
 import javax.servlet.ServletConfig;
@@ -22,7 +20,6 @@ import java.time.LocalDate;
 @WebServlet("/main/baseinfo")
 public class ProfileEditor extends HttpServlet {
 
-    private final ScientistValidator validator = new ScientistValidator();
     private static final Logger LOGGER = Logger.getLogger(ProfileEditor.class);
 
     private ScientistService service;
@@ -34,9 +31,10 @@ public class ProfileEditor extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ScientistValidator validator = new ScientistValidator();
         if (req.getParameter("button_update_scientist") != null) {
             if (validator.validateBaseInfoFields(req)) {
-                updateInfo(req);
+                updateInfo(req, validator);
             } else {
                 req.getRequestDispatcher("/WEB-INF/main/baseinfo/index.jsp").forward(req, resp);
                 return;
@@ -52,7 +50,7 @@ public class ProfileEditor extends HttpServlet {
         doPost(req, resp);
     }
 
-    private void updateInfo(HttpServletRequest req) {
+    private void updateInfo(HttpServletRequest req, ScientistValidator validator) {
         Scientist scientistOld = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
         String digestedOldPassword = RealmBase.Digest(validator.getValidPassword(), "MD5", "utf-8");
         if (!service.confirmPassword(scientistOld.getId(), digestedOldPassword)) {

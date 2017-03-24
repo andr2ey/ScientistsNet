@@ -23,7 +23,6 @@ import java.util.List;
 @WebServlet("/main/education")
 public class EducationEditor extends HttpServlet {
 
-    private static final UniversityValidator validator = new UniversityValidator();
     private UniversityService service;
 
     @Override
@@ -34,17 +33,15 @@ public class EducationEditor extends HttpServlet {
     @Override
     @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UniversityValidator validator = new UniversityValidator();
         HttpSession session = req.getSession();
         List<University> universityList = (List<University>) session.getAttribute(Const.UNIVERSITIES_KEY);
         if (req.getParameter("button_delete_education") != null) {
-            session.setAttribute(Const.UNIVERSITIES_CHANGED, true);
-            deletedProcess(req, universityList);
+            processDeleted(req, universityList);
         } else if (req.getParameter("button_update_education") != null) {
-            session.setAttribute(Const.UNIVERSITIES_CHANGED, true);
-            updatedProcess(req, session, universityList);
+            processUpdated(req, validator, universityList);
         } else if (req.getParameter("button_add_education") != null) {
-            session.setAttribute(Const.UNIVERSITIES_CHANGED, true);
-            addedProcess(req, session, universityList);
+            processAdded(req, validator, universityList);
         } else if (req.getParameter("button_save_education") != null) {
             saveChanges(req, universityList);
         }
@@ -63,13 +60,15 @@ public class EducationEditor extends HttpServlet {
         req.setAttribute(Const.MIN_GRADUATION_YEAR_KEY, Const.MIN_GRADUATION_YEAR);
     }
 
-    private void deletedProcess(HttpServletRequest req, List<University> universityList) {
+    private void processDeleted(HttpServletRequest req, List<University> universityList) {
+        req.getSession().setAttribute(Const.UNIVERSITIES_CHANGED, true);
         int indexDeleted = new Integer(req.getParameter("button_delete_education"));
         universityList.get(indexDeleted).setDeleted(true);
     }
 
     @SuppressWarnings("unchecked")
-    private void updatedProcess(HttpServletRequest req, HttpSession session, List<University> universityList) {
+    private void processUpdated(HttpServletRequest req, UniversityValidator validator, List<University> universityList) {
+        req.getSession().setAttribute(Const.UNIVERSITIES_CHANGED, true);
         int indexUpdated = new Integer(req.getParameter("button_update_education"));
         if (validator.validateChangedFields(req, indexUpdated)) {
             req.setAttribute(Const.UPDATED_STATUS, "success");
@@ -77,7 +76,7 @@ public class EducationEditor extends HttpServlet {
             //add not updated old values to buffer
             if (!university.isUpdated() && !university.isCreated()) {
                 List<University> bufferUnmodified =
-                        (List<University>) session.getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
+                        (List<University>) req.getSession().getAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY);
                 try {
                     bufferUnmodified.set(indexUpdated, (University) university.clone());
                 } catch (CloneNotSupportedException e) {
@@ -91,16 +90,17 @@ public class EducationEditor extends HttpServlet {
             university.setDegree(validator.getValidDegree());
             university.setGraduationYear(validator.getValidYear());
         } else {
-            req.setAttribute(Const.UPDATED_STATUS, "fail");
+            req.setAttribute(Const.UPDATED_STATUS, Const.FAIL);
         }
     }
 
-    private void addedProcess(HttpServletRequest req, HttpSession session, List<University> universityList) {
+    private void processAdded(HttpServletRequest req, UniversityValidator validator, List<University> universityList) {
+        req.getSession().setAttribute(Const.UNIVERSITIES_CHANGED, true);
         if (universityList.size() == Const.MAX_UNIVERSITIES) {
             req.setAttribute("maxUniversity", "You can't add more than 10 universities");
         } else {
             if (validator.validateAddedFields(req)) {
-                Scientist scientist = (Scientist) session.getAttribute(Const.EMAIL_KEY);
+                Scientist scientist = (Scientist) req.getSession().getAttribute(Const.EMAIL_KEY);
                 universityList.add(new University().builder()
                         .setCreated(true)
                         .setScientistId(scientist.getId())
@@ -119,9 +119,9 @@ public class EducationEditor extends HttpServlet {
             return;
         }
         if (transactionCUDSuccess(universityList)) {
-            req.setAttribute(Const.SUCCESS_OF_TRANSACTION, "success");
+            req.setAttribute(Const.SUCCESS_OF_TRANSACTION, Const.SUCCESS);
         } else {
-            req.setAttribute(Const.SUCCESS_OF_TRANSACTION, "fail");
+            req.setAttribute(Const.SUCCESS_OF_TRANSACTION, Const.FAIL);
         }
     }
 
