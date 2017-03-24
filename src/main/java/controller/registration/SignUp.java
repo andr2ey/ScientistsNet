@@ -58,7 +58,6 @@ public class SignUp extends HttpServlet {
                 setAttributes(req, validUser);
             } else {
                 HttpSession session = req.getSession();
-                validUser.setFormattedDob(formatDate(req.getLocale(), validUser.getDob()));
                 session.setAttribute(Const.EMAIL_KEY, validUser);
                 loadUniversities(session, validUser.getId());
                 req.setAttribute(Const.CREATED_USER_KEY, validUser);
@@ -105,8 +104,4 @@ public class SignUp extends HttpServlet {
         session.setAttribute(Const.UNIVERSITIES_KEY, universities);
     }
 
-    private String formatDate(Locale locale, LocalDate localDate) {
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-        return df.format(Date.valueOf(localDate));
-    }
 }

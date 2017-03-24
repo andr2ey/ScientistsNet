@@ -35,7 +35,7 @@ public class LogInFilter implements Filter {
         String email = request.getRemoteUser();
         // first-time login
         if (email != null && request.getSession().getAttribute(Const.EMAIL_KEY) == null) {
-            Scientist scientist = scientistService.get(email, req.getLocale());
+            Scientist scientist = scientistService.get(email);
             LOGGER.info(String.format("User - (%s) is successfully authorized", scientist));
             session.setAttribute(Const.EMAIL_KEY, scientist);
             loadUniversities(session, scientist.getId());

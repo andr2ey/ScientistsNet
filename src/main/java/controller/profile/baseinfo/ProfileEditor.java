@@ -71,7 +71,7 @@ public class ProfileEditor extends HttpServlet {
                     .setFieldOfScience(validator.getValidFieldOfScience())
                     .setId(scientistOld.getId())
                     .build();
-            if (service.updateInfo(scientistNew, req.getLocale())) {
+            if (service.updateInfo(scientistNew)) {
                 req.setAttribute(Const.SUCCESS, Const.SUCCESS);
                 scientistNew.setPassword(null);
                 scientistNew.setEmail(scientistOld.getEmail());

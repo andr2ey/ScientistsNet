@@ -201,13 +201,15 @@
                                 </tr>
                             </table>
                             <table border="0" width="100%" cellpadding="5" align="top">
-                                <c:if test="${sessionScope.email.formattedDob != null}">
-                                    <tr>
-                                        <td width="40%"></td>
-                                        <td>${txt_dob}:</td>
-                                        <td>${sessionScope.email.formattedDob}</td>
-                                    </tr>
-                                </c:if>
+                                <fmt:parseDate value="${sessionScope.email.dob}" pattern="yyyy-MM-dd"
+                                               var="parsedDate" type="date"/>
+                                <fmt:formatDate value="${parsedDate}" var="dob"
+                                                type="date" pattern="dd.MM.yyyy"/>
+                                <tr>
+                                    <td width="40%"></td>
+                                    <td>${txt_dob}:</td>
+                                    <td>${dob}</td>
+                                </tr>
                                 <c:if test="${sessionScope.email.gender != 'NONE'}">
                                     <tr>
                                         <td width="40%"></td>

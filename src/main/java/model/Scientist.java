@@ -2,9 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-/**
- * Created on 07.03.2017.
- */
+
 public class Scientist implements Comparable<Scientist> {
 
     private int id;

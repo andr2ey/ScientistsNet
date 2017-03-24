@@ -1,12 +1,7 @@
 package model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
-/**
- * Created on 19.03.2017.
- */
 public class Message implements Comparable<Message> {
 
     private int id;

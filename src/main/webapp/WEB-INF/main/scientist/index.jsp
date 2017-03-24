@@ -77,6 +77,7 @@
             padding: 4px; /* Поля вокруг текста */
             border: solid 1px #000000; /* Параметры рамки вокруг */
         }
+
         #sidebar { /* Левая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -85,6 +86,7 @@
             padding: 5px; /* Поля вокруг текста */
             border-radius: 3px;
         }
+
         #contentBaseInfo { /* Правая колонка */
             background: #e0e0e0; /* Цвет фона */
             border: solid 1px #898989; /* Параметры рамки вокруг */
@@ -131,7 +133,7 @@
     <table border="0" width="100%" cellpadding="0">
         <tr>
             <td valign="center" align="left" width="20%">
-                <form action="/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="post">
                     <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>
@@ -148,16 +150,16 @@
     <tr>
         <td valign="top" align="right" width="30%">
             <div id="sidebar">
-                <form action="/main" method="get">
+                <form action="${pageContext.request.contextPath}/main" method="get">
                     <p align="center"><input type="submit" name="button_profile" class="button_of_profile"
                                              value="${button_my_profile}"></p>
                 </form>
-                <form action="/main/search" method="get">
+                <form action="${pageContext.request.contextPath}/main/search" method="get">
                     <p align="center"><input type="submit" name="button_friends" class="button_of_profile"
                                              value="${button_search}">
                     </p>
                 </form>
-                <form action="/main/messages" method="get">
+                <form action="${pageContext.request.contextPath}/main/messages" method="get">
                     <p align="center"><input type="submit" name="button_message" class="button_of_profile"
                                              value="${button_messages}">
                     </p>
@@ -182,7 +184,8 @@
                                 </tr>
                                 <tr>
                                     <td width="25%">
-                                        <form action="/main/message/write" method="post" id="/write_message">
+                                        <form action="${pageContext.request.contextPath}/main/message/write"
+                                              method="post" id="/write_message">
                                             <input type="hidden" name="sciFirstName"
                                                    value="${requestScope.sciFirstName}">
                                             <input type="hidden" name="sciSecondName"
@@ -203,13 +206,15 @@
                                 </tr>
                             </table>
                             <table border="0" width="100%" cellpadding="5" align="top">
-                                <c:if test="${requestScope.scientist.formattedDob != null}">
-                                    <tr>
-                                        <td width="40%"></td>
-                                        <td>${txt_dob}:</td>
-                                        <td>${requestScope.scientist.formattedDob}</td>
-                                    </tr>
-                                </c:if>
+                                <fmt:parseDate value="${requestScope.scientist.dob}" pattern="yyyy-MM-dd"
+                                               var="parsedDate" type="date"/>
+                                <fmt:formatDate value="${parsedDate}" var="dob"
+                                                type="date" pattern="dd.MM.yyyy"/>
+                                <tr>
+                                    <td width="40%"></td>
+                                    <td>${txt_dob}:</td>
+                                    <td>${dob}</td>
+                                </tr>
                                 <c:if test="${requestScope.scientist.gender != 'NONE'}">
                                     <tr>
                                         <td width="40%"></td>
@@ -221,7 +226,7 @@
                                             <c:when test="${requestScope.scientist.gender eq 'FEMALE'}">
                                                 <c:set var="gender" scope="page" value="${gender_female}"/>
                                             </c:when>
-                                            <c:otherwise >
+                                            <c:otherwise>
                                                 <c:set var="gender" scope="page" value="${gender_none}"/>
                                             </c:otherwise>
                                         </c:choose>
@@ -275,7 +280,7 @@
                                             <c:when test="${university.degree eq 'SPECIALIST'}">
                                                 <c:set var="degree" scope="page" value="${specialist}"/>
                                             </c:when>
-                                            <c:otherwise >
+                                            <c:otherwise>
                                                 <c:set var="degree" scope="page" value="${none}"/>
                                             </c:otherwise>
                                         </c:choose>

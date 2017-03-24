@@ -31,7 +31,7 @@ public class Scientist extends HttpServlet {
         String scientistEmail = req.getParameter("button_scientist");
         model.Scientist currentScientist = (model.Scientist) req.getSession().getAttribute(Const.EMAIL_KEY);
         if (scientistEmail != null && !scientistEmail.equals(currentScientist.getEmail())) {
-            model.Scientist scientist = serviceScientist.get(scientistEmail, req.getLocale());
+            model.Scientist scientist = serviceScientist.get(scientistEmail);
             req.setAttribute("scientist", scientist);
             List<University> universities = serviceUniversity.getAll(scientist.getId());
             req.setAttribute("universities", universities);
