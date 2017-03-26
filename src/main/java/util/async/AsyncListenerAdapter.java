@@ -1,12 +1,9 @@
-package util;
+package util.async;
 
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import java.io.IOException;
 
-/**
- * Created on 20.03.2017.
- */
 public abstract class AsyncListenerAdapter implements AsyncListener {
     @Override
     public void onComplete(AsyncEvent event) throws IOException {

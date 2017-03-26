@@ -144,11 +144,6 @@ public class Scientist implements Comparable<Scientist> {
             return this;
         }
 
-        public Builder setFormattedDob(String formattedDob) {
-            Scientist.this.formattedDob = formattedDob;
-            return this;
-        }
-
         public Builder setGender(Gender gender) {
             Scientist.this.gender = gender;
             return this;

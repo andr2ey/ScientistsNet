@@ -12,7 +12,7 @@ public class ScientistService {
         this.scientistDao = scientistDao;
     }
 
-    public int create(Scientist scientist) {
+    public boolean create(Scientist scientist) {
         return scientistDao.create(scientist);
     }
 

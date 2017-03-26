@@ -5,7 +5,7 @@ import model.Scientist;
 import java.util.Set;
 
 public interface ScientistDao {
-    int create(Scientist scientist);
+    boolean create(Scientist scientist);
     Scientist get(int id);
     Scientist get(String email);
     boolean confirmPassword(int id, String password);

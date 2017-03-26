@@ -130,7 +130,7 @@
     <table border="0" width="100%" cellpadding="0">
         <tr>
             <td valign="center" align="left" width="20%">
-                <form action="${pageContext.request.contextPath}/main" method="post">
+                <form action="${pageContext.request.contextPath}/main" method="get">
                     <input type="submit" class="button_lang" name="logout" value="${log_out_button}">
                 </form>
             </td>

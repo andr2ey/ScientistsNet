@@ -1,11 +1,13 @@
 package filters;
 
+import controller.profile.education.EducationConst;
 import model.Scientist;
 import model.University;
 import org.apache.log4j.Logger;
 import service.ScientistService;
 import service.UniversityService;
-import util.Const;
+import util.constants.AppConst;
+import util.constants.SessionConst;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Register scientist in session
+ */
 public class LogInFilter implements Filter {
 
     private ScientistService scientistService;
@@ -23,8 +28,8 @@ public class LogInFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         ServletContext servletContext = filterConfig.getServletContext();
-        scientistService = (ScientistService) servletContext.getAttribute(Const.SCIENTIST_SERVICE);
-        universityService = (UniversityService) servletContext.getAttribute(Const.UNIVERSITY_SERVICE);
+        scientistService = (ScientistService) servletContext.getAttribute(AppConst.SCIENTIST_SERVICE);
+        universityService = (UniversityService) servletContext.getAttribute(AppConst.UNIVERSITY_SERVICE);
     }
 
     @Override
@@ -34,11 +39,11 @@ public class LogInFilter implements Filter {
 
         String email = request.getRemoteUser();
         // first-time login
-        if (email != null && request.getSession().getAttribute(Const.EMAIL_KEY) == null) {
+        if (email != null && request.getSession().getAttribute(SessionConst.EMAIL_KEY) == null) {
             Scientist scientist = scientistService.get(email);
-            LOGGER.info(String.format("User - (%s) is successfully authorized", scientist));
-            session.setAttribute(Const.EMAIL_KEY, scientist);
+            session.setAttribute(SessionConst.EMAIL_KEY, scientist);
             loadUniversities(session, scientist.getId());
+            LOGGER.info(String.format("User - (%s) is successfully authorized", scientist));
         }
         chain.doFilter(request, resp);
     }
@@ -49,14 +54,12 @@ public class LogInFilter implements Filter {
     @SuppressWarnings("Duplicates")
     private void loadUniversities(HttpSession session, int scientistId) {
         //buffer for unmodified universities
-        List<University> unmodifiedUniversities = new ArrayList<>(Const.MAX_UNIVERSITIES);
-        for (int i = 0; i < Const.MAX_UNIVERSITIES; i++)
-            unmodifiedUniversities.add(i, null);
-        session.setAttribute(Const.UNMODIFIED_UNIVERSITIES_KEY, unmodifiedUniversities);
-        session.setAttribute(Const.UNIVERSITIES_CHANGED, null);
+        List<University> unmodifiedUniversities = new ArrayList<>(EducationConst.MAX_UNIVERSITIES);
+        session.setAttribute(SessionConst.UNMODIFIED_UNIVERSITIES_KEY, unmodifiedUniversities);
+        session.setAttribute(SessionConst.UNIVERSITIES_CHANGED_KEY, null);
 
         List<University> universities = universityService.getAll(scientistId);
-        session.setAttribute(Const.UNIVERSITIES_KEY, universities);
+        session.setAttribute(SessionConst.UNIVERSITIES_KEY, universities);
     }
 
 }

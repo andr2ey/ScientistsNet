@@ -128,7 +128,7 @@ public class MySqlScientistDao implements ScientistDao {
     }
 
     @Override
-    public int create(Scientist scientist) {
+    public boolean create(Scientist scientist) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
@@ -156,7 +156,7 @@ public class MySqlScientistDao implements ScientistDao {
                 connection.setAutoCommit(true);
                 scientist.setPassword(null);
                 LOGGER.info(String.format("User %s registered", scientist));
-                return scientist.getId();
+                return true;
             } catch (SQLException e) {
                 connection.rollback();
                 LOGGER.error(String.format("Creation user - %s has been unsuccessful", scientist), e);
@@ -164,7 +164,7 @@ public class MySqlScientistDao implements ScientistDao {
         } catch (SQLException e) {
             LOGGER.error("Getting connection from data source failed", e);
         }
-        return 0;
+        return false;
     }
 
     @Override

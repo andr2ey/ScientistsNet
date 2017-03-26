@@ -9,7 +9,7 @@ import org.apache.log4j.PropertyConfigurator;
 import service.MessageService;
 import service.ScientistService;
 import service.UniversityService;
-import util.Const;
+import util.constants.AppConst;
 import util.connection.pool.MyConnectionPool;
 import util.connection.pool.MyConnectionPoolException;
 
@@ -88,11 +88,11 @@ public class AppInitializer implements ServletContextListener {
     }
 
     private void initServices(ServletContext servletContext) {
-        servletContext.setAttribute(Const.SCIENTIST_SERVICE,
+        servletContext.setAttribute(AppConst.SCIENTIST_SERVICE,
                 new ScientistService(new MySqlScientistDao(dataSource)));
-        servletContext.setAttribute(Const.UNIVERSITY_SERVICE,
+        servletContext.setAttribute(AppConst.UNIVERSITY_SERVICE,
                 new UniversityService(new MySqlUniversityDao(dataSource)));
-        servletContext.setAttribute(Const.MESSAGE_SERVICE,
+        servletContext.setAttribute(AppConst.MESSAGE_SERVICE,
                 new MessageService(new MySqlMessageDao(dataSource)));
         logger.info("Services are being initialized");
     }
@@ -107,7 +107,7 @@ public class AppInitializer implements ServletContextListener {
                 return;
             for (File fileSql : filesSql)
                 try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(new FileInputStream(fileSql), Charset.forName(Const.APP_ENCODING)))) {
+                        new InputStreamReader(new FileInputStream(fileSql), Charset.forName(AppConst.UTF_8)))) {
                     String line;
                     StringBuilder sb = new StringBuilder();
                     while ((line = reader.readLine()) != null) {

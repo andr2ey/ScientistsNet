@@ -239,11 +239,11 @@
                                         <small>
                                             <c:if test="${requestScope.successOfTransaction != null}">
                                                 <c:choose>
-                                                    <c:when test="${requestScope.successOfTransaction == 'success'}">
+                                                    <c:when test="${requestScope.successOfTransaction eq true}">
                                                         ${txt_success}
                                                         ${requestScope.successOfTransaction = null}
                                                     </c:when>
-                                                    <c:when test="${requestScope.successOfTransaction == 'fail'}">
+                                                    <c:when test="${requestScope.successOfTransaction eq false}">
                                                         ${txt_fail}
                                                         ${requestScope.successOfTransaction = null}
                                                     </c:when>
@@ -277,14 +277,14 @@
                                                 <c:if test="${university.updated == true
                                                 && requestScope.updatedStatus != null}">
                                                     <c:choose>
-                                                        <c:when test="${requestScope.updatedStatus == 'success'}">
+                                                        <c:when test="${requestScope.updatedStatus eq true}">
                                                             <p align="right">
                                                                 <small>${message_success}</small>
                                                             </p>
                                                         </c:when>
-                                                        <c:when test="${requestScope.updatedStatus == 'fail'}">
+                                                        <c:when test="${requestScope.updatedStatus eq false}">
                                                             <p align="right">
-                                                                <small>${message_success}</small>
+                                                                <small>${txt_fail}</small>
                                                             </p>
                                                         </c:when>
                                                     </c:choose>

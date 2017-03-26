@@ -1,7 +1,8 @@
 package security;
 
+import controller.profile.education.EducationConst;
 import model.Degree;
-import util.Const;
+import util.constants.AppConst;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
@@ -16,7 +17,7 @@ public class UniversityValidator {
     private String validCity;
     private String validFullName;
     private Degree validDegree = Degree.BACHELOR;
-    private int validYear = Const.MIN_GRADUATION_YEAR;
+    private int validYear = EducationConst.MIN_GRADUATION_YEAR;
 
     public UniversityValidator() {
     }
@@ -104,16 +105,16 @@ public class UniversityValidator {
 
     private UniversityValidator year(String year){
         if (!valid || year == null || year.isEmpty()) {
-            validYear = Const.MIN_GRADUATION_YEAR;
+            validYear = EducationConst.MIN_GRADUATION_YEAR;
             valid = false;
             return this;
         }
-        int yearInt = Const.MIN_GRADUATION_YEAR;
+        int yearInt = EducationConst.MIN_GRADUATION_YEAR;
         try {
             yearInt = Integer.parseInt(year.trim());
-            if (yearInt < Const.MIN_GRADUATION_YEAR ||
-                    yearInt > (LocalDate.now().getYear() + Const.MAX_EDUCATION_TIME)) {
-                validYear = Const.MIN_GRADUATION_YEAR;
+            if (yearInt < EducationConst.MIN_GRADUATION_YEAR ||
+                    yearInt > (LocalDate.now().getYear() + EducationConst.MAX_EDUCATION_TIME)) {
+                validYear = EducationConst.MIN_GRADUATION_YEAR;
                 valid = false;
                 return this;
             }

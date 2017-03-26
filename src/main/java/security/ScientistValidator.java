@@ -1,8 +1,9 @@
 package security;
 
+import controller.registration.RegistrationConst;
 import model.FieldOfScience;
 import model.Gender;
-import util.Const;
+import util.constants.AppConst;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.DateTimeException;
@@ -27,7 +28,6 @@ public class ScientistValidator {
     private FieldOfScience validFieldOfScience = FieldOfScience.NONE;
 
     private String validNewPassword;
-    private String validNewEmail;
 
     public ScientistValidator() {
     }
@@ -38,10 +38,6 @@ public class ScientistValidator {
 
     public String getValidNewPassword() {
         return validNewPassword;
-    }
-
-    public String getValidNewEmail() {
-        return validNewEmail;
     }
 
     public String getValidPassword() {
@@ -94,7 +90,6 @@ public class ScientistValidator {
         if (dob(req.getParameter("day"),
                 req.getParameter("month"),
                 req.getParameter("year"), req)
-                .emailNew(req.getParameter("emailNew"), req)       //
                 .passwordNew(req.getParameter("passwordNew"), req) //
                 .firstName(req.getParameter("first_name"), req)
                 .secondName(req.getParameter("second_name"), req)
@@ -141,17 +136,17 @@ public class ScientistValidator {
             LocalDate dob = LocalDate.of(yearInt, Integer.parseInt(month.trim()), Integer.parseInt(day.trim()));
             LocalDate difference = LocalDate.now().minusYears(yearInt);
             int yearDiffer = difference.getYear();
-            if (yearDiffer > Const.TOP_EDGE_OF_AGE || yearDiffer < Const.BOTTOM_EDGE_OF_AGE) {
+            if (yearDiffer > RegistrationConst.TOP_EDGE_OF_AGE || yearDiffer < RegistrationConst.BOTTOM_EDGE_OF_AGE) {
                 validDate = null;
                 valid = false;
-              req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
+              req.setAttribute(AppConst.DATE_INPUT_ERROR, "Date is incorrect!");
             } else {
                 validDate = dob;
             }
         } catch (NumberFormatException | DateTimeException e) {
             validDate = null;
             valid = false;
-            req.setAttribute(Const.DATE_INPUT_ERROR, "Date is incorrect!");
+            req.setAttribute(AppConst.DATE_INPUT_ERROR, "Date is incorrect!");
         }
         return this;
     }
@@ -169,25 +164,10 @@ public class ScientistValidator {
         if (!EMAIL_PATTERN.matcher(email.trim()).matches()) {
             validEmail = null;
             valid = false;
-            req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
+            req.setAttribute(AppConst.EMAIL_INPUT_ERROR, "Email is incorrect!");
             return this;
         }
         validEmail = email;
-        return this;
-    }
-
-    private ScientistValidator emailNew(String emailNew, HttpServletRequest req){
-        if (!valid || emailNew == null || emailNew.isEmpty()) {
-            validNewEmail = null;
-            return this;
-        }
-        if (!EMAIL_PATTERN.matcher(emailNew.trim()).matches()) {
-            valid = false;
-            req.setAttribute(Const.EMAIL_INPUT_ERROR, "Email is incorrect!");
-            validNewEmail = null;
-            return this;
-        }
-        validNewEmail = emailNew;
         return this;
     }
 
@@ -200,7 +180,7 @@ public class ScientistValidator {
         //noinspection Duplicates
         if (!PASSWORD_PATTERN.matcher(password.trim()).matches()) {
             valid = false;
-            req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
+            req.setAttribute(AppConst.PASSWORD_INPUT_ERROR, "Password is incorrect!");
             validPassword = null;
             return this;
         }
@@ -216,7 +196,7 @@ public class ScientistValidator {
         //noinspection Duplicates
         if (!PASSWORD_PATTERN.matcher(passwordNew.trim()).matches()) {
             valid = false;
-            req.setAttribute(Const.PASSWORD_INPUT_ERROR, "Password is incorrect!");
+            req.setAttribute(AppConst.PASSWORD_INPUT_ERROR, "Password is incorrect!");
             validNewPassword = null;
             return this;
         }
@@ -232,7 +212,7 @@ public class ScientistValidator {
         }
         if (!NAME_PATTERN.matcher(firstName.trim()).matches()) {
             valid = false;
-            req.setAttribute(Const.FIRST_NAME_INPUT_ERROR, "First name is incorrect!");
+            req.setAttribute(AppConst.FIRST_NAME_INPUT_ERROR, "First name is incorrect!");
             validFirstName = null;
             return this;
         }
@@ -248,7 +228,7 @@ public class ScientistValidator {
         }
         if (!NAME_PATTERN.matcher(secondName.trim()).matches()) {
             valid = false;
-            req.setAttribute(Const.SECOND_NAME_INPUT_ERROR, "Second name is incorrect!");
+            req.setAttribute(AppConst.SECOND_NAME_INPUT_ERROR, "Second name is incorrect!");
             validSecondName = null;
             return this;
         }
@@ -263,7 +243,7 @@ public class ScientistValidator {
         }
         if (!NAME_PATTERN.matcher(middleName.trim()).matches()) {
             valid = false;
-            req.setAttribute(Const.MIDDLE_NAME_INPUT_ERROR, "Middle name is incorrect!");
+            req.setAttribute(AppConst.MIDDLE_NAME_INPUT_ERROR, "Middle name is incorrect!");
             validMiddleName = null;
             return this;
         }
@@ -278,7 +258,7 @@ public class ScientistValidator {
         }
         if (!GENDER_PATTERN.matcher(gender.trim()).matches()) {
             valid = false;
-            req.setAttribute(Const.GENDER_INPUT_ERROR, "Gender is incorrect!");
+            req.setAttribute(AppConst.GENDER_INPUT_ERROR, "Gender is incorrect!");
             validGender = Gender.NONE;
             return this;
         }
@@ -310,7 +290,7 @@ public class ScientistValidator {
         } catch (NumberFormatException e) {
             //ignored
         }
-        req.setAttribute(Const.FIELD_OF_SCIENCE_INPUT_ERROR, "Field of science is incorrect!");
+        req.setAttribute(AppConst.FIELD_OF_SCIENCE_INPUT_ERROR, "Field of science is incorrect!");
         valid = false;
         validFieldOfScience = FieldOfScience.NONE;
         return this;

@@ -146,7 +146,7 @@
                             <table border="0" width="100%" align="top">
                                 <tr>
                                     <td width="25%"></td>
-                                    <td width="50%"><h3>Messages</h3></td>
+                                    <td width="50%"><h3>${messages}</h3></td>
                                     <td width="25%" align="right">
 
                                     </td>

@@ -11,6 +11,10 @@ import java.io.IOException;
 @WebServlet("/language")
 public class Language extends HttpServlet {
 
+    private static final String PATH_FROM_KEY = "pathFrom";
+    private static final String LANGUAGE_KEY = "language";
+    private static final String LANG_PARAM = "lang";
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
@@ -18,7 +22,7 @@ public class Language extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().setAttribute("language", req.getParameter("lang"));
-        resp.sendRedirect(req.getParameter("pathFrom"));
+        req.getSession().setAttribute(LANGUAGE_KEY, req.getParameter(LANG_PARAM));
+        resp.sendRedirect(req.getParameter(PATH_FROM_KEY));
     }
 }

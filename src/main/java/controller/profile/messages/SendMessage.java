@@ -3,7 +3,8 @@ package controller.profile.messages;
 import model.Message;
 import model.Scientist;
 import service.MessageService;
-import util.Const;
+import util.constants.AppConst;
+import util.constants.SessionConst;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,7 +23,7 @@ public class SendMessage extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        messageService = (MessageService) config.getServletContext().getAttribute(Const.MESSAGE_SERVICE);
+        messageService = (MessageService) config.getServletContext().getAttribute(AppConst.MESSAGE_SERVICE);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class SendMessage extends HttpServlet {
         String emailTo = req.getParameter("button_send_message");
         if (emailTo != null) {
             String text = req.getParameter("txt_of_message");
-            Scientist scientist = (Scientist) req.getSession().getAttribute(Const.EMAIL_KEY);
+            Scientist scientist = (Scientist) req.getSession().getAttribute(SessionConst.EMAIL_KEY);
             String emailFrom = scientist.getEmail();
             Message message = new Message().builder()
                     .setFrom(emailFrom)
@@ -38,9 +39,9 @@ public class SendMessage extends HttpServlet {
                     .setTxt(text)
                     .setLocalDateTime(LocalDateTime.now()).build();
             if (messageService.create(message)) {
-                req.setAttribute(Const.SUCCESS, Const.SUCCESS);
+                req.setAttribute(AppConst.SUCCESS, AppConst.SUCCESS);
             } else {
-                req.setAttribute(Const.FAIL, Const.FAIL);
+                req.setAttribute(AppConst.FAIL, AppConst.FAIL);
             }
             setAttributes(req, emailTo);
             req.getRequestDispatcher("/WEB-INF/main/message/write/index.jsp").forward(req, resp);

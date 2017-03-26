@@ -61,20 +61,29 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>RegistrationEntranceFilter</filter-name>
-        <filter-class>filters.registration.EntranceFilter</filter-class>
+        <filter-name>RegistrationValidation</filter-name>
+        <filter-class>filters.RegistrationValidation</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>RegistrationEntranceFilter</filter-name>
+        <filter-name>RegistrationValidation</filter-name>
         <url-pattern>/registration</url-pattern>
     </filter-mapping>
 
     <filter>
-        <filter-name>EducationProcessFilter</filter-name>
-        <filter-class>filters.education.EducationProcessFilter</filter-class>
+        <filter-name>BaseInfoValidation</filter-name>
+        <filter-class>filters.BaseInfoValidation</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>EducationProcessFilter</filter-name>
+        <filter-name>BaseInfoValidation</filter-name>
+        <url-pattern>/main/baseinfo</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>RollbackModifiedUniversities</filter-name>
+        <filter-class>filters.RollbackModifiedUniversities</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RollbackModifiedUniversities</filter-name>
         <url-pattern>/main</url-pattern>
         <url-pattern>/main/*</url-pattern>
     </filter-mapping>

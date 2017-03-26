@@ -3,7 +3,7 @@ package controller.profile.search;
 import model.Scientist;
 import security.ScientistValidator;
 import service.ScientistService;
-import util.Const;
+import util.constants.AppConst;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,7 +25,7 @@ public class Search extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        serviceScientist = (ScientistService) config.getServletContext().getAttribute(Const.SCIENTIST_SERVICE);
+        serviceScientist = (ScientistService) config.getServletContext().getAttribute(AppConst.SCIENTIST_SERVICE);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

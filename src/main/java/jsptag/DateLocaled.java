@@ -1,8 +1,5 @@
 package jsptag;
 
-import model.Scientist;
-import util.Const;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;

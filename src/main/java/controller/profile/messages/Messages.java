@@ -3,7 +3,8 @@ package controller.profile.messages;
 import model.Message;
 import model.Scientist;
 import service.MessageService;
-import util.Const;
+import util.constants.AppConst;
+import util.constants.SessionConst;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,12 +22,12 @@ public class Messages extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        messageService = (MessageService)config.getServletContext().getAttribute(Const.MESSAGE_SERVICE);
+        messageService = (MessageService)config.getServletContext().getAttribute(AppConst.MESSAGE_SERVICE);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Scientist scientist = (Scientist)req.getSession().getAttribute(Const.EMAIL_KEY);
+        Scientist scientist = (Scientist)req.getSession().getAttribute(SessionConst.EMAIL_KEY);
 
         Set<Message> messageSet = messageService.getAll(scientist.getEmail());
 
