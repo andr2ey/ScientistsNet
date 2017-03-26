@@ -1,5 +1,8 @@
 package controller.profile.messages;
 
+import controller.profile.scientist.ScientistConst;
+import util.constants.UrlConst;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,18 +12,26 @@ import java.io.IOException;
 
 @WebServlet("/main/message/write")
 public class WriteMessage extends HttpServlet {
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameter("button_write_message") != null) {
-            req.setAttribute("emailTo", req.getParameter("button_write_message"));
-            req.setAttribute("sciFirstName", req.getParameter("sciFirstName"));
-            req.setAttribute("sciSecondName", req.getParameter("sciSecondName"));
-            req.getRequestDispatcher("/WEB-INF/main/message/write/index.jsp").forward(req, resp);
+        if (req.getParameter(MessageConst.BUTTON_WRITE_MESSAGE_KEY) != null) {
+            req.setAttribute(MessageConst.EMAIL_TO_KEY, req.getParameter(MessageConst.BUTTON_WRITE_MESSAGE_KEY));
+            setAttributes(req);
+            req.getRequestDispatcher(UrlConst.WEB_INF_MAIN_MESSAGE_WRITE).forward(req, resp);
         } else {
-            resp.sendRedirect("/main");
+            resp.sendRedirect(UrlConst.MAIN);
         }
+    }
+
+    private void setAttributes(HttpServletRequest req) {
+        req.setAttribute(MessageConst.EMAIL_TO_KEY, req.getParameter(MessageConst.BUTTON_WRITE_MESSAGE_KEY));
+        req.setAttribute(ScientistConst.SCIENTIST_FIRST_NAME_KEY,
+                req.getParameter(ScientistConst.SCIENTIST_FIRST_NAME_KEY));
+        req.setAttribute(ScientistConst.SCIENTIST_SECOND_NAME_KEY,
+                req.getParameter(ScientistConst.SCIENTIST_SECOND_NAME_KEY));
     }
 }

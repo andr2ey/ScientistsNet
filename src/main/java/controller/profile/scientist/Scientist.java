@@ -1,6 +1,5 @@
 package controller.profile.scientist;
 
-import model.University;
 import service.ScientistService;
 import service.UniversityService;
 import util.constants.AppConst;
@@ -29,13 +28,14 @@ public class Scientist extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String scientistEmail = req.getParameter(ScientistConst.BUTTON_SCIENTIST);
+        String scientistEmail = req.getParameter(ScientistConst.BUTTON_SCIENTIST_KEY);
         model.Scientist currentScientist = (model.Scientist) req.getSession().getAttribute(SessionConst.EMAIL_KEY);
         if (scientistEmail == null || scientistEmail.equals(currentScientist.getEmail())) {
             resp.sendRedirect(UrlConst.WEB_INF_MAIN);
             return;
         }
         model.Scientist scientist = serviceScientist.get(scientistEmail);
+
         req.setAttribute(ScientistConst.SCIENTIST_KEY, serviceScientist.get(scientistEmail));
         req.setAttribute(ScientistConst.UNIVERSITIES_KEY, serviceUniversity.getAll(scientist.getId()));
         req.setAttribute(ScientistConst.SCIENTIST_FIRST_NAME_KEY,

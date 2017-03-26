@@ -1,10 +1,12 @@
 package controller.profile.messages;
 
+import controller.profile.scientist.ScientistConst;
 import model.Message;
 import model.Scientist;
 import service.MessageService;
 import util.constants.AppConst;
 import util.constants.SessionConst;
+import util.constants.UrlConst;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -28,26 +30,21 @@ public class SendMessage extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String emailTo = req.getParameter("button_send_message");
-        if (emailTo != null) {
-            String text = req.getParameter("txt_of_message");
-            Scientist scientist = (Scientist) req.getSession().getAttribute(SessionConst.EMAIL_KEY);
-            String emailFrom = scientist.getEmail();
-            Message message = new Message().builder()
-                    .setFrom(emailFrom)
-                    .setTo(emailTo)
-                    .setTxt(text)
-                    .setLocalDateTime(LocalDateTime.now()).build();
-            if (messageService.create(message)) {
-                req.setAttribute(AppConst.SUCCESS, AppConst.SUCCESS);
-            } else {
-                req.setAttribute(AppConst.FAIL, AppConst.FAIL);
-            }
-            setAttributes(req, emailTo);
-            req.getRequestDispatcher("/WEB-INF/main/message/write/index.jsp").forward(req, resp);
-        } else {
-            resp.sendRedirect("/main");
+        String emailTo = req.getParameter(MessageConst.BUTTON_SEND_MESSAGE_KEY);
+        if (emailTo == null) {
+            resp.sendRedirect(UrlConst.MAIN);
+            return;
         }
+        String text = req.getParameter(MessageConst.TXT_OF_MESSAGE_KEY);
+        String emailFrom = ((Scientist) req.getSession().getAttribute(SessionConst.EMAIL_KEY)).getEmail();
+        Message message = create(emailTo, text, emailFrom);
+        if (messageService.create(message)) {
+            req.setAttribute(AppConst.SUCCESS, AppConst.SUCCESS);
+        } else {
+            req.setAttribute(AppConst.FAIL, AppConst.FAIL);
+        }
+        setAttributes(req, emailTo);
+        req.getRequestDispatcher(UrlConst.WEB_INF_MAIN_MESSAGE_WRITE).forward(req, resp);
     }
 
     @Override
@@ -55,9 +52,19 @@ public class SendMessage extends HttpServlet {
         doPost(req, resp);
     }
 
+    private Message create(String emailTo, String text, String emailFrom) {
+        return new Message().builder()
+                .setFrom(emailFrom)
+                .setTo(emailTo)
+                .setTxt(text)
+                .setLocalDateTime(LocalDateTime.now()).build();
+    }
+
     private void setAttributes(HttpServletRequest req, String emailTo) {
-        req.setAttribute("sciFirstName", req.getParameter("sciFirstName"));
-        req.setAttribute("sciSecondName", req.getParameter("sciSecondName"));
-        req.setAttribute("emailTo", emailTo);
+        req.setAttribute(ScientistConst.SCIENTIST_FIRST_NAME_KEY,
+                req.getParameter(ScientistConst.SCIENTIST_FIRST_NAME_KEY));
+        req.setAttribute(ScientistConst.SCIENTIST_SECOND_NAME_KEY,
+                req.getParameter(ScientistConst.SCIENTIST_SECOND_NAME_KEY));
+        req.setAttribute(MessageConst.EMAIL_TO_KEY, emailTo);
     }
 }

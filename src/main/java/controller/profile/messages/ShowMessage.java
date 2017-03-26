@@ -1,5 +1,7 @@
 package controller.profile.messages;
 
+import util.constants.UrlConst;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,19 +9,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Show concrete message
+ */
 @WebServlet("/main/message/show")
 public class ShowMessage extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String index = req.getParameter("button_show_message");
-        String email = req.getParameter("email" + index);
-        String text = req.getParameter("message" + index);
-        String direction = req.getParameter("direction" + index);
-        req.setAttribute("email", email);
-        req.setAttribute("text", text);
-        req.setAttribute("direction", direction);
-        req.getRequestDispatcher("/WEB-INF/main/message/show/index.jsp").forward(req, resp);
+        String messageNumber = req.getParameter(MessageConst.BUTTON_SHOW_MESSAGE_KEY);
+
+        String email = req.getParameter(MessageConst.EMAIL + messageNumber);
+        String text = req.getParameter(MessageConst.MESSAGE_KEY + messageNumber);
+        String direction = req.getParameter(MessageConst.DIRECTION_KEY + messageNumber);
+
+        req.setAttribute(MessageConst.EMAIL, email);
+        req.setAttribute(MessageConst.TEXT_KEY, text);
+        req.setAttribute(MessageConst.DIRECTION_KEY, direction);
+        req.getRequestDispatcher(UrlConst.WEB_INF_MAIN_MESSAGE_SHOW).forward(req, resp);
     }
 
     @Override

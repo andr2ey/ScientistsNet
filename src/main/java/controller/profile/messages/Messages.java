@@ -5,6 +5,7 @@ import model.Scientist;
 import service.MessageService;
 import util.constants.AppConst;
 import util.constants.SessionConst;
+import util.constants.UrlConst;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -14,6 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
+
+/**
+ * Show all messages of scientist
+ */
 
 @WebServlet("/main/messages")
 public class Messages extends HttpServlet {
@@ -31,8 +36,8 @@ public class Messages extends HttpServlet {
 
         Set<Message> messageSet = messageService.getAll(scientist.getEmail());
 
-        req.setAttribute("messageSet", messageSet);
-        req.getRequestDispatcher("/WEB-INF/main/message/index.jsp").forward(req, resp);
+        req.setAttribute(MessageConst.MESSAGE_SET_KEY, messageSet);
+        req.getRequestDispatcher(UrlConst.WEB_INF_MAIN_MESSAGE).forward(req, resp);
     }
 
     @Override
