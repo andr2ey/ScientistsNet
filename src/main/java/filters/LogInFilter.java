@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,6 +56,8 @@ public class LogInFilter implements Filter {
     private void loadUniversities(HttpSession session, int scientistId) {
         //buffer for unmodified universities
         List<University> unmodifiedUniversities = new ArrayList<>(EducationConst.MAX_UNIVERSITIES);
+        for (int i = 0; i < EducationConst.MAX_UNIVERSITIES; i++)
+            unmodifiedUniversities.add(i, null);
         session.setAttribute(SessionConst.UNMODIFIED_UNIVERSITIES_KEY, unmodifiedUniversities);
         session.setAttribute(SessionConst.UNIVERSITIES_CHANGED_KEY, null);
 
